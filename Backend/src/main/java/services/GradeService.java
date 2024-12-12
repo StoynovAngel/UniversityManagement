@@ -27,7 +27,6 @@ public class GradeService implements IGrade {
         System.out.print("New grade: ");
         double mark = in.nextDouble();
         grade.setMark(mark);
-
     }
 
     @Override
