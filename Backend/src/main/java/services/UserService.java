@@ -100,6 +100,7 @@ public class UserService implements IUser {
         Group specificGroup = getSpecificGroupFromFile();
         User user = getSpecificUser(specificGroup);
         specificGroup.getGroupMembers().remove(user);
+        fileService.saveGroupToFile(specificGroup);
     }
 
     private User getSpecificUser(Group loadedGroup) {

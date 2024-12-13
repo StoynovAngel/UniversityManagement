@@ -26,6 +26,7 @@ public class InitialMenu implements Menu {
         System.out.println("7. Update user's grade.");
         System.out.println("8. Delete user's grade.");
         System.out.println("9. Add new grade");
+        System.out.println("10. Delete user from specific group.");
         System.out.println("0. Exit...");
     }
 
@@ -36,7 +37,7 @@ public class InitialMenu implements Menu {
 
         while(true) {
             show();
-            System.out.print("Enter your choice (0-6): ");
+            System.out.print("Enter your choice (0-10): ");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> groupService.addGroup();
@@ -48,6 +49,7 @@ public class InitialMenu implements Menu {
                 case 7 -> userService.updateUserGrade();
                 case 8 -> userService.deleteUserGrade();
                 case 9 -> userService.addNewGradeToUser();
+                case 10 -> userService.deleteUserFromSpecificGroup();
                 case 0 -> {
                     System.out.println("Exiting the program...");
                     return;
