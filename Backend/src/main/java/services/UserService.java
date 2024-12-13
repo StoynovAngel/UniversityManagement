@@ -95,11 +95,11 @@ public class UserService implements IUser {
         throw new GradeNotFound("No such grade found");
     }
 
-    private List<Grade> getSpecificUserGrades() {
+    @Override
+    public void deleteUserFromSpecificGroup() {
         Group specificGroup = getSpecificGroupFromFile();
         User user = getSpecificUser(specificGroup);
-        fileService.saveGroupToFile(specificGroup);
-        return user.getGrades();
+        specificGroup.getGroupMembers().remove(user);
     }
 
     private User getSpecificUser(Group loadedGroup) {

@@ -8,4 +8,5 @@ public interface IUser {
     void addNewGradeToUser();
     void updateUserGrade();
     void deleteUserGrade();
+    void deleteUserFromSpecificGroup();
 }
