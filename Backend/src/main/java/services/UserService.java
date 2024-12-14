@@ -22,16 +22,12 @@ public class UserService implements IUser {
 
     @Override
     public void displaySpecificUserGrades() {
-        Group loadedGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(loadedGroup);
-        System.out.println(user.getGrades());
+        System.out.println(getSpecificUser().getGrades());
     }
 
     @Override
     public void displayUserFromSpecificGroup() {
-        Group loadedGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(loadedGroup);
-        System.out.println(user);
+        System.out.println(getSpecificUser());
     }
 
     @Override
@@ -46,22 +42,10 @@ public class UserService implements IUser {
         }
     }
 
-    private Group getSpecificGroupFromFile() {
-        System.out.print("Enter group name: ");
-        String searchedGroupName = in.nextLine();
-        Group group = fileService.loadGroup(searchedGroupName);
-
-        if (group == null || !group.getGroupName().equals(searchedGroupName)) {
-            throw new GroupNotFoundException("Could not find group with the name: " + searchedGroupName);
-        }
-
-        return group;
-    }
-
     @Override
     public void updateUserGrade() {
         Group specificGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(specificGroup);
+        User user = getUserFromGroup(specificGroup);
         List<Grade> grades = user.getGrades();
 
         System.out.println("What grade do you want to change? Write the subject's name: ");
@@ -79,18 +63,16 @@ public class UserService implements IUser {
     @Override
     public void deleteUserGrade() {
         Group specificGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(specificGroup);
+        User user = getUserFromGroup(specificGroup);
         List<Grade> grades = user.getGrades();
 
         System.out.println("What grade do you want to change? Write the subject's name: ");
         String inputSubject = in.nextLine();
 
-        for (Grade grade: grades) {
-            if(grade.getSubject().equals(inputSubject)) {
-                grades.remove(grade);
-                fileService.saveGroupToFile(specificGroup);
-                return;
-            }
+        if (grades.removeIf(grade -> gradeHandler(grade, inputSubject))) {
+            fileService.saveGroupToFile(specificGroup);
+            System.out.println("Grade removed and group saved.");
+            return;
         }
         throw new GradeNotFound("No such grade found");
     }
@@ -98,12 +80,62 @@ public class UserService implements IUser {
     @Override
     public void deleteUserFromSpecificGroup() {
         Group specificGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(specificGroup);
+        User user = getUserFromGroup(specificGroup);
         specificGroup.getGroupMembers().remove(user);
         fileService.saveGroupToFile(specificGroup);
     }
 
-    private User getSpecificUser(Group loadedGroup) {
+    @Override
+    public void addNewUserToGroup() {
+        Group group = getSpecificGroupFromFile();
+        List<User> users = group.getGroupMembers();
+        User newUser = createUser();
+
+        if (!users.contains(newUser)) {
+            users.add(newUser);
+            fileService.saveGroupToFile(group);
+            return;
+        }
+        
+        System.out.println("This users already exists...");
+    }
+
+    @Override
+    public void addNewGradeToUser() {
+        Group specificGroup = getSpecificGroupFromFile();
+        User user = getUserFromGroup(specificGroup);
+        List<Grade> grades = user.getGrades();
+        gradeService.addGrade(grades);
+        fileService.saveGroupToFile(specificGroup);
+    }
+
+    private boolean gradeHandler(Grade grade, String subject) {
+        return grade != null && grade.getSubject().equals(subject);
+    }
+
+    private User getSpecificUser() {
+        Group specificGroup = getSpecificGroupFromFile();
+        return getUserFromGroup(specificGroup);
+    }
+
+    private Group getSpecificGroupFromFile() {
+        System.out.print("Enter group name: ");
+        String searchedGroupName = in.nextLine();
+        Group group = fileService.loadGroup(searchedGroupName);
+
+        if (groupNameHandler(group, searchedGroupName)) {
+            throw new GroupNotFoundException("Could not find group with the name: " + searchedGroupName);
+        }
+
+        return group;
+    }
+
+    private boolean groupNameHandler(Group group, String searchedGroupName) {
+        return group == null || !group.getGroupName().equals(searchedGroupName);
+    }
+
+
+    private User getUserFromGroup(Group loadedGroup) {
         List<User> usersFromGroup = loadedGroup.getGroupMembers();
         System.out.print("Enter username: ");
         String searchedUsername = in.nextLine();
@@ -120,28 +152,6 @@ public class UserService implements IUser {
             System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
             throw new InvalidUserInput("Invalid username: " + username);
         }
-    }
-
-    @Override
-    public void addNewUserToGroup() {
-        Group group = getSpecificGroupFromFile();
-        List<User> users = group.getGroupMembers();
-        User newUser = createUser();
-        if (!users.contains(newUser)) {
-            users.add(newUser);
-        }else {
-            System.out.println("This users already exists...");
-        }
-        fileService.saveGroupToFile(group);
-    }
-
-    @Override
-    public void addNewGradeToUser() {
-        Group specificGroup = getSpecificGroupFromFile();
-        User user = getSpecificUser(specificGroup);
-        List<Grade> grades = user.getGrades();
-        gradeService.addGrade(grades);
-        fileService.saveGroupToFile(specificGroup);
     }
 
     private User createUser() {

@@ -18,6 +18,15 @@ public class GroupService implements IGroup {
     }
 
     @Override
+    public void displaySpecificGroupFromFile() {
+        System.out.print("Enter a group name: ");
+        String searchedGroupName = in.nextLine();
+        validateGroupUserInput(searchedGroupName);
+        Group loadedGroup = getSpecificLoadedGroupByName(searchedGroupName);
+        System.out.println(loadedGroup);
+    }
+
+    @Override
     public void addGroup() {
         System.out.print("Enter group name: ");
         String groupName = in.nextLine();
@@ -43,21 +52,8 @@ public class GroupService implements IGroup {
     }
 
     private boolean doesGroupExist(List<Group> loadedGroups, String nameOfNewGroup) {
-        for (Group loadedGroup : loadedGroups) {
-            if (loadedGroup.getGroupName().equalsIgnoreCase(nameOfNewGroup)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void displaySpecificGroupFromFile() {
-        System.out.print("Enter a group name: ");
-        String searchedGroupName = in.nextLine();
-        validateGroupUserInput(searchedGroupName);
-        Group loadedGroup = getSpecificLoadedGroupByName(searchedGroupName);
-        System.out.println(loadedGroup);
+        return loadedGroups.stream()
+                .anyMatch(group -> group.getGroupName().equalsIgnoreCase(nameOfNewGroup));
     }
 
     private Group getSpecificLoadedGroupByName(String searchedGroupName) {
