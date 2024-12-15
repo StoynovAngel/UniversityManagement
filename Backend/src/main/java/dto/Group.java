@@ -1,10 +1,12 @@
 package dto;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private String groupName;
     private List<User> groupMembers;
@@ -15,8 +17,7 @@ public class Group implements Serializable {
     }
 
     public Group(String groupName) {
-        this.groupName = groupName;
-        this.groupMembers = new ArrayList<>();
+        this(groupName, new ArrayList<>());
     }
 
     public String getGroupName() {

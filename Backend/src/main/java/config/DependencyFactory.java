@@ -1,5 +1,6 @@
 package config;
 
+import handlers.Interaction;
 import services.FileService;
 import services.GroupService;
 import services.InitialMenu;
@@ -20,7 +21,7 @@ public class DependencyFactory {
         return new GroupService(createFileService());
     }
 
-    public InitialMenu createInitialMenu() {
-        return new InitialMenu(createUserService(), createGroupService());
+    public Interaction createInteraction() {
+        return new Interaction(createUserService(), createGroupService());
     }
 }

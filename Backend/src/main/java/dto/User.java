@@ -11,14 +11,13 @@ public class User implements Serializable {
     private String username;
     private List<Grade> grades;
 
-    public User(String username) {
-        this.username = username;
-        this.grades = new ArrayList<>();
-    }
-
     public User(String username, List<Grade> grades) {
         this.username = username;
         this.grades = grades;
+    }
+
+    public User(String username) {
+        this(username, new ArrayList<>());
     }
 
     public String getUsername() {
@@ -27,10 +26,6 @@ public class User implements Serializable {
 
     public List<Grade> getGrades() {
         return grades;
-    }
-
-    public void setGrades(List<Grade> grades) {
-        this.grades = grades;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package services;
 
+import config.DependencyFactory;
+import handlers.Interaction;
 import interfaces.IGroup;
 import interfaces.IUser;
 import interfaces.Menu;
@@ -8,13 +10,12 @@ import utils.consoleArt.ConsoleArt;
 import java.util.Scanner;
 
 public class InitialMenu implements Menu {
-    private final IUser userService;
-    private final IGroup groupService;
+    private final Interaction interaction;
 
-    public InitialMenu(IUser userService, IGroup groupService) {
-        this.userService = userService;
-        this.groupService = groupService;
+    public InitialMenu(Interaction interaction) {
+        this.interaction = interaction;
     }
+
     @Override
     public void show() {
         System.out.println("1. Add a group");
@@ -33,37 +34,14 @@ public class InitialMenu implements Menu {
     @Override
     public void handleUserChoice() {
         Scanner scanner = new Scanner(System.in);
+        int choice;
         ConsoleArt.welcomeMessage();
-        while (true) {
-            menu(scanner);
-        }
+        do {
+            show();
+            System.out.print("Enter your choice (0-10):");
+            choice = scanner.nextInt();
+            interaction.handleChoice(choice);
+        } while (choice != 0);
     }
-
-    private void menu(Scanner scanner) {
-        show();
-        System.out.print("Enter your choice (0-10): ");
-        int choice = scanner.nextInt();
-        menuOptions(choice);
-    }
-
-    private void menuOptions(int choice) {
-        switch(choice) {
-            case 1 -> groupService.addGroup();
-            case 2 -> groupService.displaySpecificGroupFromFile();
-            case 3 -> userService.displayUserFromSpecificGroup();
-            case 4 -> userService.displayAllUsersFromSpecificGroup();
-            case 5 -> userService.displaySpecificUserGrades();
-            case 6 -> userService.addNewUserToGroup();
-            case 7 -> userService.updateUserGrade();
-            case 8 -> userService.deleteUserGrade();
-            case 9 -> userService.addNewGradeToUser();
-            case 10 -> userService.deleteUserFromSpecificGroup();
-            case 0 -> {
-                System.out.println("Exiting the program...");
-                return;
-            }
-            default -> System.out.println("Invalid choice");
-        }
-    }
-
 }
+
