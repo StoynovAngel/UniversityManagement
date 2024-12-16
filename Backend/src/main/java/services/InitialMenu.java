@@ -38,7 +38,7 @@ public class InitialMenu implements Menu {
         ConsoleArt.welcomeMessage();
         do {
             show();
-            System.out.print("Enter your choice (0-10):");
+            System.out.print("Enter your choice (0-10): ");
             choice = scanner.nextInt();
             interaction.handleChoice(choice);
         } while (choice != 0);

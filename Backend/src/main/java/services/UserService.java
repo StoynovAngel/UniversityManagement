@@ -8,6 +8,8 @@ import exceptions.GroupNotFoundException;
 import exceptions.InvalidUserInput;
 import exceptions.UserNotFoundException;
 import interfaces.IUser;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,16 +47,11 @@ public class UserService implements IUser {
     @Override
     public void updateUserGrade() {
         Group specificGroup = getSpecificGroupFromFile();
-        User user = getUserFromGroup(specificGroup);
-        List<Grade> grades = user.getGrades();
 
         System.out.println("What grade do you want to change? Write the subject's name: ");
         String inputSubject = in.nextLine();
 
-        Grade filteredGrade = grades.stream()
-                .filter(grade -> grade.getSubject().equals(inputSubject))
-                .findFirst()
-                .orElseThrow(() -> new GradeNotFound("No such subject found - " + inputSubject));
+        Grade filteredGrade = getFilteredGrade(specificGroup, inputSubject);
 
         gradeService.updateGrade(filteredGrade);
         fileService.saveGroupToFile(specificGroup);
@@ -63,13 +60,11 @@ public class UserService implements IUser {
     @Override
     public void deleteUserGrade() {
         Group specificGroup = getSpecificGroupFromFile();
-        User user = getUserFromGroup(specificGroup);
-        List<Grade> grades = user.getGrades();
 
         System.out.println("What grade do you want to change? Write the subject's name: ");
         String inputSubject = in.nextLine();
 
-        if (grades.removeIf(grade -> gradeHandler(grade, inputSubject))) {
+        if (removeGradeIfInGroup(specificGroup, inputSubject)) {
             fileService.saveGroupToFile(specificGroup);
             System.out.println("Grade removed and group saved.");
             return;
@@ -91,13 +86,14 @@ public class UserService implements IUser {
         List<User> users = group.getGroupMembers();
         User newUser = createUser();
 
-        if (!users.contains(newUser)) {
-            users.add(newUser);
-            fileService.saveGroupToFile(group);
+        if (isUserAlreadyInGroup(users, newUser)) {
+            System.out.println("This user already exists...");
             return;
         }
-        
-        System.out.println("This users already exists...");
+
+        users.add(newUser);
+        fileService.saveGroupToFile(group);
+        System.out.println("User successfully added and group saved!");
     }
 
     @Override
@@ -107,6 +103,25 @@ public class UserService implements IUser {
         List<Grade> grades = user.getGrades();
         gradeService.addGrade(grades);
         fileService.saveGroupToFile(specificGroup);
+    }
+
+    private Grade getFilteredGrade(Group specificGroup, String inputSubject) {
+        User user = getUserFromGroup(specificGroup);
+        List<Grade> grades = user.getGrades();
+        return grades.stream()
+                .filter(grade -> grade.getSubject().equals(inputSubject))
+                .findFirst()
+                .orElseThrow(() -> new GradeNotFound("No such subject found - " + inputSubject));
+    }
+
+    private boolean isUserAlreadyInGroup(List<User> users, User newUser) {
+        return users.stream().anyMatch(user -> user.getUsername().equals(newUser.getUsername()));
+    }
+
+    private boolean removeGradeIfInGroup(Group specificGroup, String inputSubject) {
+        User user = getUserFromGroup(specificGroup);
+        List<Grade> grades = user.getGrades();
+        return grades.removeIf(grade -> gradeHandler(grade, inputSubject));
     }
 
     private boolean gradeHandler(Grade grade, String subject) {
@@ -133,7 +148,6 @@ public class UserService implements IUser {
     private boolean groupNameHandler(Group group, String searchedGroupName) {
         return group == null || !group.getGroupName().equals(searchedGroupName);
     }
-
 
     private User getUserFromGroup(Group loadedGroup) {
         List<User> usersFromGroup = loadedGroup.getGroupMembers();
@@ -171,5 +185,4 @@ public class UserService implements IUser {
         }
         return user;
     }
-
 }
