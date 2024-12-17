@@ -17,7 +17,7 @@ public class DependencyFactory {
     }
 
     public UserHandler createUserHandler() {
-        return new UserHandler(createFileService(), createGradeService());
+        return new UserHandler(createGradeService());
     }
 
     public GradeService createGradeService() {

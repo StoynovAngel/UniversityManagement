@@ -22,9 +22,49 @@ public class GroupService implements IGroup {
         groupHandler.displaySpecificGroupFromFile();
     }
 
+
+    @Override
+    public Group getGroup() {
+        return groupHandler.getGroup();
+    }
+
+    @Override
+    public void addNewGradeToUser() {
+        groupHandler.addNewUserToGroup();
+    }
+
+    @Override
+    public void updateUserGrade() {
+        groupHandler.updateUserGrade();
+    }
+
+    @Override
+    public void deleteUserGrade() {
+        groupHandler.deleteUserGrade();
+    }
+
+    @Override
+    public void deleteUserFromSpecificGroup() {
+        groupHandler.deleteUserFromSpecificGroup();
+    }
+
+    @Override
+    public void displaySpecificUserGrades() {
+        groupHandler.displaySpecificUserGrades();
+    }
+
+    @Override
+    public void displayUserFromSpecificGroup() {
+        groupHandler.displayUserFromSpecificGroup();
+    }
+
     @Override
     public void addGroup() {
         groupHandler.addGroup();
     }
 
+    @Override
+    public void addNewUserToGroup() {
+        groupHandler.addNewUserToGroup();
+    }
 }

@@ -29,14 +29,13 @@ public class Interaction {
     private void populateUserChoiceToInteract() {
         userChoiceToInteract.put(1, groupService::addGroup);
         userChoiceToInteract.put(2, groupService::displaySpecificGroupFromFile);
-        userChoiceToInteract.put(3, userService::displayUserFromSpecificGroup);
-        userChoiceToInteract.put(4, userService::displayAllUsersFromSpecificGroup);
-        userChoiceToInteract.put(5, userService::displaySpecificUserGrades);
-        userChoiceToInteract.put(6, userService::addNewUserToGroup);
-        userChoiceToInteract.put(7, userService::updateUserGrade);
-        userChoiceToInteract.put(8, userService::deleteUserGrade);
-        userChoiceToInteract.put(9, userService::addNewGradeToUser);
-        userChoiceToInteract.put(10, userService::deleteUserFromSpecificGroup);
+        userChoiceToInteract.put(3, groupService::displayUserFromSpecificGroup);
+        userChoiceToInteract.put(4, groupService::displaySpecificUserGrades);
+        userChoiceToInteract.put(5, groupService::addNewUserToGroup);
+        userChoiceToInteract.put(6, groupService::updateUserGrade);
+        userChoiceToInteract.put(7, groupService::deleteUserGrade);
+        userChoiceToInteract.put(8, groupService::addNewGradeToUser);
+        userChoiceToInteract.put(9, groupService::deleteUserFromSpecificGroup);
         userChoiceToInteract.put(0, () -> System.out.println("Exiting the program..."));
     }
 }

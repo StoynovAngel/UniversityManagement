@@ -1,12 +1,7 @@
 package interfaces;
 
+import dto.User;
+
 public interface IUser {
-    void displaySpecificUserGrades();
-    void displayUserFromSpecificGroup();
-    void displayAllUsersFromSpecificGroup();
-    void addNewUserToGroup();
-    void addNewGradeToUser();
-    void updateUserGrade();
-    void deleteUserGrade();
-    void deleteUserFromSpecificGroup();
+    User createUser();
 }

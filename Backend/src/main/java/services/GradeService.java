@@ -1,6 +1,7 @@
 package services;
 
 import dto.Grade;
+import dto.Group;
 import dto.User;
 import handlers.GradeHandler;
 import interfaces.IGrade;
@@ -30,4 +31,5 @@ public class GradeService implements IGrade {
     public void addGrade(List<Grade> grades) {
         gradeHandler.addGrade(grades);
     }
+
 }

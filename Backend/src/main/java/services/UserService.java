@@ -22,42 +22,7 @@ public class UserService implements IUser {
     }
 
     @Override
-    public void displaySpecificUserGrades() {
-        userHandler.displaySpecificUserGrades();
-    }
-
-    @Override
-    public void displayUserFromSpecificGroup() {
-        userHandler.displayUserFromSpecificGroup();
-    }
-
-    @Override
-    public void displayAllUsersFromSpecificGroup() {
-        userHandler.displayAllUsersFromSpecificGroup();
-    }
-
-    @Override
-    public void updateUserGrade() {
-        userHandler.updateUserGrade();
-    }
-
-    @Override
-    public void deleteUserGrade() {
-        userHandler.deleteUserGrade();
-    }
-
-    @Override
-    public void deleteUserFromSpecificGroup() {
-        userHandler.deleteUserFromSpecificGroup();
-    }
-
-    @Override
-    public void addNewUserToGroup() {
-        userHandler.addNewUserToGroup();
-    }
-
-    @Override
-    public void addNewGradeToUser() {
-        userHandler.addNewGradeToUser();
+    public User createUser() {
+        return userHandler.createUser();
     }
 }

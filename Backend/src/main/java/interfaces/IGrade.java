@@ -1,6 +1,7 @@
 package interfaces;
 
 import dto.Grade;
+import dto.Group;
 import dto.User;
 
 import java.util.List;
