@@ -1,27 +1,46 @@
 package config;
 
-import handlers.Interaction;
+import handlers.*;
 import services.FileService;
+import services.GradeService;
 import services.GroupService;
-import services.InitialMenu;
 import services.UserService;
 
 public class DependencyFactory {
 
-
-    public FileService createFileService() {
-        return new FileService("files/");
+    public FileHandler createFileHandler() {
+        return new FileHandler("files/");
     }
 
     public UserService createUserService() {
-        return new UserService(createFileService());
+        return new UserService(createUserHandler());
+    }
+
+    public UserHandler createUserHandler() {
+        return new UserHandler(createFileService(), createGradeService());
+    }
+
+    public GradeService createGradeService() {
+        return new GradeService(createGradeHandler());
+    }
+
+    public GradeHandler createGradeHandler() {
+        return new GradeHandler();
     }
 
     public GroupService createGroupService() {
-        return new GroupService(createFileService());
+        return new GroupService(createGroupHandler());
+    }
+
+    public GroupHandler createGroupHandler() {
+        return new GroupHandler(createFileService());
     }
 
     public Interaction createInteraction() {
         return new Interaction(createUserService(), createGroupService());
+    }
+
+    public FileService createFileService() {
+        return new FileService(createFileHandler());
     }
 }
