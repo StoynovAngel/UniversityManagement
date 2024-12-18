@@ -134,5 +134,4 @@ public class GroupHandler {
     private User getUserFromGroup(Group loadedGroup) {
         return userService.getUserFromGroup(loadedGroup);
     }
-
 }
