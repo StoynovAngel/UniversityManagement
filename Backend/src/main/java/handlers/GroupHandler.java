@@ -1,11 +1,9 @@
 package handlers;
 
-import dto.Grade;
 import dto.Group;
 import dto.User;
 import exceptions.*;
 import services.FileService;
-import services.GradeService;
 import services.UserService;
 
 import java.util.List;
@@ -14,19 +12,15 @@ import java.util.Scanner;
 public class GroupHandler {
     private final Scanner in = new Scanner(System.in);
     private final FileService fileService;
-    private final GradeService gradeService = new GradeService(new GradeHandler());
-    private final UserService userService = new UserService(new UserHandler(gradeService));
+    private final UserService userService;
 
-    public GroupHandler(FileService fileService) {
+    public GroupHandler(FileService fileService, UserService userService) {
         this.fileService = fileService;
+        this.userService = userService;
     }
 
     public void displaySpecificGroupFromFile() {
-        System.out.print("Enter a group name: ");
-        String searchedGroupName = in.nextLine();
-        validateGroupUserInput(searchedGroupName);
-        Group loadedGroup = getSpecificLoadedGroupByName(searchedGroupName);
-        System.out.println(loadedGroup);
+        System.out.println(getGroup());
     }
 
     public void addGroup() {
@@ -50,70 +44,36 @@ public class GroupHandler {
             System.out.println("This user already exists...");
             return;
         }
-
         users.add(newUser);
         saveGroup(group);
         System.out.println("User successfully added and group saved!");
     }
 
-    public Group getGroup() {
-        System.out.print("Enter group name: ");
-        String searchedGroupName = in.nextLine();
-        Group group = loadGroup(searchedGroupName);
-
-        if (groupNameHandler(group, searchedGroupName)) {
-            throw new GroupNotFoundException("Could not find group with the name: " + searchedGroupName);
-        }
-
-        return group;
+    public void addNewGradeToUserAndSaveToFile() {
+        Group group = getGroup();
+        userService.addGradeUser(group);
+        saveGroup(group);
     }
 
-    public void displaySpecificUserGrades() {
-        System.out.println(getSpecificUser().getGrades());
+    public void deleteUserFromSpecificGroup() {
+        Group group = getGroup();
+        userService.deleteUser(group);
+        saveGroup(group);
     }
 
     public void displayUserFromSpecificGroup() {
         System.out.println(getSpecificUser());
     }
 
-    public void updateUserGrade() {
+    public void updateUserGradeAndSaveToFile() {
         Group specificGroup = getGroup();
-
-        System.out.println("What grade do you want to change? Write the subject's name: ");
-        String inputSubject = in.nextLine();
-
-        Grade filteredGrade = getFilteredGrade(specificGroup, inputSubject);
-
-        gradeService.updateGrade(filteredGrade);
+        userService.updateUserGrade(specificGroup);
         saveGroup(specificGroup);
     }
 
     public void deleteUserGrade() {
         Group specificGroup = getGroup();
-
-        System.out.println("What grade do you want to change? Write the subject's name: ");
-        String inputSubject = in.nextLine();
-
-        if (removeGradeIfInGroup(specificGroup, inputSubject)) {
-            saveGroup(specificGroup);
-            System.out.println("Grade removed and group saved.");
-            return;
-        }
-        throw new GradeNotFound("No such grade found");
-    }
-
-    public void deleteUserFromSpecificGroup() {
-        Group specificGroup = getGroup();
-        User user = getUserFromGroup(specificGroup);
-        specificGroup.getGroupMembers().remove(user);
-        saveGroup(specificGroup);
-    }
-
-    public void addNewGradeToUser() {
-        Group specificGroup = getGroup();
-        User user = getUserFromGroup(specificGroup);
-        List<Grade> grades = user.getGrades();
-        gradeService.addGrade(grades);
+        userService.deleteUserGrade(specificGroup);
         saveGroup(specificGroup);
     }
 
@@ -154,54 +114,25 @@ public class GroupHandler {
                 .anyMatch(group -> group.getGroupName().equalsIgnoreCase(nameOfNewGroup));
     }
 
-    private Group getSpecificLoadedGroupByName(String searchedGroupName) {
-        Group loadedGroup = loadGroup(searchedGroupName);
-        if (loadedGroup == null) {
-            throw new InvalidGroup("Group with this name could not be find.");
-        }
-        return loadedGroup;
-    }
-
-    private Grade getFilteredGrade(Group specificGroup, String inputSubject) {
-        User user = getUserFromGroup(specificGroup);
-        List<Grade> grades = user.getGrades();
-        return grades.stream()
-                .filter(grade -> grade.getSubject().equals(inputSubject))
-                .findFirst()
-                .orElseThrow(() -> new GradeNotFound("No such subject found - " + inputSubject));
-    }
-
-    private boolean removeGradeIfInGroup(Group specificGroup, String inputSubject) {
-        User user = getUserFromGroup(specificGroup);
-        List<Grade> grades = user.getGrades();
-        return grades.removeIf(grade -> gradeHandler(grade, inputSubject));
-    }
-
-    private boolean gradeHandler(Grade grade, String subject) {
-        return grade != null && grade.getSubject().equals(subject);
-    }
-
     private User getSpecificUser() {
         Group specificGroup = getGroup();
         return getUserFromGroup(specificGroup);
     }
 
-    private User getUserFromGroup(Group loadedGroup) {
-        List<User> usersFromGroup = loadedGroup.getGroupMembers();
-        System.out.print("Enter username: ");
-        String searchedUsername = in.nextLine();
-        validateUserInput(searchedUsername);
+    private Group getGroup() {
+        System.out.print("Enter group name: ");
+        String searchedGroupName = in.nextLine();
+        Group group = loadGroup(searchedGroupName);
 
-        return usersFromGroup.stream()
-                .filter(user -> user.getUsername().equals(searchedUsername))
-                .findFirst()
-                .orElseThrow(() -> new UserNotFoundException("User with username '" + searchedUsername + "' not found."));
-    }
-
-    private void validateUserInput(String username) {
-        if (!username.matches("^[a-zA-Z]{4,}$")) {
-            System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
-            throw new InvalidUserInput("Invalid username: " + username);
+        if (groupNameHandler(group, searchedGroupName)) {
+            throw new GroupNotFoundException("Could not find group with the name: " + searchedGroupName);
         }
+
+        return group;
     }
+
+    private User getUserFromGroup(Group loadedGroup) {
+        return userService.getUserFromGroup(loadedGroup);
+    }
+
 }

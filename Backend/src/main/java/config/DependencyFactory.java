@@ -1,10 +1,7 @@
 package config;
 
 import handlers.*;
-import services.FileService;
-import services.GradeService;
-import services.GroupService;
-import services.UserService;
+import services.*;
 
 public class DependencyFactory {
 
@@ -33,11 +30,11 @@ public class DependencyFactory {
     }
 
     public GroupHandler createGroupHandler() {
-        return new GroupHandler(createFileService());
+        return new GroupHandler(createFileService(), createUserService());
     }
 
     public Interaction createInteraction() {
-        return new Interaction(createUserService(), createGroupService());
+        return new Interaction(createGroupService());
     }
 
     public FileService createFileService() {

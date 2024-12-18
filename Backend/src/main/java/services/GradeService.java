@@ -1,14 +1,8 @@
 package services;
 
-import dto.Grade;
-import dto.Group;
 import dto.User;
 import handlers.GradeHandler;
 import interfaces.IGrade;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class GradeService implements IGrade {
     private final GradeHandler gradeHandler;
@@ -18,18 +12,17 @@ public class GradeService implements IGrade {
     }
 
     @Override
-    public Grade addGradeToUser() {
-        return gradeHandler.addGradeToUser();
+    public void addGrade(User user) {
+        gradeHandler.addGradeToUser(user);
     }
 
     @Override
-    public void updateGrade(Grade grade) {
-        gradeHandler.updateGrade(grade);
+    public void updateGrade(User user) {
+        gradeHandler.updateUserGrade(user);
     }
 
     @Override
-    public void addGrade(List<Grade> grades) {
-        gradeHandler.addGrade(grades);
+    public void deleteGrade(User user) {
+        gradeHandler.deleteGrade(user);
     }
-
 }

@@ -1,14 +1,7 @@
 package services;
 
-import dto.Group;
-import exceptions.GroupAlreadyExists;
-import exceptions.InvalidGroup;
-import exceptions.InvalidUserInput;
 import handlers.GroupHandler;
 import interfaces.IGroup;
-
-import java.util.List;
-import java.util.Scanner;
 
 public class GroupService implements IGroup {
     private final GroupHandler groupHandler;
@@ -22,35 +15,24 @@ public class GroupService implements IGroup {
         groupHandler.displaySpecificGroupFromFile();
     }
 
-
     @Override
-    public Group getGroup() {
-        return groupHandler.getGroup();
+    public void addNewGradeToUserAndSaveToFile() {
+        groupHandler.addNewGradeToUserAndSaveToFile();
     }
 
     @Override
-    public void addNewGradeToUser() {
-        groupHandler.addNewUserToGroup();
+    public void updateUserGradeAndSaveToFile() {
+        groupHandler.updateUserGradeAndSaveToFile();
     }
 
     @Override
-    public void updateUserGrade() {
-        groupHandler.updateUserGrade();
-    }
-
-    @Override
-    public void deleteUserGrade() {
+    public void deleteUserGradeAndSaveToFile() {
         groupHandler.deleteUserGrade();
     }
 
     @Override
     public void deleteUserFromSpecificGroup() {
         groupHandler.deleteUserFromSpecificGroup();
-    }
-
-    @Override
-    public void displaySpecificUserGrades() {
-        groupHandler.displaySpecificUserGrades();
     }
 
     @Override

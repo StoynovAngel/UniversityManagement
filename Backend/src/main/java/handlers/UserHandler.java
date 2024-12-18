@@ -1,16 +1,10 @@
 package handlers;
 
-import dto.Grade;
 import dto.Group;
 import dto.User;
-import exceptions.GradeNotFound;
 import exceptions.InvalidUserInput;
 import exceptions.UserNotFoundException;
-import services.FileService;
 import services.GradeService;
-import services.GroupService;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class UserHandler {
@@ -22,13 +16,10 @@ public class UserHandler {
     }
 
     public User createUser() {
-        System.out.print("Username: ");
-        String username = in.nextLine();
+        String username = getUsernameForm();
         User user = new User(username);
         while (true) {
-            Grade newGrade = gradeService.addGradeToUser();
-            user.getGrades().add(newGrade);
-
+            gradeService.addGrade(user);
             System.out.println("Add another grade? (y/n): ");
             String choice = in.nextLine().toLowerCase().trim();
             if (!choice.equals("y")) {
@@ -37,5 +28,43 @@ public class UserHandler {
             }
         }
         return user;
+    }
+
+    public void addGradeUser(Group loadedGroup) {
+        gradeService.addGrade(getUserFromGroup(loadedGroup));
+    }
+
+    public void deleteUser(Group loadedGroup) {
+        loadedGroup.getGroupMembers().remove(getUserFromGroup(loadedGroup));
+    }
+
+    public User getUserFromGroup(Group loadedGroup) {
+        String username = getUsernameForm();
+        return loadedGroup.getGroupMembers().stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException("User with username '" + username + "' not found in group '" + loadedGroup.getGroupName() + "'."));
+    }
+
+    public void updateUserGrade(Group loadedGroup) {
+        gradeService.updateGrade(getUserFromGroup(loadedGroup));
+    }
+
+    public void deleteUserGrade(Group loadedGroup) {
+        gradeService.deleteGrade(getUserFromGroup(loadedGroup));
+    }
+
+    private String getUsernameForm() {
+        System.out.print("Username: ");
+        String username = in.nextLine();
+        validateUserInput(username);
+        return username;
+    }
+
+    private void validateUserInput(String username) {
+        if (!username.matches("^[a-zA-Z]{4,}$")) {
+            System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
+            throw new InvalidUserInput("Invalid username: " + username);
+        }
     }
 }

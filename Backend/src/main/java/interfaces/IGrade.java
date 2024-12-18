@@ -7,7 +7,7 @@ import dto.User;
 import java.util.List;
 
 public interface IGrade {
-    Grade addGradeToUser();
-    void updateGrade(Grade grade);
-    void addGrade(List<Grade> grades);
+    void addGrade(User user);
+    void updateGrade(User user);
+    void deleteGrade(User user);
 }
