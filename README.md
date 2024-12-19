@@ -1,4 +1,4 @@
-# UniversityManagement
+# University Management
 This project is designed to help manage user groups, assign grades and for a university eating hall. This Java-based implementation focuses on providing modular and maintainable code with a menu-driven interface for user interaction.
 
 ## Features
