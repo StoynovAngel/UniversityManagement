@@ -1,7 +1,7 @@
 package services;
 
 import dto.User;
-import handlers.GradeHandler;
+import utils.handlers.GradeHandler;
 import interfaces.IGrade;
 
 public class GradeService implements IGrade {

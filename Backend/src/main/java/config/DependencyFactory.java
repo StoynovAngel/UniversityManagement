@@ -1,6 +1,6 @@
 package config;
 
-import handlers.*;
+import utils.handlers.*;
 import services.*;
 
 public class DependencyFactory {

@@ -1,6 +1,6 @@
 package services;
 
-import handlers.Interaction;
+import utils.handlers.Interaction;
 import interfaces.Menu;
 import utils.consoleArt.ConsoleArt;
 import java.util.Scanner;

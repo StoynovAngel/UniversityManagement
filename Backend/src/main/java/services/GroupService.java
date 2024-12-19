@@ -1,6 +1,6 @@
 package services;
 
-import handlers.GroupHandler;
+import utils.handlers.GroupHandler;
 import interfaces.IGroup;
 
 public class GroupService implements IGroup {

@@ -1,13 +1,14 @@
-package handlers;
+package utils.handlers;
 
 import dto.Group;
 import dto.User;
-import exceptions.InvalidUserInput;
-import exceptions.UserNotFoundException;
+import utils.exceptions.UserNotFoundException;
 import services.GradeService;
+import utils.validation.Validation;
+
 import java.util.Scanner;
 
-public class UserHandler {
+public class UserHandler extends Validation {
     private final Scanner in = new Scanner(System.in);
     private final GradeService gradeService;
 
@@ -57,14 +58,7 @@ public class UserHandler {
     private String getUsernameForm() {
         System.out.print("Username: ");
         String username = in.nextLine();
-        validateUserInput(username);
+        usernameValidation(username);
         return username;
-    }
-
-    private void validateUserInput(String username) {
-        if (!username.matches("^[a-zA-Z]{4,}$")) {
-            System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
-            throw new InvalidUserInput("Invalid username: " + username);
-        }
     }
 }

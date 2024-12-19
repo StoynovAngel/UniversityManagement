@@ -2,7 +2,7 @@ package services;
 
 import dto.Group;
 import dto.User;
-import handlers.UserHandler;
+import utils.handlers.UserHandler;
 import interfaces.IUser;
 
 public class UserService implements IUser {
