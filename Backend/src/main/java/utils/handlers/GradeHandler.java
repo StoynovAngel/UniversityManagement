@@ -42,6 +42,7 @@ public class GradeHandler extends Validation {
         String subject = in.nextLine();
         System.out.print("Mark: ");
         double mark = in.nextDouble();
+        gradeValidation(mark);
         in.nextLine();
         return new Grade(subject, mark);
     }
@@ -51,6 +52,7 @@ public class GradeHandler extends Validation {
         System.out.print("Enter new grade: ");
         double newMark = in.nextDouble();
         in.nextLine();
+        gradeValidation(newMark);
         gradeToUpdate.setMark(newMark);
         System.out.println("Grade updated successfully.");
     }
