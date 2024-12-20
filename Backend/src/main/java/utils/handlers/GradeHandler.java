@@ -19,11 +19,7 @@ public class GradeHandler extends Validation {
     public void updateUserGrade(User user) {
         System.out.print("What grade do you want to update? Enter subject to update: ");
         String subject = in.nextLine();
-        List<Grade> grades = user.getGrades();
-        Grade gradeToUpdate = grades.stream()
-                .filter(grade -> grade.getSubject().equalsIgnoreCase(subject))
-                .findFirst()
-                .orElseThrow(() -> new GradeNotFound("No grade found for subject: " + subject));
+        Grade gradeToUpdate = getFilteredGrade(user, subject);
         updateUserGradeHandler(gradeToUpdate, subject);
     }
 
@@ -45,6 +41,14 @@ public class GradeHandler extends Validation {
         gradeValidation(mark);
         in.nextLine();
         return new Grade(subject, mark);
+    }
+
+    private Grade getFilteredGrade(User user, String subject) {
+        List<Grade> grades = user.getGrades();
+        return grades.stream()
+                .filter(grade -> grade.getSubject().equalsIgnoreCase(subject))
+                .findFirst()
+                .orElseThrow(() -> new GradeNotFound("No grade found for subject: " + subject));
     }
 
     private void updateUserGradeHandler(Grade gradeToUpdate, String subject) {
