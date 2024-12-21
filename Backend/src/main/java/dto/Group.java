@@ -8,8 +8,8 @@ import java.util.List;
 public class Group implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String groupName;
-    private List<User> groupMembers;
+    private final String groupName;
+    private final List<User> groupMembers;
 
     public Group(String groupName, List<User> groupMembers) {
         this.groupName = groupName;

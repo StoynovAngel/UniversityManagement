@@ -8,8 +8,8 @@ import java.util.List;
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String username;
-    private List<Grade> grades;
+    private final String username;
+    private final List<Grade> grades;
 
     public User(String username, List<Grade> grades) {
         this.username = username;

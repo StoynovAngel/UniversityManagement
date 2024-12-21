@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Grade implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String subject;
+    private final String subject;
     private double mark;
 
     public Grade(String subject, double mark) {
