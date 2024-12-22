@@ -42,8 +42,7 @@ public class GroupHandler extends Validation {
         User newUser = userService.createUser();
 
         if (isUserAlreadyInGroup(users, newUser)) {
-            System.out.println("This user already exists...");
-            return;
+            throw new IllegalArgumentException("This user already exists in the group.");
         }
         users.add(newUser);
         saveGroup(group);

@@ -22,6 +22,7 @@ public class Validation {
             throw new InvalidUserInput("Invalid username: " + username);
         }
     }
+
     protected boolean isGradeRemoved(List<Grade> grades, String subject) {
         return grades.removeIf(grade -> grade.getSubject().equalsIgnoreCase(subject));
     }
