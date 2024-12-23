@@ -11,7 +11,7 @@ import java.util.List;
 public class Validation {
 
     protected void gradeValidation(double mark) {
-        if (mark <= 2 || mark > 6) {
+        if (mark < 2 || mark > 6) {
             throw new InvalidUserInput("Mark must be between 2 and 6");
         }
     }
