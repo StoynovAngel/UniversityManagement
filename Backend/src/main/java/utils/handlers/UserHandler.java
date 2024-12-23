@@ -57,8 +57,6 @@ public class UserHandler extends Validation {
 
     private String getUsernameForm() {
         System.out.print("Username: ");
-        String username = in.nextLine();
-        usernameValidation(username);
-        return username;
+        return in.nextLine();
     }
 }

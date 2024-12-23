@@ -10,19 +10,6 @@ import java.util.List;
 
 public class Validation {
 
-    protected void gradeValidation(double mark) {
-        if (mark < 2 || mark > 6) {
-            throw new InvalidUserInput("Mark must be between 2 and 6");
-        }
-    }
-
-    protected void usernameValidation(String username) {
-        if (!username.matches("^[a-zA-Z]{4,}$")) {
-            System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
-            throw new InvalidUserInput("Invalid username: " + username);
-        }
-    }
-
     protected boolean isGradeRemoved(List<Grade> grades, String subject) {
         return grades.removeIf(grade -> grade.getSubject().equalsIgnoreCase(subject));
     }

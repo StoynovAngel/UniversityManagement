@@ -1,5 +1,7 @@
 package dto;
 
+import utils.exceptions.InvalidUserInput;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class User implements Serializable {
     public User(String username, List<Grade> grades) {
         this.username = username;
         this.grades = grades;
+        usernameValidation(username);
     }
 
     public User(String username) {
@@ -26,6 +29,13 @@ public class User implements Serializable {
 
     public List<Grade> getGrades() {
         return grades;
+    }
+
+    protected void usernameValidation(String username) {
+        if (!username.matches("^[a-zA-Z]{4,}$")) {
+            System.out.println("Invalid input. Username must contain only alphabetic characters and be at least 4 letters.");
+            throw new InvalidUserInput("Invalid username: " + username);
+        }
     }
 
     @Override
