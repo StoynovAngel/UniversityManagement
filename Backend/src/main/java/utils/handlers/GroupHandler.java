@@ -1,7 +1,9 @@
 package utils.handlers;
 
 import dto.Group;
+import dto.Student;
 import dto.User;
+import services.StudentService;
 import utils.exceptions.*;
 import services.FileService;
 import services.UserService;
@@ -13,11 +15,9 @@ import java.util.Scanner;
 public class GroupHandler extends Validation {
     private final Scanner in = new Scanner(System.in);
     private final FileService fileService;
-    private final UserService userService;
 
-    public GroupHandler(FileService fileService, UserService userService) {
+    public GroupHandler(FileService fileService) {
         this.fileService = fileService;
-        this.userService = userService;
     }
 
     public void displaySpecificGroupFromFile() {
@@ -36,46 +36,6 @@ public class GroupHandler extends Validation {
         saveGroup(newGroup);
     }
 
-    public void addNewUserToGroup() {
-        Group group = getGroup();
-        List<User> users = group.getGroupMembers();
-        User newUser = userService.createUser();
-
-        if (isUserAlreadyInGroup(users, newUser)) {
-            throw new IllegalArgumentException("This user already exists in the group.");
-        }
-        users.add(newUser);
-        saveGroup(group);
-        System.out.println("User successfully added and group saved!");
-    }
-
-    public void addNewGradeToUserAndSaveToFile() {
-        Group group = getGroup();
-        userService.addGradeUser(group);
-        saveGroup(group);
-    }
-
-    public void deleteUserFromSpecificGroup() {
-        Group group = getGroup();
-        userService.deleteUser(group);
-        saveGroup(group);
-    }
-
-    public void displayUserFromSpecificGroup() {
-        System.out.println(getSpecificUser());
-    }
-
-    public void updateUserGradeAndSaveToFile() {
-        Group specificGroup = getGroup();
-        userService.updateUserGrade(specificGroup);
-        saveGroup(specificGroup);
-    }
-
-    public void deleteUserGrade() {
-        Group specificGroup = getGroup();
-        userService.deleteUserGrade(specificGroup);
-        saveGroup(specificGroup);
-    }
 
     private void saveGroup(Group group){
         fileService.saveGroupToFile(group);
@@ -89,10 +49,6 @@ public class GroupHandler extends Validation {
         return fileService.loadAllGroups();
     }
 
-    private User getSpecificUser() {
-        Group specificGroup = getGroup();
-        return getUserFromGroup(specificGroup);
-    }
 
     private Group getGroup() {
         System.out.print("Enter group name: ");
@@ -106,7 +62,4 @@ public class GroupHandler extends Validation {
         return group;
     }
 
-    private User getUserFromGroup(Group loadedGroup) {
-        return userService.getUserFromGroup(loadedGroup);
-    }
 }

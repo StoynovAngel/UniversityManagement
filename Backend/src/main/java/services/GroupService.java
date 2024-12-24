@@ -16,28 +16,23 @@ public class GroupService implements IGroup {
     }
 
     @Override
-    public void addNewGradeToUserAndSaveToFile() {
-        groupHandler.addNewGradeToUserAndSaveToFile();
+    public void displayUserFromSpecificGroup() {
+
     }
 
     @Override
     public void updateUserGradeAndSaveToFile() {
-        groupHandler.updateUserGradeAndSaveToFile();
+
     }
 
     @Override
     public void deleteUserGradeAndSaveToFile() {
-        groupHandler.deleteUserGrade();
+
     }
 
     @Override
     public void deleteUserFromSpecificGroup() {
-        groupHandler.deleteUserFromSpecificGroup();
-    }
 
-    @Override
-    public void displayUserFromSpecificGroup() {
-        groupHandler.displayUserFromSpecificGroup();
     }
 
     @Override
@@ -47,6 +42,12 @@ public class GroupService implements IGroup {
 
     @Override
     public void addNewUserToGroup() {
-        groupHandler.addNewUserToGroup();
+
     }
+
+    @Override
+    public void addNewGradeToUserAndSaveToFile() {
+
+    }
+
 }

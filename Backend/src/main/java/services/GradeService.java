@@ -1,6 +1,9 @@
 package services;
 
+import dto.Student;
+import dto.Subject;
 import dto.User;
+import enums.GradeType;
 import utils.handlers.GradeHandler;
 import interfaces.IGrade;
 
@@ -12,17 +15,17 @@ public class GradeService implements IGrade {
     }
 
     @Override
-    public void addGrade(User user) {
-        gradeHandler.addGradeToUser(user);
+    public void updateGrade(Subject subject) {
+        gradeHandler.updateSubjectGrade(subject);
     }
 
     @Override
-    public void updateGrade(User user) {
-        gradeHandler.updateUserGrade(user);
+    public void deleteGrade(Subject subject) {
+        gradeHandler.deleteGrade(subject);
     }
 
     @Override
-    public void deleteGrade(User user) {
-        gradeHandler.deleteGrade(user);
+    public GradeType getGradeType() {
+        return gradeHandler.getGradeType();
     }
 }

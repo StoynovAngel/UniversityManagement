@@ -1,9 +1,10 @@
 package interfaces;
 
-import dto.User;
+import dto.Subject;
+import enums.GradeType;
 
 public interface IGrade {
-    void addGrade(User user);
-    void updateGrade(User user);
-    void deleteGrade(User user);
+    void updateGrade(Subject subject);
+    void deleteGrade(Subject subject);
+    GradeType getGradeType();
 }

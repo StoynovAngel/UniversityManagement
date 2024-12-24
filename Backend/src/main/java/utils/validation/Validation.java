@@ -19,7 +19,7 @@ public class Validation {
                 .anyMatch(group -> group.getGroupName().equalsIgnoreCase(nameOfNewGroup));
     }
 
-    protected boolean isUserAlreadyInGroup(List<User> users, User newUser) {
+    protected <T extends User> boolean isUserAlreadyInGroup(List<T> users, User newUser) {
         return users.stream().anyMatch(user -> user.getUsername().equals(newUser.getUsername()));
     }
 

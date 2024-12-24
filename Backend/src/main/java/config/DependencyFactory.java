@@ -14,7 +14,7 @@ public class DependencyFactory {
     }
 
     public UserHandler createUserHandler() {
-        return new UserHandler(createGradeService());
+        return new UserHandler();
     }
 
     public GradeService createGradeService() {
@@ -30,7 +30,7 @@ public class DependencyFactory {
     }
 
     public GroupHandler createGroupHandler() {
-        return new GroupHandler(createFileService(), createUserService());
+        return new GroupHandler(createFileService());
     }
 
     public Interaction createInteraction() {

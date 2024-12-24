@@ -9,9 +9,9 @@ public class Group implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final String groupName;
-    private final List<User> groupMembers;
+    private final List<Student> groupMembers;
 
-    public Group(String groupName, List<User> groupMembers) {
+    public Group(String groupName, List<Student> groupMembers) {
         this.groupName = groupName;
         this.groupMembers = groupMembers;
     }
@@ -24,15 +24,15 @@ public class Group implements Serializable {
         return groupName;
     }
 
-    public List<User> getGroupMembers() {
+    public List<Student> getGroupMembers() {
         return groupMembers;
     }
 
     @Override
     public String toString() {
         StringBuilder members = new StringBuilder();
-        for (User user : groupMembers) {
-            members.append("\t").append(user.toString()).append("\n");
+        for (Student student : groupMembers) {
+            members.append("\t").append(student.toString()).append("\n");
         }
 
         return "Group {\n" +
