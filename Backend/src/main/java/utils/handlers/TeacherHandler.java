@@ -59,7 +59,7 @@ public class TeacherHandler {
         double mark = in.nextDouble();
         in.nextLine();
 
-        return new Grade(subject.getName(), mark, teacher, subject.getDescription(), gradeService.getGradeType());
+        return new Grade(subject.getName(), mark, teacher, gradeService.getGradeType());
     }
 
 }

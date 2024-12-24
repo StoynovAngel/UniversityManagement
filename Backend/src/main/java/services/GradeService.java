@@ -7,6 +7,8 @@ import enums.GradeType;
 import utils.handlers.GradeHandler;
 import interfaces.IGrade;
 
+import java.time.LocalDate;
+
 public class GradeService implements IGrade {
     private final GradeHandler gradeHandler;
 
@@ -22,6 +24,11 @@ public class GradeService implements IGrade {
     @Override
     public void deleteGrade(Subject subject) {
         gradeHandler.deleteGrade(subject);
+    }
+
+    @Override
+    public void viewGradesBasedOnDate(Subject subject, LocalDate date) {
+        gradeHandler.viewGradesBasedOnDate(subject, date);
     }
 
     @Override

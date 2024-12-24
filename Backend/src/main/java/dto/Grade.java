@@ -12,16 +12,14 @@ public class Grade implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String subject;
     private Teacher teacher;
-    private String description;
     private GradeType gradeType;
     private double mark;
     private final LocalDate dateOfGrading;
 
-    public Grade(String subject, double mark, Teacher teacher, String description, GradeType gradeType) {
-        this.subject = subject;
+    public Grade(String subject, double mark, Teacher teacher, GradeType gradeType) {
         this.mark = mark;
+        this.subject = subject;
         this.teacher = teacher;
-        this.description = description;
         this.gradeType = gradeType;
         this.dateOfGrading = LocalDate.now();
         gradeValidation(mark);
@@ -30,6 +28,14 @@ public class Grade implements Serializable {
 
     public String getSubject() {
         return subject;
+    }
+
+    public GradeType getGradeType() {
+        return gradeType;
+    }
+
+    public LocalDate getDateOfGrading() {
+        return dateOfGrading;
     }
 
     public double getMark() {

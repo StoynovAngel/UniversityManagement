@@ -3,9 +3,9 @@ package utils.handlers;
 import dto.Grade;
 import dto.Group;
 import dto.Student;
-import utils.validation.Validation;
+import utils.validation.Validator;
 
-public class StudentHandler extends Validation {
+public class StudentHandler extends Validator {
     public void viewGrades(Student student) {
         student.getSubjects().forEach(subject -> System.out.println(subject.getAllGrades().toString()));
     }

@@ -8,7 +8,7 @@ import utils.exceptions.InvalidUserInput;
 
 import java.util.List;
 
-public class Validation {
+public class Validator {
 
     protected boolean isGradeRemoved(List<Grade> grades, String subject) {
         return grades.removeIf(grade -> grade.getSubject().equalsIgnoreCase(subject));

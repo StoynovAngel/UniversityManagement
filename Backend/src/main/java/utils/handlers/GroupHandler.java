@@ -1,18 +1,14 @@
 package utils.handlers;
 
 import dto.Group;
-import dto.Student;
-import dto.User;
-import services.StudentService;
 import utils.exceptions.*;
 import services.FileService;
-import services.UserService;
-import utils.validation.Validation;
+import utils.validation.Validator;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class GroupHandler extends Validation {
+public class GroupHandler extends Validator {
     private final Scanner in = new Scanner(System.in);
     private final FileService fileService;
 
