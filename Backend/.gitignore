@@ -21,6 +21,11 @@ target/
 .springBeans
 .sts4-cache
 
+### Enviroument file ###
+.env
+
+create_tables.sql
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
