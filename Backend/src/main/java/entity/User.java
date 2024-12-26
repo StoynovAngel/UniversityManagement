@@ -1,24 +1,28 @@
-package dto;
+package entity;
 
 import utils.exceptions.InvalidUserInput;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    private final Long id;
     private final String username;
 
-    public User(String username) {
+    public User(Long id, String username) {
+        this.id = id;
         this.username = username;
         usernameValidation(username);
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     protected void usernameValidation(String username) {

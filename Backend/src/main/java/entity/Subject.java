@@ -1,9 +1,10 @@
-package dto;
+package entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Subject {
+    private final Long id;
     private String name;
     private int hoursPerWeek;
     private String description;
@@ -11,12 +12,14 @@ public class Subject {
     private final List<Student> studentsAssignedToSubject;
     private final List<Grade> allGrades;
 
-    public Subject(String name, int hoursPerWeek, String description,
+    public Subject(Long id, String name, int hoursPerWeek, String description,
                    List<Teacher> teachersAssignedToSubject,
                    List<Student> studentsAssignedToSubject, List<Grade> allGrades)
     {
-        this.allGrades = allGrades;
+
         validateHoursPerWeek(hoursPerWeek);
+        this.id = id;
+        this.allGrades = allGrades;
         this.name = name;
         this.hoursPerWeek = hoursPerWeek;
         this.description = description;
@@ -24,8 +27,8 @@ public class Subject {
         this.studentsAssignedToSubject = studentsAssignedToSubject;
     }
 
-    public Subject(String name, int hoursPerWeek, String description) {
-        this(name, hoursPerWeek, description, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    public Subject(Long id, String name, int hoursPerWeek, String description) {
+        this(id, name, hoursPerWeek, description, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public String getName() {

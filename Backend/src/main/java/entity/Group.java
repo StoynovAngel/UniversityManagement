@@ -1,4 +1,4 @@
-package dto;
+package entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,16 +8,18 @@ import java.util.List;
 public class Group implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    private final Long id;
     private final String groupName;
     private final List<Student> groupMembers;
 
-    public Group(String groupName, List<Student> groupMembers) {
+    public Group(Long id, String groupName, List<Student> groupMembers) {
+        this.id = id;
         this.groupName = groupName;
         this.groupMembers = groupMembers;
     }
 
-    public Group(String groupName) {
-        this(groupName, new ArrayList<>());
+    public Group(Long id, String groupName) {
+        this(id, groupName, new ArrayList<>());
     }
 
     public String getGroupName() {

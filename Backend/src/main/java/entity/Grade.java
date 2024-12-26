@@ -1,4 +1,4 @@
-package dto;
+package entity;
 
 import enums.GradeType;
 import utils.exceptions.InvalidUserInput;
@@ -10,13 +10,15 @@ import java.time.LocalDate;
 public class Grade implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    private final Long id;
     private final String subject;
     private Teacher teacher;
     private GradeType gradeType;
     private double mark;
     private final LocalDate dateOfGrading;
 
-    public Grade(String subject, double mark, Teacher teacher, GradeType gradeType) {
+    public Grade(Long id, String subject, double mark, Teacher teacher, GradeType gradeType) {
+        this.id = id;
         this.mark = mark;
         this.subject = subject;
         this.teacher = teacher;

@@ -1,4 +1,4 @@
-package dto;
+package entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +8,15 @@ public class Student extends User{
     private double averageGradePerSubject;
     private double averageGradeOverall;
 
-    public Student(String username, List<Subject> subjects, double averageGradePerSubject, double averageGradeOverall) {
-        super(username);
+    public Student(Long id, String username, List<Subject> subjects, double averageGradePerSubject, double averageGradeOverall) {
+        super(id, username);
         this.subjects = subjects;
         this.averageGradePerSubject = averageGradePerSubject;
         this.averageGradeOverall = averageGradeOverall;
     }
 
-    public Student(String username) {
-        super(username);
+    public Student(Long id, String username) {
+        super(id, username);
         this.subjects = new ArrayList<>();
         this.averageGradeOverall = 0.0;
         this.averageGradePerSubject = 0.0;
@@ -29,7 +29,11 @@ public class Student extends User{
     @Override
     public String toString() {
         return "Student{" +
-                "grades=" + subjects +
+                "id=" + getId() +
+                ", username='" + getUsername() + '\'' +
+                ", subjects=" + subjects +
+                ", averageGradePerSubject=" + averageGradePerSubject +
+                ", averageGradeOverall=" + averageGradeOverall +
                 '}';
     }
 
