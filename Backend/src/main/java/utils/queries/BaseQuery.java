@@ -1,4 +1,4 @@
-package queries;
+package utils.queries;
 
 import config.DatabaseConnection;
 import java.sql.Connection;

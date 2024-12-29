@@ -1,7 +1,7 @@
-package queries.delete;
+package utils.queries.delete;
 
 import entity.Student;
-import queries.BaseQuery;
+import utils.queries.BaseQuery;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

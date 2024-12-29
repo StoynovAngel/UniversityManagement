@@ -1,4 +1,4 @@
-package queries.delete;
+package utils.queries.delete;
 
 import interfaces.ITables;
 
