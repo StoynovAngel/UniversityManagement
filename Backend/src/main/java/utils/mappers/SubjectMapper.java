@@ -86,22 +86,12 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
                 });
 
                 if (resultSet.getObject("grade_id") != null) {
-                    Grade grade = mapGrade(resultSet);
+                    Grade grade = getGradeMapper().mapLight(resultSet);
                     student.getGrades().add(grade);
                 }
             }
         } while (resultSet.next());
 
         return new ArrayList<>(studentMap.values());
-    }
-
-    private Grade mapGrade(ResultSet resultSet) throws SQLException {
-        Grade grade = new Grade();
-        grade.setId(resultSet.getLong("grade_id"));
-        grade.setName(resultSet.getString("grade_name"));
-        grade.setMark(resultSet.getDouble("grade_mark"));
-        grade.setGradeType(GradeType.valueOf(resultSet.getString("grade_type")));
-        grade.setDateOfGrading(resultSet.getDate("date_of_grading"));
-        return grade;
     }
 }

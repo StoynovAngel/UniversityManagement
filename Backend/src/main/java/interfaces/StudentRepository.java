@@ -1,5 +1,7 @@
 package interfaces;
 
-public interface StudentRepository {
+import entity.Student;
 
+public interface StudentRepository {
+    Student getStudentById(Long id);
 }

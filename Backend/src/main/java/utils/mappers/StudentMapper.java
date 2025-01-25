@@ -45,26 +45,30 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     }
 
     private Student mapForm(ResultSet resultSet) throws SQLException {
-        Student student = new Student();
-        List<Grade> grades = mapGrades(resultSet);
-
-        student.setGrades(grades);
-        student.setId(resultSet.getLong("id"));
-        student.setUsername(resultSet.getString("username"));
-        student.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
-        student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
-
-        return student;
-    }
-
-    private List<Grade> mapGrades(ResultSet resultSet) throws SQLException{
+        Student student = null;
         List<Grade> grades = new ArrayList<>();
-        do {
-            if (resultSet.getString("grade_id") != null) {
-                Grade grade = getGradeMapper().mapRow(resultSet);
+
+        while (resultSet.next()) {
+            if (student == null) {
+                student = new Student();
+                student.setId(resultSet.getLong("id"));
+                student.setUsername(resultSet.getString("username"));
+                student.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
+                student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
+            }
+
+            if (resultSet.getObject("grade_id") != null) {
+                Grade grade = getGradeMapper().mapLight(resultSet);
                 grades.add(grade);
             }
-        } while (resultSet.next());
-        return grades;
+        }
+
+        if (student != null) {
+            student.setGrades(grades);
+        }
+
+        return student;
+
     }
+
 }

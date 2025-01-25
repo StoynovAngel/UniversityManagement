@@ -10,4 +10,9 @@ public class SubjectService extends BasicService implements SubjectRepository {
     public Subject getSubjectById(Long id) {
         return selectQuery.getSubjectById(id, subjectMapper);
     }
+
+    @Override
+    public Subject getSubjectByName(String name) {
+        return selectQuery.getSubjectByName(name, subjectMapper);
+    }
 }
