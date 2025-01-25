@@ -1,12 +1,12 @@
 package utils.handlers;
 
 import enums.UserAction;
-import interfaces.IGroup;
+import interfaces.GroupRepository;
 
 public class Interaction {
-    private final IGroup groupService;
+    private final GroupRepository groupService;
 
-    public Interaction(IGroup groupService) {
+    public Interaction(GroupRepository groupService) {
         this.groupService = groupService;
     }
 

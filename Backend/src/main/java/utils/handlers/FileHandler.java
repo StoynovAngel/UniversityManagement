@@ -1,6 +1,6 @@
 package utils.handlers;
 
-import dto.Group;
+import entity.Group;
 
 import java.io.*;
 import java.nio.file.Files;

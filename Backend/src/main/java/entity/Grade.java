@@ -1,74 +1,41 @@
 package entity;
 
 import enums.GradeType;
-import utils.exceptions.InvalidUserInput;
+import lombok.*;
+import javax.persistence.*;
+import java.util.Date;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDate;
+@Entity
+@Table(name = "grade")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Grade {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
 
-public class Grade implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private final Long id;
-    private final String subject;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade_type", nullable = false)
     private GradeType gradeType;
+
+    @Column(name = "mark", nullable = false)
     private double mark;
-    private final LocalDate dateOfGrading;
 
-    public Grade(Long id, String subject, double mark, Teacher teacher, GradeType gradeType) {
-        this.id = id;
-        this.mark = mark;
-        this.subject = subject;
-        this.teacher = teacher;
-        this.gradeType = gradeType;
-        this.dateOfGrading = LocalDate.now();
-        gradeValidation(mark);
-        typeValidation(gradeType);
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public GradeType getGradeType() {
-        return gradeType;
-    }
-
-    public LocalDate getDateOfGrading() {
-        return dateOfGrading;
-    }
-
-    public double getMark() {
-        return mark;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setMark(double mark) {
-        gradeValidation(mark);
-        this.mark = mark;
-    }
-
-    protected void gradeValidation(double mark) {
-        if (mark < 2 || mark > 6) {
-            throw new InvalidUserInput("Mark must be between 2 and 6");
-        }
-    }
-
-    protected void typeValidation(GradeType gradeType) {
-        if (gradeType == null) { throw new NullPointerException(); }
-    }
-
-    @Override
-    public String toString() {
-        return "Grade{" +
-                "subject='" + subject + '\'' +
-                ", mark=" + mark +
-                ", dateOfGrading=" + dateOfGrading +
-                '}';
-    }
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_of_grading", nullable = false)
+    private Date dateOfGrading;
 }

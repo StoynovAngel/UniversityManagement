@@ -1,12 +1,12 @@
 package services;
 
-import dto.Group;
+import entity.Group;
 import utils.handlers.FileHandler;
-import interfaces.IFile;
+import interfaces.FileRepository;
 
 import java.util.List;
 
-public class FileService implements IFile {
+public class FileService implements FileRepository {
     private final FileHandler fileHandler;
 
     public FileService(FileHandler fileHandler) {

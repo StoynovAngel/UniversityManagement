@@ -1,21 +1,14 @@
 package services;
 
-import dto.Grade;
-import dto.Subject;
-import dto.Teacher;
-import interfaces.ITeacher;
-import utils.handlers.TeacherHandler;
+import entity.Teacher;
+import interfaces.TeacherRepository;
+import utils.mappers.TeacherMapper;
 
-public class TeacherService implements ITeacher {
-    private final TeacherHandler teacherHandler = new TeacherHandler();
-
+public class TeacherService extends BasicService implements TeacherRepository {
+    private final TeacherMapper teacherMapper = new TeacherMapper();
     @Override
-    public Subject createSubject() {
-        return teacherHandler.createSubject();
+    public Teacher getTeacherById(Long id) {
+        return selectQuery.getTeacherById(id, teacherMapper);
     }
 
-    @Override
-    public void addGradeToSubject(Subject subject) {
-        teacherHandler.addGradeToSubject(subject);
-    }
 }

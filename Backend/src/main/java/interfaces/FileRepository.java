@@ -1,10 +1,10 @@
 package interfaces;
 
-import dto.Group;
+import entity.Group;
 
 import java.util.List;
 
-public interface IFile {
+public interface FileRepository {
     void saveGroupToFile(Group group);
     Group loadGroup(String fileName);
     List<Group> loadAllGroups();

@@ -1,38 +1,21 @@
 package services;
 
-import dto.Student;
-import dto.Subject;
-import dto.User;
-import enums.GradeType;
-import utils.handlers.GradeHandler;
-import interfaces.IGrade;
+import entity.Grade;
+import interfaces.GradeRepository;
+import utils.mappers.GradeMapper;
 
-import java.time.LocalDate;
+import java.util.List;
 
-public class GradeService implements IGrade {
-    private final GradeHandler gradeHandler;
+public class GradeService extends BasicService implements GradeRepository {
+    private final GradeMapper gradeMapper = new GradeMapper();
 
-    public GradeService(GradeHandler gradeHandler) {
-        this.gradeHandler = gradeHandler;
+    @Override
+    public Grade getGradeByName(String name) {
+        return selectQuery.getGradeByName(name, gradeMapper);
     }
 
     @Override
-    public void updateGrade(Subject subject) {
-        gradeHandler.updateSubjectGrade(subject);
-    }
-
-    @Override
-    public void deleteGrade(Subject subject) {
-        gradeHandler.deleteGrade(subject);
-    }
-
-    @Override
-    public void viewGradesBasedOnDate(Subject subject, LocalDate date) {
-        gradeHandler.viewGradesBasedOnDate(subject, date);
-    }
-
-    @Override
-    public GradeType getGradeType() {
-        return gradeHandler.getGradeType();
+    public List<Grade> getGradeByStudentName(String studentName) {
+        return selectQuery.getGradeByStudentName(studentName, gradeMapper);
     }
 }

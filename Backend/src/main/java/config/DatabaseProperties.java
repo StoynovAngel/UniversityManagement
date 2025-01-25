@@ -29,4 +29,8 @@ public class DatabaseProperties {
     public String getCreateTableFilePath() {
         return dotenv.get("FILE_PATH");
     }
+
+    public String insertTableFilePath() {
+        return dotenv.get("INSERT_INTO_TABLES");
+    }
 }

@@ -1,63 +1,39 @@
 package entity;
 
-import java.util.ArrayList;
+import lombok.*;
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "subject")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Subject {
-    private final Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "hours_per_week")
     private int hoursPerWeek;
+
+    @Column(name = "description")
     private String description;
-    private final List<Teacher> teachersAssignedToSubject;
-    private final List<Student> studentsAssignedToSubject;
-    private final List<Grade> allGrades;
 
-    public Subject(Long id, String name, int hoursPerWeek, String description,
-                   List<Teacher> teachersAssignedToSubject,
-                   List<Student> studentsAssignedToSubject, List<Grade> allGrades)
-    {
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
 
-        validateHoursPerWeek(hoursPerWeek);
-        this.id = id;
-        this.allGrades = allGrades;
-        this.name = name;
-        this.hoursPerWeek = hoursPerWeek;
-        this.description = description;
-        this.teachersAssignedToSubject = teachersAssignedToSubject;
-        this.studentsAssignedToSubject = studentsAssignedToSubject;
-    }
-
-    public Subject(Long id, String name, int hoursPerWeek, String description) {
-        this(id, name, hoursPerWeek, description, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getHoursPerWeek() {
-        return hoursPerWeek;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<Student> getStudentsAssignedToSubject() {
-        return studentsAssignedToSubject;
-    }
-
-    public List<Grade> getAllGrades() {
-        return allGrades;
-    }
-
-    public List<Teacher> getTeachersAssignedToSubject() {
-        return teachersAssignedToSubject;
-    }
-
-    private void validateHoursPerWeek(int hoursPerWeek) {
-        if (hoursPerWeek < 0) {
-            throw new IllegalArgumentException("Hours per week must be a positive number");
-        }
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "subject_student",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> studentsAssignedToSubject;
 }

@@ -6,16 +6,21 @@ import java.sql.*;
 
 public class DatabaseInitializer {
     private final DatabaseConnection databaseConnection = new DatabaseConnection();
+    private final DatabaseProperties databaseProperties = new DatabaseProperties();
 
     public void initializeDatabase() {
-        processSqlFile();
+        processSqlFile(databaseProperties.getCreateTableFilePath());
     }
 
-    private void processSqlFile() {
+    public void insertIntoDatabase() {
+        processSqlFile(databaseProperties.insertTableFilePath());
+    }
+
+    private void processSqlFile(String filename) {
         try (Connection connection = databaseConnection.getConnection();
              Statement statement = connection.createStatement())
         {
-            executeSqlFile(statement);
+            executeSqlFile(statement, filename);
         } catch (SQLException e) {
             System.err.println("Error executing SQL from file: " + e.getMessage());
         } catch (IOException e) {
@@ -23,14 +28,12 @@ public class DatabaseInitializer {
         }
     }
 
-    private void executeSqlFile(Statement statement) throws IOException, SQLException {
-        String sql = getSqlFile();
-        executeParsedQueries(sql, statement);
+    private void executeSqlFile(Statement statement, String filename) throws IOException, SQLException {
+        executeParsedQueries(getSqlFile(filename), statement);
     }
 
-    private String getSqlFile() throws IOException {
-        DatabaseProperties databaseProperties = new DatabaseProperties();
-        return new String(Files.readAllBytes(Paths.get(databaseProperties.getCreateTableFilePath())));
+    private String getSqlFile(String filename) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(filename)));
     }
 
     private void executeParsedQueries(String sql, Statement statement) throws SQLException {

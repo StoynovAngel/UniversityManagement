@@ -24,7 +24,10 @@ target/
 ### Enviroument file ###
 .env
 
+### SQL Files ###
 create_tables.sql
+inserts.sql
+
 
 ### NetBeans ###
 /nbproject/private/
