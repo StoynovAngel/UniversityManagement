@@ -18,4 +18,9 @@ public class GradeService extends BasicService implements GradeRepository {
     public List<Grade> getGradeByStudentName(String studentName) {
         return selectQuery.getGradeByStudentName(studentName, gradeMapper);
     }
+
+    @Override
+    public void updateGradeMark(double mark, Long id) {
+        updateQuery.updateGradeMark(mark, id);
+    }
 }

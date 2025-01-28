@@ -1,5 +1,4 @@
 package services;
-;
 import entity.Subject;
 import interfaces.SubjectRepository;
 import utils.mappers.SubjectMapper;
@@ -14,5 +13,11 @@ public class SubjectService extends BasicService implements SubjectRepository {
     @Override
     public Subject getSubjectByName(String name) {
         return selectQuery.getSubjectByName(name, subjectMapper);
+    }
+
+
+    @Override
+    public void updateSubjectDescriptionBySubjectName(String description, String name) {
+        updateQuery.updateSubjectDescription(description, name);
     }
 }

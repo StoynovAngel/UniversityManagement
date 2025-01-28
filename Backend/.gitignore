@@ -27,7 +27,7 @@ target/
 ### SQL Files ###
 create_tables.sql
 inserts.sql
-
+query_logs.txt
 
 ### NetBeans ###
 /nbproject/private/

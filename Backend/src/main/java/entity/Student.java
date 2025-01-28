@@ -30,4 +30,5 @@ public class Student {
 
     @Column(name = "average_grade_overall")
     private double averageGradeOverall;
+
 }

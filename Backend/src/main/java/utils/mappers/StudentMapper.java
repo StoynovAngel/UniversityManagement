@@ -7,7 +7,6 @@ import interfaces.CustomRowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO, Student> {
 
@@ -24,6 +23,20 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     @Override
     public Student mapRow(ResultSet resultSet) throws SQLException {
         return mapForm(resultSet);
+    }
+
+    public Student mapLight(ResultSet resultSet, Long id) {
+        try {
+            Student s = new Student();
+            s.setId(id);
+            s.setUsername(resultSet.getString("username"));
+            s.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
+            s.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
+            s.setGrades(new ArrayList<>());
+            return s;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Student entityForm(StudentDTO studentDTO) {
@@ -45,30 +58,21 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     }
 
     private Student mapForm(ResultSet resultSet) throws SQLException {
-        Student student = null;
-        List<Grade> grades = new ArrayList<>();
 
-        while (resultSet.next()) {
-            if (student == null) {
-                student = new Student();
-                student.setId(resultSet.getLong("id"));
-                student.setUsername(resultSet.getString("username"));
-                student.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
-                student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
-            }
+        Student student = new Student();
+        student.setId(resultSet.getLong("student_id"));
+        student.setUsername(resultSet.getString("username"));
+        student.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
+        student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
+        student.setGrades(new ArrayList<>());
 
+        do {
             if (resultSet.getObject("grade_id") != null) {
                 Grade grade = getGradeMapper().mapLight(resultSet);
-                grades.add(grade);
+                student.getGrades().add(grade);
             }
-        }
-
-        if (student != null) {
-            student.setGrades(grades);
-        }
+        } while (resultSet.next());
 
         return student;
-
     }
-
 }

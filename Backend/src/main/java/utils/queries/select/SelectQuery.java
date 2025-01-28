@@ -11,6 +11,10 @@ public class SelectQuery extends QueryExecutor {
         super();
     }
 
+    public Group getGroupById(Long id, GroupMapper mapper) {
+        return executeSelect(SelectStatements.selectGroupByIdSql(), mapper, id);
+    }
+
     public Subject getSubjectById(Long id, SubjectMapper mapper) {
         return executeSelect(SelectStatements.selectSubjectByIdSql(), mapper, id);
     }
@@ -25,6 +29,10 @@ public class SelectQuery extends QueryExecutor {
 
     public Student getStudentById(Long id, StudentMapper mapper) {
         return executeSelect(SelectStatements.selectStudentByIdSql(), mapper, id);
+    }
+
+    public Student getStudentByUsername(String username, StudentMapper mapper) {
+        return executeSelect(SelectStatements.selectStudentByUsernameSql(), mapper, username);
     }
 
     public Grade getGradeByName(String name, GradeMapper mapper) {

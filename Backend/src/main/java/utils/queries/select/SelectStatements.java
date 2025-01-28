@@ -1,6 +1,23 @@
 package utils.queries.select;
 
 public class SelectStatements {
+    public static String selectGroupByIdSql() {
+        return "SELECT university_group.id, university_group.name, " +
+                "student.id AS student_id, " +
+                "student.username, student.average_grade_per_subject, student.average_grade_overall, " +
+                "grade.id AS grade_id, " +
+                "grade.name AS grade_name, " +
+                "grade.mark AS grade_mark, " +
+                "grade.grade_type, " +
+                "grade.date_of_grading " +
+                "FROM public.university_group " +
+                "LEFT JOIN group_student ON university_group.id = group_student.group_id " +
+                "LEFT JOIN student ON student.id = group_student.student_id " +
+                "LEFT JOIN grade ON grade.student_id = student.id " +
+                "WHERE university_group.id = ? " +
+                "ORDER BY student.id, grade.id";
+    }
+
     public static String selectTeacherByIdSql() {
         return "SELECT teacher.id AS teacher_id, teacher.name AS teacher_name " +
                 "FROM public.teacher " +
@@ -8,13 +25,28 @@ public class SelectStatements {
     }
 
     public static String selectStudentByIdSql() {
-        return "SELECT student.id, student.username, student.average_grade_per_subject, student.average_grade_overall, " +
+        return "SELECT student.id AS student_id, student.username, student.average_grade_per_subject, student.average_grade_overall, " +
                 "grade.id AS grade_id, " +
                 "grade.name AS grade_name, " +
                 "grade.mark AS grade_mark, " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.student JOIN grade ON grade.student_id = student.id WHERE student.id = ?";
+                "FROM public.student " +
+                "LEFT JOIN grade ON grade.student_id = student.id " +
+                "WHERE student.id = ?";
+    }
+
+    public static String selectStudentByUsernameSql() {
+        return "SELECT student.id AS student_id, " +
+                "student.username, student.average_grade_per_subject, student.average_grade_overall, " +
+                "grade.id AS grade_id, " +
+                "grade.name AS grade_name, " +
+                "grade.mark AS grade_mark, " +
+                "grade.grade_type, " +
+                "grade.date_of_grading " +
+                "FROM public.student " +
+                "LEFT JOIN grade ON grade.student_id = student.id " +
+                "WHERE student.username = ?";
     }
 
     public static String selectGradeByGradeNameSql() {
@@ -61,7 +93,7 @@ public class SelectStatements {
                 "LEFT JOIN subject_student ON subject.id = subject_student.subject_id " +
                 "LEFT JOIN student ON student.id = subject_student.student_id " +
                 "LEFT JOIN grade ON grade.student_id = student.id " +
-                "WHERE subject.id = ? AND subject.name = grade.name";
+                "WHERE subject.id = ?";
     }
 
     public static String selectSubjectByNameSql() {
@@ -86,6 +118,6 @@ public class SelectStatements {
                 "LEFT JOIN subject_student ON subject.id = subject_student.subject_id " +
                 "LEFT JOIN student ON student.id = subject_student.student_id " +
                 "LEFT JOIN grade ON grade.student_id = student.id " +
-                "WHERE subject.name = ? AND subject.name = grade.name";
+                "WHERE subject.name = ?";
     }
 }

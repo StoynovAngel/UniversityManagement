@@ -11,4 +11,14 @@ public class StudentService extends BasicService implements StudentRepository {
     public Student getStudentById(Long id) {
         return selectQuery.getStudentById(id, studentMapper);
     }
+
+    @Override
+    public Student getStudentByUsername(String username) {
+        return selectQuery.getStudentByUsername(username, studentMapper);
+    }
+
+    @Override
+    public void updateStudentUsername(String username, Long id) {
+        updateQuery.updateStudentUsername(username, id);
+    }
 }
