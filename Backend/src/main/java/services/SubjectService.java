@@ -29,4 +29,9 @@ public class SubjectService extends BasicService implements SubjectRepository {
     public void insertSubject(String name, int hours_per_week, String teacherName, String description) {
         insertQuery.insertSubject(name, hours_per_week, teacherName, description);
     }
+
+    @Override
+    public void insertStudentIntoSubject(String subjectName, String studentUsername) {
+        insertQuery.insertStudentIntoSubject(subjectName, studentUsername);
+    }
 }

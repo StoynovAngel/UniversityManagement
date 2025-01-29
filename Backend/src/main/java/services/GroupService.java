@@ -21,4 +21,9 @@ public class GroupService extends BasicService implements GroupRepository {
     public void insertGroup(String name) {
         insertQuery.insertGroup(name);
     }
+
+    @Override
+    public void insertStudentIntoGroup(String groupName, String studentUsername) {
+        insertQuery.insertStudentIntoGroup(groupName, studentUsername);
+    }
 }

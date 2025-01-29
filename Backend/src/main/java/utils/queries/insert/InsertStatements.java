@@ -24,4 +24,18 @@ public class InsertStatements {
                 "(SELECT id FROM public.student WHERE username = ? LIMIT 1), " +
                 "?)";
     }
+
+    public static String insertStudentIntoGroup() {
+        return "INSERT INTO public.group_student(group_id, student_id) " +
+                "VALUES (" +
+                "(SELECT id FROM public.university_group WHERE name = ? LIMIT 1), " +
+                "(SELECT id FROM public.student WHERE username = ? LIMIT 1)" +
+                ")";
+    }
+
+    public static String insertStudentIntoSubject() {
+        return "INSERT INTO public.subject_student(subject_id, student_id) VALUES " +
+                "((SELECT id FROM public.subject WHERE name = ? LIMIT 1), " +
+                "(SELECT id FROM public.student WHERE username = ? LIMIT 1))";
+    }
 }

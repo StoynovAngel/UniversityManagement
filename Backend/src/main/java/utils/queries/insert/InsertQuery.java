@@ -23,4 +23,12 @@ public class InsertQuery extends QueryUpdater {
     public void insertGrade(String name, double mark, String teacherName, String studentUsername, String gradeType) {
         updateSingleRow(InsertStatements.insertGrade(), name, mark, teacherName, studentUsername, gradeType);
     }
+
+    public void insertStudentIntoGroup(String groupName, String studentUsername) {
+        updateSingleRow(InsertStatements.insertStudentIntoGroup(), groupName, studentUsername);
+    }
+
+    public void insertStudentIntoSubject(String subjectName, String studentUsername) {
+        updateSingleRow(InsertStatements.insertStudentIntoSubject(), subjectName, studentUsername);
+    }
 }
