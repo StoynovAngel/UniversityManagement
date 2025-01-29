@@ -6,6 +6,7 @@ import utils.mappers.GroupMapper;
 
 public class GroupService extends BasicService implements GroupRepository {
     private final GroupMapper groupMapper = new GroupMapper();
+
     @Override
     public Group getGroupById(Long id) {
         return selectQuery.getGroupById(id, groupMapper);
@@ -14,5 +15,10 @@ public class GroupService extends BasicService implements GroupRepository {
     @Override
     public void updateGroupName(String name, Long id) {
         updateQuery.updateGroupName(name, id);
+    }
+
+    @Override
+    public void insertGroup(String name) {
+        insertQuery.insertGroup(name);
     }
 }

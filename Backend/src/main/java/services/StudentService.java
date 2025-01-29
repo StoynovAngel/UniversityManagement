@@ -21,4 +21,9 @@ public class StudentService extends BasicService implements StudentRepository {
     public void updateStudentUsername(String username, Long id) {
         updateQuery.updateStudentUsername(username, id);
     }
+
+    @Override
+    public void insertStudent(String username) {
+        insertQuery.insertStudent(username);
+    }
 }

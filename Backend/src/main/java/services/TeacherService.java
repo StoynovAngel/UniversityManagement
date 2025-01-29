@@ -16,4 +16,9 @@ public class TeacherService extends BasicService implements TeacherRepository {
     public void updateTeacherName(String name, Long id) {
         updateQuery.updateTeacherName(name, id);
     }
+
+    @Override
+    public void insertTeacher(String name) {
+        insertQuery.insertTeacher(name);
+    }
 }

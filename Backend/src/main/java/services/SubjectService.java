@@ -15,9 +15,18 @@ public class SubjectService extends BasicService implements SubjectRepository {
         return selectQuery.getSubjectByName(name, subjectMapper);
     }
 
-
     @Override
     public void updateSubjectDescriptionBySubjectName(String description, String name) {
         updateQuery.updateSubjectDescription(description, name);
+    }
+
+    @Override
+    public void deleteSubject(Long id) {
+        deleteQuery.deleteSubjectById(id);
+    }
+
+    @Override
+    public void insertSubject(String name, int hours_per_week, String teacherName, String description) {
+        insertQuery.insertSubject(name, hours_per_week, teacherName, description);
     }
 }
