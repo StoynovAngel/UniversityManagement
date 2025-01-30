@@ -2,6 +2,7 @@ package utils.mappers;
 
 import dto.GradeDTO;
 import entity.Grade;
+import entity.GradeBG;
 import entity.Student;
 import entity.Teacher;
 import enums.GradeType;
@@ -28,24 +29,25 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
     }
 
     public Grade mapLight(ResultSet resultSet) throws SQLException {
-        Grade grade = new Grade();
-        grade.setId(resultSet.getLong("grade_id"));
-        grade.setName(resultSet.getString("grade_name"));
-        grade.setMark(resultSet.getDouble("grade_mark"));
-        grade.setGradeType(GradeType.valueOf(resultSet.getString("grade_type")));
-        grade.setDateOfGrading(resultSet.getDate("date_of_grading"));
-        return grade;
+        return new GradeBG(
+                resultSet.getString("grade_name"),
+                null,
+                null,
+                GradeType.valueOf(resultSet.getString("grade_type")),
+                resultSet.getDouble("grade_mark"),
+                resultSet.getDate("date_of_grading")
+        );
     }
 
     private Grade entityForm(GradeDTO dto) {
-        Grade grade = new Grade();
-        grade.setName(dto.name());
-        grade.setMark(dto.mark());
-        grade.setStudent(getStudentMapper().mapToEntity(dto.student()));
-        grade.setTeacher(getTeacherMapper().mapToEntity(dto.teacher()));
-        grade.setDateOfGrading(dto.dateOfGrading());
-        grade.setGradeType(dto.gradeType());
-        return grade;
+        return new GradeBG(
+                dto.name(),
+                getStudentMapper().mapToEntity(dto.student()),
+                getTeacherMapper().mapToEntity(dto.teacher()),
+                dto.gradeType(),
+                dto.mark(),
+                dto.dateOfGrading()
+        );
     }
 
     private GradeDTO dtoForm(Grade entity) {
@@ -60,24 +62,13 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
     }
 
     private Grade mapForm(ResultSet resultSet) throws SQLException {
-        Grade grade = new Grade();
-        grade.setId(resultSet.getLong("grade_id"));
-        grade.setName(resultSet.getString("name"));
-        grade.setMark(resultSet.getDouble("mark"));
-        grade.setGradeType(GradeType.valueOf(resultSet.getString("grade_type")));
-        grade.setDateOfGrading(resultSet.getDate("date_of_grading"));
-
-        Student student = new Student();
-        student.setId(resultSet.getLong("student_id"));
-        student.setUsername(resultSet.getString("student_username"));
-        grade.setStudent(student);
-
-        Teacher teacher = new Teacher();
-        teacher.setId(resultSet.getLong("teacher_id"));
-        teacher.setName(resultSet.getString("teacher_name"));
-        grade.setTeacher(teacher);
-
-        return grade;
+        return new GradeBG(
+                resultSet.getString("name"),
+                new Student(resultSet.getLong("student_id"), resultSet.getString("student_username")),
+                new Teacher(resultSet.getLong("teacher_id"), resultSet.getString("teacher_name")),
+                GradeType.valueOf(resultSet.getString("grade_type")),
+                resultSet.getDouble("mark"),
+                resultSet.getDate("date_of_grading")
+        );
     }
-
 }

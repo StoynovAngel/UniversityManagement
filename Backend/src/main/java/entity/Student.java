@@ -25,10 +25,11 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Grade> grades;
 
-    @Column(name = "average_grade_per_subject")
-    private double averageGradePerSubject;
-
     @Column(name = "average_grade_overall")
     private double averageGradeOverall;
 
+    public Student(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 }

@@ -26,4 +26,5 @@ public class StudentService extends BasicService implements StudentRepository {
     public void insertStudent(String username) {
         insertQuery.insertStudent(username);
     }
+
 }

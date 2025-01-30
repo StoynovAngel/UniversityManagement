@@ -16,7 +16,7 @@ class SelectQueryTest {
 
     @BeforeAll
     static void setUp() {
-        connection = new DatabaseConnection().getConnection();
+        connection = DatabaseConnection.getConnection();
         selectQuery = new SelectQuery();
     }
 

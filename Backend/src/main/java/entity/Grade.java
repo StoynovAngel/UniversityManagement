@@ -5,13 +5,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "grade")
+@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Grade {
+public abstract class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -38,4 +37,19 @@ public class Grade {
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_grading", nullable = false)
     private Date dateOfGrading;
+
+    public Grade(String name, Student student, Teacher teacher, GradeType gradeType, double mark, Date dateOfGrading) {
+        this.name = name;
+        this.student = student;
+        this.teacher = teacher;
+        this.gradeType = gradeType;
+        setDateOfGrading(dateOfGrading);
+        setMark(mark);
+    }
+
+    protected abstract void validateMark(double mark);
+    public void setMark(double mark) {
+        validateMark(mark);
+        this.mark = mark;
+    }
 }

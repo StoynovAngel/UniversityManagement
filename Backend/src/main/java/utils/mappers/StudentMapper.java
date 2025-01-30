@@ -30,7 +30,6 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
             Student s = new Student();
             s.setId(id);
             s.setUsername(resultSet.getString("username"));
-            s.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
             s.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
             s.setGrades(new ArrayList<>());
             return s;
@@ -43,8 +42,7 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
         Student newStudent = new Student();
         newStudent.setUsername(studentDTO.username());
         newStudent.setGrades(studentDTO.grades().stream().map(getGradeMapper()::mapToEntity).toList());
-        newStudent.setAverageGradePerSubject(studentDTO.averageGradePerSubject());
-        newStudent.setAverageGradeOverall(studentDTO.averageGradePerSubject());
+        newStudent.setAverageGradeOverall(studentDTO.averageGradeOverall());
         return newStudent;
     }
 
@@ -52,7 +50,6 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
         return new StudentDTO(
                 student.getUsername(),
                 student.getGrades().stream().map(getGradeMapper()::mapToDTO).toList(),
-                student.getAverageGradePerSubject(),
                 student.getAverageGradeOverall()
         );
     }
@@ -62,13 +59,13 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
         Student student = new Student();
         student.setId(resultSet.getLong("student_id"));
         student.setUsername(resultSet.getString("username"));
-        student.setAverageGradePerSubject(resultSet.getDouble("average_grade_per_subject"));
         student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
         student.setGrades(new ArrayList<>());
 
         do {
             if (resultSet.getObject("grade_id") != null) {
                 Grade grade = getGradeMapper().mapLight(resultSet);
+
                 student.getGrades().add(grade);
             }
         } while (resultSet.next());

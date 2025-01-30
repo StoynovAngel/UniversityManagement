@@ -20,4 +20,8 @@ public class UpdateStatements {
     public static String updateGradeNameById() {
         return "UPDATE public.university_group SET name = ? WHERE id = ?";
     }
+
+    public static String updateStudentAverages() {
+        return "UPDATE public.student SET average_grade_per_subject = ?, average_grade_overall = ? WHERE id = ?";
+    }
 }

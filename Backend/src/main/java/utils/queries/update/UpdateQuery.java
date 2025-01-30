@@ -1,6 +1,7 @@
 package utils.queries.update;
 
 import utils.queries.QueryUpdater;
+import utils.queries.select.*;
 
 public class UpdateQuery extends QueryUpdater {
     public void updateTeacherName(String name, Long id) {

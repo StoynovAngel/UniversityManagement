@@ -25,7 +25,7 @@ public class SelectStatements {
     }
 
     public static String selectStudentByIdSql() {
-        return "SELECT student.id AS student_id, student.username, student.average_grade_per_subject, student.average_grade_overall, " +
+        return "SELECT student.id AS student_id, student.username, student.average_grade_overall, " +
                 "grade.id AS grade_id, " +
                 "grade.name AS grade_name, " +
                 "grade.mark AS grade_mark, " +
@@ -38,7 +38,7 @@ public class SelectStatements {
 
     public static String selectStudentByUsernameSql() {
         return "SELECT student.id AS student_id, " +
-                "student.username, student.average_grade_per_subject, student.average_grade_overall, " +
+                "student.username, student.average_grade_overall, " +
                 "grade.id AS grade_id, " +
                 "grade.name AS grade_name, " +
                 "grade.mark AS grade_mark, " +

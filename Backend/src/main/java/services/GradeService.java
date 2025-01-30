@@ -1,7 +1,6 @@
 package services;
 
 import entity.Grade;
-import enums.GradeType;
 import interfaces.GradeRepository;
 import utils.mappers.GradeMapper;
 

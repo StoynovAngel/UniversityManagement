@@ -1,6 +1,5 @@
 package utils.queries.insert;
 
-import enums.GradeType;
 import utils.queries.QueryUpdater;
 
 public class InsertQuery extends QueryUpdater {
@@ -31,4 +30,5 @@ public class InsertQuery extends QueryUpdater {
     public void insertStudentIntoSubject(String subjectName, String studentUsername) {
         updateSingleRow(InsertStatements.insertStudentIntoSubject(), subjectName, studentUsername);
     }
+
 }

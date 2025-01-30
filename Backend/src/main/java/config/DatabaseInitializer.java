@@ -5,7 +5,6 @@ import java.nio.file.*;
 import java.sql.*;
 
 public class DatabaseInitializer {
-    private static final DatabaseConnection databaseConnection = new DatabaseConnection();
     private static final DatabaseProperties databaseProperties = new DatabaseProperties();
 
     public static void initializeDatabase() {
@@ -17,7 +16,7 @@ public class DatabaseInitializer {
     }
 
     private static void processSqlFile(String filename) {
-        try (Connection connection = databaseConnection.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement())
         {
             executeSqlFile(statement, filename);
