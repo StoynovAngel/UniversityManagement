@@ -19,7 +19,7 @@ public class GradeBG extends Grade{
     @Override
     protected void validateMark(double mark) {
         if (mark < 2.0 || mark > 6.0) {
-            throw new IllegalArgumentException("BG Grades must be between 0.0 and 6.0");
+            throw new IllegalArgumentException("BG Grades must be between 2.0 and 6.0");
         }
     }
 }
