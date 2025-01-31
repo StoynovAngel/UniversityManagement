@@ -1,0 +1,6 @@
+db.url=jdbc:postgresql://localhost:5432/university
+db.username=your_username
+db.password=your_password
+db.ssl=false
+db.file_path=create_tables.sql
+db.insert_into_tables=inserts.sql

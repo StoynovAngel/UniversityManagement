@@ -23,12 +23,9 @@ target/
 
 ### Enviroument file ###
 .env
-
-### SQL Files ###
-create_tables.sql
-inserts.sql
+src/main/resources/database.properties
+!src/main/resources/database.properties.example
 query_logs.txt
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

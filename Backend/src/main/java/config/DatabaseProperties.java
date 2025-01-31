@@ -1,36 +1,45 @@
 package config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class DatabaseProperties {
-    private final Dotenv dotenv;
+    private final Properties properties;
 
     public DatabaseProperties() {
-        this.dotenv = Dotenv.load();
+        this.properties = new Properties();
+        loadProperties();
     }
 
     public Properties getProperties() {
-        String user = dotenv.get("SQL_USERNAME");
-        String password = dotenv.get("PASSWORD");
-        String ssl = dotenv.get("SSL");
-
         Properties props = new Properties();
-        props.setProperty("user", user);
-        props.setProperty("password", password);
-        props.setProperty("ssl", ssl);
+        props.setProperty("user", properties.getProperty("db.username"));
+        props.setProperty("password", properties.getProperty("db.password"));
+        props.setProperty("ssl", properties.getProperty("db.ssl"));
         return props;
     }
 
     public String getDatabaseUrl() {
-        return dotenv.get("URL");
+        return properties.getProperty("db.url");
     }
 
     public String getCreateTableFilePath() {
-        return dotenv.get("FILE_PATH");
+        return properties.getProperty("db.file_path");
     }
 
     public String insertTableFilePath() {
-        return dotenv.get("INSERT_INTO_TABLES");
+        return properties.getProperty("db.insert_into_tables");
+    }
+
+    private void loadProperties() {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("database.properties")) {
+            if (input == null) {
+                throw new RuntimeException("database.properties file not found in resources folder.");
+            }
+            properties.load(input);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load database.properties file", e);
+        }
     }
 }

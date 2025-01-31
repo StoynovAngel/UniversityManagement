@@ -1,9 +1,8 @@
 package utils.queries;
 
 import config.DatabaseConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+
 
 public class BaseQuery {
     protected Connection getConnection() {
