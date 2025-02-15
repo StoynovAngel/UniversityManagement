@@ -10,7 +10,7 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         if (conn == null) {
             try {
-                DatabaseProperties databaseProperties = new DatabaseProperties();
+                DatabaseProperties databaseProperties = DatabaseProperties.getUniqueInstance();
                 conn = DriverManager.getConnection(databaseProperties.getDatabaseUrl(), databaseProperties.getProperties());
                 System.out.println("Database connected successfully!");
             } catch (SQLException e) {

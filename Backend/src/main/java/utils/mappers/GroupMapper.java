@@ -1,17 +1,11 @@
 package utils.mappers;
 
 import dto.GroupDTO;
-import entity.Grade;
-import entity.Group;
-import entity.Student;
-import enums.GradeType;
+import entity.*;
 import interfaces.CustomRowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Group> {
 
@@ -52,10 +46,10 @@ public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Gr
                 group = mapGroup(resultSet);
             }
 
-            Long studentId = resultSet.getLong("student_id");
+            Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
             Student student = studentMap.computeIfAbsent(studentId, id -> getStudentMapper().mapLight(resultSet, id));
 
-            if (resultSet.getObject("grade_id") != null) {
+            if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
                 Grade grade = getGradeMapper().mapLight(resultSet);
                 student.getGrades().add(grade);
             }
@@ -68,8 +62,8 @@ public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Gr
 
     private Group mapGroup(ResultSet resultSet) throws SQLException {
         Group group = new Group();
-        group.setId(resultSet.getLong("id"));
-        group.setGroupName(resultSet.getString("name"));
+        group.setId(resultSet.getLong(TableMapperConstants.GROUP_ID));
+        group.setGroupName(resultSet.getString(TableMapperConstants.GROUP_NAME));
         return group;
     }
 }

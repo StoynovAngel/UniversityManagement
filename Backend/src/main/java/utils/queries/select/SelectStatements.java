@@ -1,13 +1,15 @@
 package utils.queries.select;
 
+import utils.mappers.TableMapperConstants;
+
 public class SelectStatements {
     public static String selectGroupByIdSql() {
-        return "SELECT university_group.id, university_group.name, " +
-                "student.id AS student_id, " +
-                "student.username, student.average_grade_per_subject, student.average_grade_overall, " +
-                "grade.id AS grade_id, " +
-                "grade.name AS grade_name, " +
-                "grade.mark AS grade_mark, " +
+        return "SELECT university_group.id AS group_id, university_group.name AS group_name, " +
+                "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + ", student.average_grade_overall, " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
                 "FROM public.university_group " +
@@ -19,16 +21,19 @@ public class SelectStatements {
     }
 
     public static String selectTeacherByIdSql() {
-        return "SELECT teacher.id AS teacher_id, teacher.name AS teacher_name " +
+        return "SELECT teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
+                "teacher.name AS " + TableMapperConstants.TEACHER_NAME + " " +
                 "FROM public.teacher " +
                 "WHERE teacher.id = ?";
     }
 
     public static String selectStudentByIdSql() {
-        return "SELECT student.id AS student_id, student.username, student.average_grade_overall, " +
-                "grade.id AS grade_id, " +
-                "grade.name AS grade_name, " +
-                "grade.mark AS grade_mark, " +
+        return "SELECT student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + ", " +
+                "student.average_grade_overall, " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
                 "FROM public.student " +
@@ -37,11 +42,12 @@ public class SelectStatements {
     }
 
     public static String selectStudentByUsernameSql() {
-        return "SELECT student.id AS student_id, " +
-                "student.username, student.average_grade_overall, " +
-                "grade.id AS grade_id, " +
-                "grade.name AS grade_name, " +
-                "grade.mark AS grade_mark, " +
+        return "SELECT student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + ", " +
+                "student.average_grade_overall, " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
                 "FROM public.student " +
@@ -51,9 +57,14 @@ public class SelectStatements {
 
     public static String selectGradeByGradeNameSql() {
         return "SELECT " +
-                "grade.id AS grade_id, grade.name, grade.mark, grade.date_of_grading, grade.grade_type, " +
-                "teacher.id AS teacher_id, teacher.name AS teacher_name, " +
-                "student.id AS student_id, student.username AS student_username " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
+                "grade.date_of_grading, grade.grade_type, " +
+                "teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
+                "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
+                "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + " " +
                 "FROM public.grade " +
                 "JOIN teacher ON teacher.id = grade.teacher_id " +
                 "JOIN student ON student.id = grade.student_id " +
@@ -62,9 +73,13 @@ public class SelectStatements {
 
     public static String selectGradesByStudentNameSql() {
         return "SELECT " +
-                "grade.id AS grade_id, grade.name, grade.mark, grade.date_of_grading, grade.grade_type, " +
-                "teacher.id AS teacher_id, teacher.name AS teacher_name, " +
-                "student.id AS student_id, student.username AS student_username " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark, grade.date_of_grading, grade.grade_type, " +
+                "teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
+                "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
+                "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + " " +
                 "FROM public.grade " +
                 "JOIN teacher ON teacher.id = grade.teacher_id " +
                 "JOIN student ON student.id = grade.student_id " +
@@ -73,19 +88,18 @@ public class SelectStatements {
 
     public static String selectSubjectByIdSql() {
         return "SELECT " +
-                "subject.id AS subject_id, " +
-                "subject.name AS subject_name, " +
+                "subject.id AS " + TableMapperConstants.SUBJECT_ID + ", " +
+                "subject.name AS " + TableMapperConstants.SUBJECT_NAME + ", " +
                 "subject.hours_per_week, " +
                 "subject.description, " +
-                "teacher.id AS teacher_id, " +
-                "teacher.name AS teacher_name, " +
-                "student.id AS student_id, " +
-                "student.username AS student_username, " +
-                "student.average_grade_per_subject, " +
+                "teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
+                "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
+                "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + ", " +
                 "student.average_grade_overall, " +
-                "grade.id AS grade_id, " +
-                "grade.name AS grade_name, " +
-                "grade.mark AS grade_mark, " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
                 "FROM public.subject " +
@@ -98,19 +112,18 @@ public class SelectStatements {
 
     public static String selectSubjectByNameSql() {
         return "SELECT " +
-                "subject.id AS subject_id, " +
-                "subject.name AS subject_name, " +
+                "subject.id AS " + TableMapperConstants.SUBJECT_ID + ", " +
+                "subject.name AS " + TableMapperConstants.SUBJECT_NAME + ", " +
                 "subject.hours_per_week, " +
                 "subject.description, " +
-                "teacher.id AS teacher_id, " +
-                "teacher.name AS teacher_name, " +
-                "student.id AS student_id, " +
-                "student.username AS student_username, " +
-                "student.average_grade_per_subject, " +
+                "teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
+                "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
+                "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
+                "student.username AS " + TableMapperConstants.STUDENT_USERNAME + ", " +
                 "student.average_grade_overall, " +
-                "grade.id AS grade_id, " +
-                "grade.name AS grade_name, " +
-                "grade.mark AS grade_mark, " +
+                "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
+                "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
                 "FROM public.subject " +

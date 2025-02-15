@@ -5,7 +5,11 @@ import java.nio.file.*;
 import java.sql.*;
 
 public class DatabaseInitializer {
-    private static final DatabaseProperties databaseProperties = new DatabaseProperties();
+    private static final DatabaseProperties databaseProperties = DatabaseProperties.getUniqueInstance();
+
+    private DatabaseInitializer() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+    }
 
     public static void initializeDatabase() {
         processSqlFile(databaseProperties.getCreateTableFilePath());

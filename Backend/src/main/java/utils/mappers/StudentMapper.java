@@ -29,8 +29,8 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
         try {
             Student s = new Student();
             s.setId(id);
-            s.setUsername(resultSet.getString("username"));
-            s.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
+            s.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
+            s.setAverageGradeOverall(resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL));
             s.setGrades(new ArrayList<>());
             return s;
         } catch (SQLException e) {
@@ -57,13 +57,13 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     private Student mapForm(ResultSet resultSet) throws SQLException {
 
         Student student = new Student();
-        student.setId(resultSet.getLong("student_id"));
-        student.setUsername(resultSet.getString("username"));
-        student.setAverageGradeOverall(resultSet.getDouble("average_grade_overall"));
+        student.setId(resultSet.getLong(TableMapperConstants.STUDENT_ID));
+        student.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
+        student.setAverageGradeOverall(resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL));
         student.setGrades(new ArrayList<>());
 
         do {
-            if (resultSet.getObject("grade_id") != null) {
+            if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
                 Grade grade = getGradeMapper().mapLight(resultSet);
 
                 student.getGrades().add(grade);

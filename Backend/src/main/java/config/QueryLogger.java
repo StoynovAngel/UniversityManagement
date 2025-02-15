@@ -5,10 +5,11 @@ import java.util.logging.*;
 
 public class QueryLogger {
     private static final Logger LOGGER = Logger.getLogger(QueryLogger.class.getName());
+    private static final String LOG_FILE = "query_logs.txt";
 
     static {
         try {
-            FileHandler fileHandler = new FileHandler("query_logs.txt", true);
+            FileHandler fileHandler = new FileHandler(LOG_FILE, true);
             fileHandler.setFormatter(new SimpleFormatter());
             LOGGER.addHandler(fileHandler);
             LOGGER.setUseParentHandlers(false);

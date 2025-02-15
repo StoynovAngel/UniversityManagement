@@ -46,10 +46,10 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
 
     private Subject mapForm(ResultSet resultSet) throws SQLException {
         Subject subject = new Subject();
-        subject.setId(resultSet.getLong("subject_id"));
-        subject.setName(resultSet.getString("subject_name"));
-        subject.setHoursPerWeek(resultSet.getInt("hours_per_week"));
-        subject.setDescription(resultSet.getString("description"));
+        subject.setId(resultSet.getLong(TableMapperConstants.SUBJECT_ID));
+        subject.setName(resultSet.getString(TableMapperConstants.SUBJECT_NAME));
+        subject.setHoursPerWeek(resultSet.getInt(TableMapperConstants.SUBJECT_HOURS_PER_WEEK));
+        subject.setDescription(resultSet.getString(TableMapperConstants.SUBJECT_DESCRIPTION));
 
         Teacher teacher = mapTeacher(resultSet);
         subject.setTeacher(teacher);
@@ -62,8 +62,8 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
 
     private Teacher mapTeacher(ResultSet resultSet) throws SQLException {
         Teacher teacher = new Teacher();
-        teacher.setId(resultSet.getLong("teacher_id"));
-        teacher.setName(resultSet.getString("teacher_name"));
+        teacher.setId(resultSet.getLong(TableMapperConstants.TEACHER_ID));
+        teacher.setName(resultSet.getString(TableMapperConstants.TEACHER_NAME));
         return teacher;
     }
 
@@ -71,13 +71,13 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
         Map<Long, Student> studentMap = new HashMap<>();
 
         do {
-            Long studentId = resultSet.getLong("student_id");
+            Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
             if (studentId != 0) {
                 Student student = studentMap.computeIfAbsent(studentId, id -> {
                     Student newStudent = new Student();
                     try {
-                        newStudent.setId(resultSet.getLong("student_id"));
-                        newStudent.setUsername(resultSet.getString("student_username"));
+                        newStudent.setId(resultSet.getLong(TableMapperConstants.STUDENT_ID));
+                        newStudent.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
                         newStudent.setGrades(new ArrayList<>());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
@@ -85,7 +85,7 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
                     return newStudent;
                 });
 
-                if (resultSet.getObject("grade_id") != null) {
+                if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
                     Grade grade = getGradeMapper().mapLight(resultSet);
                     student.getGrades().add(grade);
                 }

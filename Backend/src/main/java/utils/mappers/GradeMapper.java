@@ -1,18 +1,13 @@
 package utils.mappers;
 
 import dto.GradeDTO;
-import entity.Grade;
-import entity.GradeBG;
-import entity.Student;
-import entity.Teacher;
+import entity.*;
 import enums.GradeType;
 import interfaces.CustomRowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Grade> {
-
     @Override
     public Grade mapToEntity(GradeDTO dto) {
         return entityForm(dto);
@@ -30,12 +25,12 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
 
     public Grade mapLight(ResultSet resultSet) throws SQLException {
         return new GradeBG(
-                resultSet.getString("grade_name"),
+                resultSet.getString(TableMapperConstants.GRADE_NAME),
                 null,
                 null,
-                GradeType.valueOf(resultSet.getString("grade_type")),
-                resultSet.getDouble("grade_mark"),
-                resultSet.getDate("date_of_grading")
+                GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
+                resultSet.getDouble(TableMapperConstants.GRADE_MARK),
+                resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
         );
     }
 
@@ -63,12 +58,12 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
 
     private Grade mapForm(ResultSet resultSet) throws SQLException {
         return new GradeBG(
-                resultSet.getString("name"),
-                new Student(resultSet.getLong("student_id"), resultSet.getString("student_username")),
-                new Teacher(resultSet.getLong("teacher_id"), resultSet.getString("teacher_name")),
-                GradeType.valueOf(resultSet.getString("grade_type")),
-                resultSet.getDouble("mark"),
-                resultSet.getDate("date_of_grading")
+                resultSet.getString(TableMapperConstants.GRADE_NAME),
+                new Student(resultSet.getLong(TableMapperConstants.STUDENT_ID), resultSet.getString(TableMapperConstants.STUDENT_USERNAME)),
+                new Teacher(resultSet.getLong(TableMapperConstants.TEACHER_ID), resultSet.getString(TableMapperConstants.TEACHER_NAME)),
+                GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
+                resultSet.getDouble(TableMapperConstants.GRADE_MARK),
+                resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
         );
     }
 }
