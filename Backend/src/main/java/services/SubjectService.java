@@ -1,18 +1,17 @@
 package services;
 import entity.Subject;
 import interfaces.SubjectRepository;
-import utils.mappers.SubjectMapper;
+import utils.mappers.Mappers;
 
 public class SubjectService extends BasicService implements SubjectRepository {
-    private final SubjectMapper subjectMapper = new SubjectMapper();
     @Override
     public Subject getSubjectById(Long id) {
-        return selectQuery.getSubjectById(id, subjectMapper);
+        return selectQuery.getSubjectById(id, Mappers.getSubjectMapper());
     }
 
     @Override
     public Subject getSubjectByName(String name) {
-        return selectQuery.getSubjectByName(name, subjectMapper);
+        return selectQuery.getSubjectByName(name, Mappers.getSubjectMapper());
     }
 
     @Override

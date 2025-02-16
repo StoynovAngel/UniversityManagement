@@ -52,7 +52,7 @@ public class DatabaseInitializer {
         for (String query : queries) {
             if (!isQueryEmpty(query)) {
                 statement.executeUpdate(query.trim() + ";");
-                System.out.println(query +" was executed successfully.");
+                System.out.println(query + " was executed successfully.");
             }
         }
     }

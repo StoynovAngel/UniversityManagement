@@ -4,7 +4,9 @@ import java.sql.*;
 
 public class DatabaseConnection {
     private static Connection conn;
+
     private DatabaseConnection() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
 
     public static Connection getConnection() {

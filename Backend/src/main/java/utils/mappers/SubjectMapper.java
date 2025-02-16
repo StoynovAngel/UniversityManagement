@@ -2,14 +2,24 @@ package utils.mappers;
 
 import dto.SubjectDTO;
 import entity.*;
-import enums.GradeType;
 import interfaces.CustomRowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 
-public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO, Subject> {
+public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
+    private static SubjectMapper uniqueInstance;
+
+    private SubjectMapper() {
+    }
+
+    public static SubjectMapper getUniqueInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new SubjectMapper();
+        }
+        return uniqueInstance;
+    }
 
     public Subject mapToEntity(SubjectDTO subjectDTO) {
         return entityForm(subjectDTO);
@@ -29,8 +39,8 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
         newSubject.setName(subjectDTO.name());
         newSubject.setHoursPerWeek(subjectDTO.hoursPerWeek());
         newSubject.setDescription(subjectDTO.description());
-        newSubject.setTeacher(getTeacherMapper().mapToEntity(subjectDTO.teacher()));
-        newSubject.setStudentsAssignedToSubject(subjectDTO.students().stream().map(getStudentMapper()::mapToEntity).toList());
+        newSubject.setTeacher(Mappers.getTeacherMapper().mapToEntity(subjectDTO.teacher()));
+        newSubject.setStudentsAssignedToSubject(subjectDTO.students().stream().map(Mappers.getStudentMapper()::mapToEntity).toList());
         return newSubject;
     }
 
@@ -39,8 +49,8 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
                 subject.getName(),
                 subject.getHoursPerWeek(),
                 subject.getDescription(),
-                getTeacherMapper().mapToDTO(subject.getTeacher()),
-                subject.getStudentsAssignedToSubject().stream().map(getStudentMapper()::mapToDTO).toList()
+                Mappers.getTeacherMapper().mapToDTO(subject.getTeacher()),
+                subject.getStudentsAssignedToSubject().stream().map(Mappers.getStudentMapper()::mapToDTO).toList()
         );
     }
 
@@ -86,7 +96,7 @@ public class SubjectMapper extends Mappers implements CustomRowMapper<SubjectDTO
                 });
 
                 if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
-                    Grade grade = getGradeMapper().mapLight(resultSet);
+                    Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
                     student.getGrades().add(grade);
                 }
             }

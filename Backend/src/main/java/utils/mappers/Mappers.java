@@ -1,47 +1,28 @@
 package utils.mappers;
 
 public class Mappers {
-    private TeacherMapper teacherMapper;
-    private StudentMapper studentMapper;
-    private GradeMapper gradeMapper;
-    private SubjectMapper subjectMapper;
-    private GroupMapper groupMapper;
 
-    public Mappers() {}
-
-    protected TeacherMapper getTeacherMapper() {
-        if (teacherMapper == null) {
-            teacherMapper = new TeacherMapper();
-        }
-        return teacherMapper;
+    private Mappers() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
 
-    protected StudentMapper getStudentMapper() {
-        if (studentMapper == null) {
-            studentMapper = new StudentMapper();
-        }
-        return studentMapper;
+    public static TeacherMapper getTeacherMapper() {
+        return TeacherMapper.getUniqueInstance();
     }
 
-    protected GradeMapper getGradeMapper() {
-        if (gradeMapper == null) {
-            gradeMapper = new GradeMapper();
-        }
-        return gradeMapper;
+    public static StudentMapper getStudentMapper() {
+        return StudentMapper.getUniqueInstance();
     }
 
-    protected SubjectMapper getSubjectMapper() {
-        if (subjectMapper == null) {
-            subjectMapper = new SubjectMapper();
-        }
-        return subjectMapper;
+    public static GradeMapper getGradeMapper() {
+        return GradeMapper.getUniqueInstance();
     }
 
-    protected GroupMapper getGroupMapper() {
-        if (groupMapper == null) {
-            groupMapper = new GroupMapper();
-        }
-        return groupMapper;
+    public static SubjectMapper getSubjectMapper() {
+        return SubjectMapper.getUniqueInstance();
     }
 
+    public static GroupMapper getGroupMapper() {
+        return GroupMapper.getUniqueInstance();
+    }
 }

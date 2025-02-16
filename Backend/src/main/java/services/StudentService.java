@@ -2,19 +2,18 @@ package services;
 
 import entity.Student;
 import interfaces.StudentRepository;
-import utils.mappers.StudentMapper;
+import utils.mappers.Mappers;
 
 public class StudentService extends BasicService implements StudentRepository {
-    private final StudentMapper studentMapper = new StudentMapper();
 
     @Override
     public Student getStudentById(Long id) {
-        return selectQuery.getStudentById(id, studentMapper);
+        return selectQuery.getStudentById(id, Mappers.getStudentMapper());
     }
 
     @Override
     public Student getStudentByUsername(String username) {
-        return selectQuery.getStudentByUsername(username, studentMapper);
+        return selectQuery.getStudentByUsername(username, Mappers.getStudentMapper());
     }
 
     @Override

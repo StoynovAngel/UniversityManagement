@@ -23,7 +23,6 @@ public class DatabaseProperties {
         return uniqueInstance;
     }
 
-
     public Properties getProperties() {
         Properties props = new Properties();
         props.setProperty("user", properties.getProperty(DATABASE_USERNAME));
@@ -39,8 +38,6 @@ public class DatabaseProperties {
     public String getCreateTableFilePath() {
         return properties.getProperty(DATABASE_CREATE_TABLE_FILE_PATH);
     }
-
-
 
     public String insertTableFilePath() {
         return properties.getProperty(DATABASE_INSERT_TABLE_FILE_PATH);

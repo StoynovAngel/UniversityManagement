@@ -2,21 +2,19 @@ package services;
 
 import entity.Grade;
 import interfaces.GradeRepository;
-import utils.mappers.GradeMapper;
-
+import utils.mappers.Mappers;
 import java.util.List;
 
 public class GradeService extends BasicService implements GradeRepository {
-    private final GradeMapper gradeMapper = new GradeMapper();
 
     @Override
     public Grade getGradeByName(String name) {
-        return selectQuery.getGradeByName(name, gradeMapper);
+        return selectQuery.getGradeByName(name, Mappers.getGradeMapper());
     }
 
     @Override
     public List<Grade> getGradeByStudentName(String studentName) {
-        return selectQuery.getGradeByStudentName(studentName, gradeMapper);
+        return selectQuery.getGradeByStudentName(studentName, Mappers.getGradeMapper());
     }
 
     @Override

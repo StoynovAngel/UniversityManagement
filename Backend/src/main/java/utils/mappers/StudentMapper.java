@@ -8,7 +8,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO, Student> {
+public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
+    private static StudentMapper uniqueInstance;
+
+    private StudentMapper() {
+    }
+
+    public static StudentMapper getUniqueInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new StudentMapper();
+        }
+        return uniqueInstance;
+    }
 
     @Override
     public Student mapToEntity(StudentDTO studentDTO) {
@@ -41,7 +52,7 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     private Student entityForm(StudentDTO studentDTO) {
         Student newStudent = new Student();
         newStudent.setUsername(studentDTO.username());
-        newStudent.setGrades(studentDTO.grades().stream().map(getGradeMapper()::mapToEntity).toList());
+        newStudent.setGrades(studentDTO.grades().stream().map(Mappers.getGradeMapper()::mapToEntity).toList());
         newStudent.setAverageGradeOverall(studentDTO.averageGradeOverall());
         return newStudent;
     }
@@ -49,7 +60,7 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
     private StudentDTO dtoForm(Student student) {
         return new StudentDTO(
                 student.getUsername(),
-                student.getGrades().stream().map(getGradeMapper()::mapToDTO).toList(),
+                student.getGrades().stream().map(Mappers.getGradeMapper()::mapToDTO).toList(),
                 student.getAverageGradeOverall()
         );
     }
@@ -64,7 +75,7 @@ public class StudentMapper extends Mappers implements CustomRowMapper<StudentDTO
 
         do {
             if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
-                Grade grade = getGradeMapper().mapLight(resultSet);
+                Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
 
                 student.getGrades().add(grade);
             }

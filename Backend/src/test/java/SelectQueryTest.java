@@ -28,75 +28,67 @@ class SelectQueryTest {
 
     @Test
     void getGroupById() {
-        GroupMapper groupMapper = new GroupMapper();
         Long groupId = 3L;
-        Group result = selectQuery.getGroupById(groupId, groupMapper);
+        Group result = selectQuery.getGroupById(groupId, Mappers.getGroupMapper());
         assertNotNull(result, "Group should not be null");
         assertEquals(groupId, result.getId(), "Group ID does not match");
     }
 
     @Test
     void getSubjectById() {
-        SubjectMapper subjectMapper = new SubjectMapper();
         Long subjectId = 1L;
-        Subject result = selectQuery.getSubjectById(subjectId, subjectMapper);
+        Subject result = selectQuery.getSubjectById(subjectId, Mappers.getSubjectMapper());
         assertNotNull(result, "Subject should not be null");
         assertEquals(subjectId, result.getId(), "Subject id does not match");
     }
 
     @Test
     void getSubjectByName() {
-        SubjectMapper subjectMapper = new SubjectMapper();
         String name = "Math";
-        Subject result = selectQuery.getSubjectByName(name, subjectMapper);
+        Subject result = selectQuery.getSubjectByName(name, Mappers.getSubjectMapper());
         assertNotNull(result, "Subject should not be null");
         assertEquals(name, result.getName(), "Subject name does not match");
     }
 
     @Test
     void getTeacherById() {
-        TeacherMapper teacherMapper = new TeacherMapper();
         Long subjectId = 1L;
-        Teacher result = selectQuery.getTeacherById(subjectId, teacherMapper);
+        Teacher result = selectQuery.getTeacherById(subjectId, Mappers.getTeacherMapper());
         assertNotNull(result, "Teacher should not be null");
         assertEquals(subjectId, result.getId(), "Teacher id does not match");
     }
 
     @Test
     void getStudentById() {
-        StudentMapper studentMapper = new StudentMapper();
         Long subjectId = 1L;
-        Student result = selectQuery.getStudentById(subjectId, studentMapper);
+        Student result = selectQuery.getStudentById(subjectId, Mappers.getStudentMapper());
         assertNotNull(result, "Student should not be null");
         assertEquals(subjectId, result.getId(), "Student id does not match");
     }
 
     @Test
     void getStudentByUsername() {
-        StudentMapper studentMapper = new StudentMapper();
         String name = "jane_doe";
-        Student result = selectQuery.getStudentByUsername(name, studentMapper);
+        Student result = selectQuery.getStudentByUsername(name, Mappers.getStudentMapper());
         assertNotNull(result, "Student should not be null");
         assertEquals(name, result.getUsername(), "Student username does not match");
     }
 
     @Test
     void getGradeByName() {
-        GradeMapper gradeMapper = new GradeMapper();
         String name = "Math";
-        Grade result = selectQuery.getGradeByName(name, gradeMapper);
+        Grade result = selectQuery.getGradeByName(name, Mappers.getGradeMapper());
         assertNotNull(result, "Grade should not be null");
         assertEquals(name, result.getName(), "Grade name does not match");
     }
 
     @Test
     void getGradeByStudentName() {
-        GradeMapper gradeMapper = new GradeMapper();
         String studentName = "jane_doe";
-
-        List<Grade> result = selectQuery.getGradeByStudentName(studentName, gradeMapper);
+        List<Grade> result = selectQuery.getGradeByStudentName(studentName, Mappers.getGradeMapper());
         assertNotNull(result, "Grade list should not be null");
         assertFalse(result.isEmpty(), "Grade list should not be empty for student: " + studentName);
+
         for (Grade grade : result) {
             assertNotNull(grade.getStudent(), "Grade should have an associated student");
             assertEquals(studentName, grade.getStudent().getUsername(), "Student's name does not match");

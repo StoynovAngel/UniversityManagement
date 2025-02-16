@@ -7,7 +7,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Group> {
+public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
+    private static GroupMapper uniqueInstance;
+
+    private GroupMapper() {
+    }
+
+    public static GroupMapper getUniqueInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new GroupMapper();
+        }
+        return uniqueInstance;
+    }
 
     @Override
     public Group mapToEntity(GroupDTO groupDTO) {
@@ -33,7 +44,7 @@ public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Gr
     private GroupDTO dtoForm(Group group) {
         return new GroupDTO(
                 group.getGroupName(),
-                group.getStudentsAssignedToGroup().stream().map(getStudentMapper()::mapToDTO).toList()
+                group.getStudentsAssignedToGroup().stream().map(Mappers.getStudentMapper()::mapToDTO).toList()
         );
     }
 
@@ -47,10 +58,10 @@ public class GroupMapper extends Mappers implements CustomRowMapper<GroupDTO, Gr
             }
 
             Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
-            Student student = studentMap.computeIfAbsent(studentId, id -> getStudentMapper().mapLight(resultSet, id));
+            Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapLight(resultSet, id));
 
             if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
-                Grade grade = getGradeMapper().mapLight(resultSet);
+                Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
                 student.getGrades().add(grade);
             }
         } while (resultSet.next());

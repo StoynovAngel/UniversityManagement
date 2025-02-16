@@ -3,10 +3,21 @@ package utils.mappers;
 import dto.TeacherDTO;
 import entity.Teacher;
 import interfaces.CustomRowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
+    private static TeacherMapper uniqueInstance;
+
+    private TeacherMapper() {
+    }
+
+    public static TeacherMapper getUniqueInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new TeacherMapper();
+        }
+        return uniqueInstance;
+    }
 
     @Override
     public Teacher mapToEntity(TeacherDTO teacherDTO) {

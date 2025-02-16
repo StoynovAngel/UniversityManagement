@@ -12,7 +12,7 @@ public class SelectStatements {
                 "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.university_group " +
+                "FROM " + TableMapperConstants.GROUP_TABLE + " " +
                 "LEFT JOIN group_student ON university_group.id = group_student.group_id " +
                 "LEFT JOIN student ON student.id = group_student.student_id " +
                 "LEFT JOIN grade ON grade.student_id = student.id " +
@@ -23,7 +23,7 @@ public class SelectStatements {
     public static String selectTeacherByIdSql() {
         return "SELECT teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
                 "teacher.name AS " + TableMapperConstants.TEACHER_NAME + " " +
-                "FROM public.teacher " +
+                "FROM " + TableMapperConstants.TEACHER_TABLE + " " +
                 "WHERE teacher.id = ?";
     }
 
@@ -36,7 +36,7 @@ public class SelectStatements {
                 "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.student " +
+                "FROM " + TableMapperConstants.STUDENT_TABLE + " " +
                 "LEFT JOIN grade ON grade.student_id = student.id " +
                 "WHERE student.id = ?";
     }
@@ -50,7 +50,7 @@ public class SelectStatements {
                 "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.student " +
+                "FROM " + TableMapperConstants.STUDENT_TABLE + " " +
                 "LEFT JOIN grade ON grade.student_id = student.id " +
                 "WHERE student.username = ?";
     }
@@ -65,7 +65,7 @@ public class SelectStatements {
                 "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
                 "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
                 "student.username AS " + TableMapperConstants.STUDENT_USERNAME + " " +
-                "FROM public.grade " +
+                "FROM " + TableMapperConstants.GRADE_TABLE + " " +
                 "JOIN teacher ON teacher.id = grade.teacher_id " +
                 "JOIN student ON student.id = grade.student_id " +
                 "WHERE grade.name = ?";
@@ -75,12 +75,13 @@ public class SelectStatements {
         return "SELECT " +
                 "grade.id AS " + TableMapperConstants.GRADE_ID + ", " +
                 "grade.name AS " + TableMapperConstants.GRADE_NAME + ", " +
-                "grade.mark, grade.date_of_grading, grade.grade_type, " +
+                "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
+                "grade.date_of_grading, grade.grade_type, " +
                 "teacher.id AS " + TableMapperConstants.TEACHER_ID + ", " +
                 "teacher.name AS " + TableMapperConstants.TEACHER_NAME + ", " +
                 "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +
                 "student.username AS " + TableMapperConstants.STUDENT_USERNAME + " " +
-                "FROM public.grade " +
+                "FROM " + TableMapperConstants.GRADE_TABLE + " " +
                 "JOIN teacher ON teacher.id = grade.teacher_id " +
                 "JOIN student ON student.id = grade.student_id " +
                 "WHERE student.username = ?";
@@ -102,7 +103,7 @@ public class SelectStatements {
                 "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.subject " +
+                "FROM " + TableMapperConstants.SUBJECT_TABLE + " " +
                 "LEFT JOIN teacher ON teacher.id = subject.teacher_id " +
                 "LEFT JOIN subject_student ON subject.id = subject_student.subject_id " +
                 "LEFT JOIN student ON student.id = subject_student.student_id " +
@@ -126,7 +127,7 @@ public class SelectStatements {
                 "grade.mark AS " + TableMapperConstants.GRADE_MARK + ", " +
                 "grade.grade_type, " +
                 "grade.date_of_grading " +
-                "FROM public.subject " +
+                "FROM " + TableMapperConstants.SUBJECT_TABLE + " " +
                 "LEFT JOIN teacher ON teacher.id = subject.teacher_id " +
                 "LEFT JOIN subject_student ON subject.id = subject_student.subject_id " +
                 "LEFT JOIN student ON student.id = subject_student.student_id " +

@@ -7,7 +7,19 @@ import interfaces.CustomRowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Grade> {
+public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
+    private static GradeMapper uniqueInstance;
+
+    private GradeMapper() {
+    }
+
+    public static GradeMapper getUniqueInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new GradeMapper();
+        }
+        return uniqueInstance;
+    }
+
     @Override
     public Grade mapToEntity(GradeDTO dto) {
         return entityForm(dto);
@@ -37,8 +49,8 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
     private Grade entityForm(GradeDTO dto) {
         return new GradeBG(
                 dto.name(),
-                getStudentMapper().mapToEntity(dto.student()),
-                getTeacherMapper().mapToEntity(dto.teacher()),
+                Mappers.getStudentMapper().mapToEntity(dto.student()),
+                Mappers.getTeacherMapper().mapToEntity(dto.teacher()),
                 dto.gradeType(),
                 dto.mark(),
                 dto.dateOfGrading()
@@ -48,8 +60,8 @@ public class GradeMapper extends Mappers implements CustomRowMapper<GradeDTO, Gr
     private GradeDTO dtoForm(Grade entity) {
         return new GradeDTO(
                 entity.getName(),
-                getStudentMapper().mapToDTO(entity.getStudent()),
-                getTeacherMapper().mapToDTO(entity.getTeacher()),
+                Mappers.getStudentMapper().mapToDTO(entity.getStudent()),
+                Mappers.getTeacherMapper().mapToDTO(entity.getTeacher()),
                 entity.getGradeType(),
                 entity.getMark(),
                 entity.getDateOfGrading()
