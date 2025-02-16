@@ -1,12 +1,18 @@
 package utils.mappers;
 
+import config.QueryLogger;
 import dto.StudentDTO;
 import entity.Grade;
 import entity.Student;
 import interfaces.CustomRowMapper;
+import utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     private static StudentMapper uniqueInstance;
@@ -34,6 +40,10 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     @Override
     public Student mapRow(ResultSet resultSet) throws SQLException {
         return mapForm(resultSet);
+    }
+
+    public List<Student> mapAllStudents(ResultSet resultSet) {
+        return mapStudents(resultSet);
     }
 
     public Student mapLight(ResultSet resultSet, Long id) {
@@ -66,7 +76,6 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     private Student mapForm(ResultSet resultSet) throws SQLException {
-
         Student student = new Student();
         student.setId(resultSet.getLong(TableMapperConstants.STUDENT_ID));
         student.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
@@ -82,5 +91,39 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         } while (resultSet.next());
 
         return student;
+    }
+
+    private List<Student> mapStudents(ResultSet resultSet)  {
+        Map<Long, Student> studentMap = new HashMap<>();
+
+        try{
+            do {
+                Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
+                if (studentId != 0) {
+                    Student student = studentMap.computeIfAbsent(studentId, id -> {
+                        Student newStudent = new Student();
+                        try {
+                            newStudent.setId(resultSet.getLong(TableMapperConstants.STUDENT_ID));
+                            newStudent.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
+                            newStudent.setGrades(new ArrayList<>());
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return newStudent;
+                    });
+
+                    if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
+                        Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
+                        student.getGrades().add(grade);
+                    }
+                }
+            } while (resultSet.next());
+
+            return new ArrayList<>(studentMap.values());
+
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Student object", e);
+            throw new DataMappingException("Error mapping database result to Student", e);
+        }
     }
 }

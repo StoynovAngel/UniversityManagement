@@ -1,5 +1,6 @@
 package config;
 
+import utils.exceptions.DatabaseConnectionException;
 import java.sql.*;
 
 public class DatabaseConnection {
@@ -16,7 +17,8 @@ public class DatabaseConnection {
                 conn = DriverManager.getConnection(databaseProperties.getDatabaseUrl(), databaseProperties.getProperties());
                 System.out.println("Database connected successfully!");
             } catch (SQLException e) {
-                System.err.println("Database connection failed: " + e.getMessage());
+                QueryLogger.logError("Database connection failed", e);
+                throw new DatabaseConnectionException("Failed to establish database connection", e);
             }
         }
         return conn;

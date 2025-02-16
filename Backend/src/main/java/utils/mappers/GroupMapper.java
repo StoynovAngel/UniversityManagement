@@ -1,8 +1,11 @@
 package utils.mappers;
 
+import config.QueryLogger;
 import dto.GroupDTO;
 import entity.*;
 import interfaces.CustomRowMapper;
+import utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -31,7 +34,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
     }
 
     @Override
-    public Group mapRow(ResultSet resultSet) throws SQLException {
+    public Group mapRow(ResultSet resultSet) {
         return mapForm(resultSet);
     }
 
@@ -48,33 +51,48 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         );
     }
 
-    private Group mapForm(ResultSet resultSet) throws SQLException {
+    private Group mapForm(ResultSet resultSet) {
         Group group = null;
         Map<Long, Student> studentMap = new HashMap<>();
 
-        do {
-            if (group == null) {
-                group = mapGroup(resultSet);
-            }
+        if (resultSet == null) {
+            QueryLogger.logMessage("ResultSet is null. Cannot map Group.");
+            throw new DataMappingException("ResultSet is null. Mapping failed.");
+        }
 
-            Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
-            Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapLight(resultSet, id));
+        try{
+            do {
+                if (group == null) {
+                    group = mapGroup(resultSet);
+                }
 
-            if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
-                Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
-                student.getGrades().add(grade);
-            }
-        } while (resultSet.next());
+                Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
+                Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapLight(resultSet, id));
 
-        group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
+                if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
+                    Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
+                    student.getGrades().add(grade);
+                }
+            } while (resultSet.next());
 
-        return group;
+            group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
+            return group;
+        }  catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Group object with ", e);
+            throw new DataMappingException("Error mapping database result to Group", e);
+        }
     }
 
-    private Group mapGroup(ResultSet resultSet) throws SQLException {
-        Group group = new Group();
-        group.setId(resultSet.getLong(TableMapperConstants.GROUP_ID));
-        group.setGroupName(resultSet.getString(TableMapperConstants.GROUP_NAME));
-        return group;
+    private Group mapGroup(ResultSet resultSet) {
+        try {
+            return new Group(
+                resultSet.getLong(TableMapperConstants.GROUP_ID),
+                resultSet.getString(TableMapperConstants.GROUP_NAME),
+                null
+            );
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Group object", e);
+            throw new DataMappingException("Error mapping database result to Group", e);
+        }
     }
 }

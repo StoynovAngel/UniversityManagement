@@ -23,8 +23,8 @@ target/
 
 ### Enviroument file ###
 .env
-src/main/resources/database.properties
-!src/main/resources/database.properties.example
+src/main/java/resources/database.properties
+src/main/java/Main.java
 query_logs.txt
 ### NetBeans ###
 /nbproject/private/

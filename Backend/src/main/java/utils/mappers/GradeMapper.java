@@ -1,9 +1,12 @@
 package utils.mappers;
 
+import config.QueryLogger;
 import dto.GradeDTO;
 import entity.*;
 import enums.GradeType;
 import interfaces.CustomRowMapper;
+import utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -31,19 +34,24 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
     }
 
     @Override
-    public Grade mapRow(ResultSet resultSet) throws SQLException {
+    public Grade mapRow(ResultSet resultSet) {
         return mapForm(resultSet);
     }
 
-    public Grade mapLight(ResultSet resultSet) throws SQLException {
-        return new GradeBG(
-                resultSet.getString(TableMapperConstants.GRADE_NAME),
-                null,
-                null,
-                GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
-                resultSet.getDouble(TableMapperConstants.GRADE_MARK),
-                resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
-        );
+    public Grade mapLight(ResultSet resultSet) {
+        try {
+            return new GradeBG(
+                    resultSet.getString(TableMapperConstants.GRADE_NAME),
+                    null,
+                    null,
+                    GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
+                    resultSet.getDouble(TableMapperConstants.GRADE_MARK),
+                    resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
+            );
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Grade object.", e);
+            throw new DataMappingException("Error mapping database result to Grade", e);
+        }
     }
 
     private Grade entityForm(GradeDTO dto) {
@@ -68,14 +76,19 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
         );
     }
 
-    private Grade mapForm(ResultSet resultSet) throws SQLException {
-        return new GradeBG(
+    private Grade mapForm(ResultSet resultSet) {
+        try {
+            return new GradeBG(
                 resultSet.getString(TableMapperConstants.GRADE_NAME),
                 new Student(resultSet.getLong(TableMapperConstants.STUDENT_ID), resultSet.getString(TableMapperConstants.STUDENT_USERNAME)),
                 new Teacher(resultSet.getLong(TableMapperConstants.TEACHER_ID), resultSet.getString(TableMapperConstants.TEACHER_NAME)),
                 GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
                 resultSet.getDouble(TableMapperConstants.GRADE_MARK),
                 resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
-        );
+            );
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Grade object", e);
+            throw new DataMappingException("Error mapping database result to Grade", e);
+        }
     }
 }

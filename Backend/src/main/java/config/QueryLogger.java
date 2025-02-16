@@ -8,14 +8,11 @@ public class QueryLogger {
     private static final String LOG_FILE = "query_logs.txt";
 
     static {
-        try {
-            FileHandler fileHandler = new FileHandler(LOG_FILE, true);
-            fileHandler.setFormatter(new SimpleFormatter());
-            LOGGER.addHandler(fileHandler);
-            LOGGER.setUseParentHandlers(false);
-        } catch (IOException e) {
-            System.err.println("Failed to initialize log file: " + e.getMessage());
-        }
+        loggerInitializer();
+    }
+
+    private QueryLogger() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
 
     public static void logQuery(String sql, Object... params) {
@@ -38,5 +35,20 @@ public class QueryLogger {
 
     public static void logError(String message, Exception e) {
         LOGGER.log(Level.SEVERE, message, e);
+    }
+
+    private static void loggerInitializer() {
+        try {
+            loggerSpecifics(new FileHandler(LOG_FILE, true));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize QueryLogger. Logging will not work.", e);
+        }
+    }
+
+    private static void loggerSpecifics(FileHandler fileHandler) {
+        fileHandler.setFormatter(new SimpleFormatter());
+        LOGGER.addHandler(fileHandler);
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.setLevel(Level.INFO);
     }
 }

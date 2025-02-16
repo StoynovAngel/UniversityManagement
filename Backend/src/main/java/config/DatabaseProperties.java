@@ -1,5 +1,7 @@
 package config;
 
+import utils.exceptions.DatabaseConnectionException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -24,11 +26,16 @@ public class DatabaseProperties {
     }
 
     public Properties getProperties() {
-        Properties props = new Properties();
-        props.setProperty("user", properties.getProperty(DATABASE_USERNAME));
-        props.setProperty("password", properties.getProperty(DATABASE_PASSWORD));
-        props.setProperty("ssl", properties.getProperty(DATABASE_SSL));
-        return props;
+        try {
+            Properties props = new Properties();
+            props.setProperty("user", properties.getProperty(DATABASE_USERNAME));
+            props.setProperty("password", properties.getProperty(DATABASE_PASSWORD));
+            props.setProperty("ssl", properties.getProperty(DATABASE_SSL));
+            return props;
+        } catch (IllegalArgumentException e) {
+            QueryLogger.logError("Invalid database property found", e);
+            throw new DatabaseConnectionException("Error retrieving database properties", e);
+        }
     }
 
     public String getDatabaseUrl() {
@@ -46,11 +53,12 @@ public class DatabaseProperties {
     private void loadProperties() {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE)) {
             if (input == null) {
-                throw new RuntimeException("database.properties file not found in resources folder.");
+                throw new FileNotFoundException("database.properties file not found in resources folder.");
             }
             properties.load(input);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load database.properties file", e);
+            QueryLogger.logError("Failed to load database properties", e);
+            throw new DatabaseConnectionException("Failed to load database.properties file", e);
         }
     }
 }

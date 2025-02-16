@@ -1,8 +1,11 @@
 package utils.mappers;
 
+import config.QueryLogger;
 import dto.TeacherDTO;
 import entity.Teacher;
 import interfaces.CustomRowMapper;
+import utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -30,7 +33,7 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
     }
 
     @Override
-    public Teacher mapRow(ResultSet resultSet) throws SQLException {
+    public Teacher mapRow(ResultSet resultSet) {
         return mapForm(resultSet);
     }
 
@@ -46,10 +49,15 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
         );
     }
 
-    private Teacher mapForm(ResultSet resultSet) throws SQLException {
-        Teacher teacher = new Teacher();
-        teacher.setId(resultSet.getLong("teacher_id"));
-        teacher.setName(resultSet.getString("teacher_name"));
-        return teacher;
+    private Teacher mapForm(ResultSet resultSet) {
+        try {
+            return new Teacher(
+                resultSet.getLong(TableMapperConstants.TEACHER_ID),
+                resultSet.getString(TableMapperConstants.TEACHER_NAME)
+            );
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map ResultSet to Teacher object", e);
+            throw new DataMappingException("Error mapping database result to Teacher", e);
+        }
     }
 }

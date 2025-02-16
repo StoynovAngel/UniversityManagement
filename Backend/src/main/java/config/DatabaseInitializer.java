@@ -26,17 +26,20 @@ public class DatabaseInitializer {
             executeSqlFile(statement, filename);
         } catch (SQLException e) {
             System.err.println("Error executing SQL from file: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Error reading SQL file: " + e.getMessage());
         }
     }
 
-    private static void executeSqlFile(Statement statement, String filename) throws IOException, SQLException {
+    private static void executeSqlFile(Statement statement, String filename) throws SQLException {
         executeParsedQueries(getSqlFile(filename), statement);
     }
 
-    private static String getSqlFile(String filename) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filename)));
+    private static String getSqlFile(String filename) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filename)));
+        } catch (IOException e) {
+            QueryLogger.logError("Failed to read SQL file: " + filename, e);
+            throw new RuntimeException("Database initialization failed", e);
+        }
     }
 
     private static void executeParsedQueries(String sql, Statement statement) throws SQLException {
