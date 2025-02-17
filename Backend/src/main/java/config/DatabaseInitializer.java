@@ -25,17 +25,12 @@ public class DatabaseInitializer {
     }
 
     private static void processSqlFile(String filename) {
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement())
-        {
-            executeSqlFile(statement, filename);
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            executeSqlFile(getSqlFile(filename), connection);
         } catch (SQLException e) {
-            System.err.println("Error executing SQL from file: " + e.getMessage());
+            QueryLogger.logError("Error executing SQL from file: " + filename, e);
+            throw new RuntimeException("Database initialization failed", e);
         }
-    }
-
-    private static void executeSqlFile(Statement statement, String filename) throws SQLException {
-        executeParsedQueries(getSqlFile(filename), statement);
     }
 
     private static String getSqlFile(String filename) {
@@ -47,20 +42,25 @@ public class DatabaseInitializer {
         }
     }
 
-    private static void executeParsedQueries(String sql, Statement statement) throws SQLException {
+    private static void executeSqlFile(String sql, Connection connection) throws SQLException {
         String[] queries = splitSqlIntoQueries(sql);
-        executeSqlStatements(queries, statement);
+        executeSqlStatements(queries, connection);
     }
 
     private static String[] splitSqlIntoQueries(String sql) {
         return sql.split(";");
     }
 
-    private static void executeSqlStatements(String[] queries, Statement statement) throws SQLException {
+    private static void executeSqlStatements(String[] queries, Connection connection) throws SQLException {
         for (String query : queries) {
             if (!isQueryEmpty(query)) {
-                statement.executeUpdate(query.trim() + ";");
-                System.out.println(query + " was executed successfully.");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(query.trim())) {
+                    preparedStatement.executeUpdate();
+                    System.out.println(query.trim() + " was executed successfully.");
+                } catch (SQLException e) {
+                    QueryLogger.logError("Failed to execute query: " + query, e);
+                    throw new SQLException("Error executing query: " + query, e);
+                }
             }
         }
     }
