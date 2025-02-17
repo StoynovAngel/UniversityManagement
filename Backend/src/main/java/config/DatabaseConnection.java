@@ -3,6 +3,11 @@ package config;
 import utils.exceptions.DatabaseConnectionException;
 import java.sql.*;
 
+/**
+ *  DatabaseConnection used to establish connection to the database.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class DatabaseConnection {
     private static Connection conn;
 

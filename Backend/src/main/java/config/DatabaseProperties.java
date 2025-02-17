@@ -6,6 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ *  DatabaseProperties sets the database properties. It implements eager singleton.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
+
 public class DatabaseProperties {
     private static final String DATABASE_USERNAME = "db.username";
     private static final String DATABASE_PASSWORD = "db.password";

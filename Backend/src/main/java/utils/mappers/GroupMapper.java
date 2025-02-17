@@ -5,20 +5,34 @@ import dto.GroupDTO;
 import entity.*;
 import interfaces.CustomRowMapper;
 import utils.exceptions.DataMappingException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
+
 public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
-    private static GroupMapper uniqueInstance;
+    private static volatile GroupMapper uniqueInstance;
 
     private GroupMapper() {
+        if (uniqueInstance != null) {
+            throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+        }
     }
 
     public static GroupMapper getUniqueInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new GroupMapper();
+            synchronized (GroupMapper.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new GroupMapper();
+                }
+            }
         }
         return uniqueInstance;
     }
@@ -67,7 +81,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
                 }
 
                 Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
-                Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapLight(resultSet, id));
+                Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapStudentById(resultSet, id));
 
                 if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
                     Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
@@ -78,8 +92,8 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
             group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
             return group;
         }  catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Group object with ", e);
-            throw new DataMappingException("Error mapping database result to Group", e);
+            QueryLogger.logError("Failed to map ResultSet to Group object within mapForm.", e);
+            throw new DataMappingException("Error mapping database result to Group.", e);
         }
     }
 
@@ -91,8 +105,8 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
                 null
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Group object", e);
-            throw new DataMappingException("Error mapping database result to Group", e);
+            QueryLogger.logError("Failed to map ResultSet to Group object.", e);
+            throw new DataMappingException("Error mapping database result to Group.", e);
         }
     }
 }

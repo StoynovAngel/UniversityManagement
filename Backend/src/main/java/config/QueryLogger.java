@@ -3,6 +3,11 @@ package config;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ *  QueryLogger contains static methods used to log queries and display error messages.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class QueryLogger {
     private static final Logger LOGGER = Logger.getLogger(QueryLogger.class.getName());
     private static final String LOG_FILE = "query_logs.txt";

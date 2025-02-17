@@ -5,19 +5,33 @@ import dto.TeacherDTO;
 import entity.Teacher;
 import interfaces.CustomRowMapper;
 import utils.exceptions.DataMappingException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
+
 public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
-    private static TeacherMapper uniqueInstance;
+    private static volatile TeacherMapper uniqueInstance;
 
     private TeacherMapper() {
+        if (uniqueInstance != null) {
+            throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+        }
     }
 
     public static TeacherMapper getUniqueInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new TeacherMapper();
+            synchronized (TeacherMapper.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new TeacherMapper();
+                }
+            }
         }
         return uniqueInstance;
     }
@@ -56,8 +70,8 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
                 resultSet.getString(TableMapperConstants.TEACHER_NAME)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Teacher object", e);
-            throw new DataMappingException("Error mapping database result to Teacher", e);
+            QueryLogger.logError("Failed to map ResultSet to Teacher object.", e);
+            throw new DataMappingException("Error mapping database result to Teacher.", e);
         }
     }
 }

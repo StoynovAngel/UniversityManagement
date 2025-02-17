@@ -6,19 +6,33 @@ import entity.*;
 import enums.GradeType;
 import interfaces.CustomRowMapper;
 import utils.exceptions.DataMappingException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
+
 public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
-    private static GradeMapper uniqueInstance;
+    private static volatile GradeMapper uniqueInstance;
 
     private GradeMapper() {
+        if (uniqueInstance != null) {
+            throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+        }
     }
 
     public static GradeMapper getUniqueInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new GradeMapper();
+            synchronized (GradeMapper.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new GradeMapper();
+                }
+            }
         }
         return uniqueInstance;
     }
@@ -49,8 +63,8 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
                     resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Grade object.", e);
-            throw new DataMappingException("Error mapping database result to Grade", e);
+            QueryLogger.logError("Failed to map ResultSet within mapLight to Grade object.", e);
+            throw new DataMappingException("Error mapping database result to Grade.", e);
         }
     }
 

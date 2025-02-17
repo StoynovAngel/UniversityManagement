@@ -4,20 +4,20 @@ import entity.Teacher;
 import interfaces.TeacherRepository;
 import utils.mappers.Mappers;
 
-public class TeacherService extends BasicService implements TeacherRepository {
+public class TeacherService implements TeacherRepository {
 
     @Override
     public Teacher getTeacherById(Long id) {
-        return selectQuery.getTeacherById(id, Mappers.getTeacherMapper());
+        return QueryManager.getSelectQuery().getTeacherById(id, Mappers.getTeacherMapper());
     }
 
     @Override
     public void updateTeacherName(String name, Long id) {
-        updateQuery.updateTeacherName(name, id);
+        QueryManager.getUpdateQuery().updateTeacherName(name, id);
     }
 
     @Override
     public void insertTeacher(String name) {
-        insertQuery.insertTeacher(name);
+        QueryManager.getInsertQuery().insertTeacher(name);
     }
 }

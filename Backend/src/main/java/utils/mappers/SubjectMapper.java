@@ -5,21 +5,34 @@ import dto.SubjectDTO;
 import entity.*;
 import interfaces.CustomRowMapper;
 import utils.exceptions.DataMappingException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
 
 public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
-    private static SubjectMapper uniqueInstance;
+    private static volatile SubjectMapper uniqueInstance;
 
     private SubjectMapper() {
+        if (uniqueInstance != null) {
+            throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+        }
     }
 
     public static SubjectMapper getUniqueInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new SubjectMapper();
+            synchronized (SubjectMapper.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new SubjectMapper();
+                }
+            }
         }
         return uniqueInstance;
     }

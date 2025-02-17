@@ -14,15 +14,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ *  <p>
+ *  This class prevents instantiation and provides a static method
+ *  {@link #getUniqueInstance()} to obtain the properties.
+ *  </p>
+ */
 public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
-    private static StudentMapper uniqueInstance;
+    private static volatile StudentMapper uniqueInstance;
 
     private StudentMapper() {
+        if (uniqueInstance != null) {
+            throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+        }
     }
 
     public static StudentMapper getUniqueInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new StudentMapper();
+            synchronized (StudentMapper.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new StudentMapper();
+                }
+            }
         }
         return uniqueInstance;
     }
@@ -38,7 +52,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     @Override
-    public Student mapRow(ResultSet resultSet) throws SQLException {
+    public Student mapRow(ResultSet resultSet) {
         return mapForm(resultSet);
     }
 
@@ -46,7 +60,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         return mapStudents(resultSet);
     }
 
-    public Student mapLight(ResultSet resultSet, Long id) {
+    public Student mapStudentById(ResultSet resultSet, Long id) {
         try {
             Student s = new Student();
             s.setId(id);
@@ -55,7 +69,8 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
             s.setGrades(new ArrayList<>());
             return s;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            QueryLogger.logError("Failed to mapStudentById object with ID: " + id, e);
+            throw new DataMappingException("Error by mapStudentById object with ID: " + id, e);
         }
     }
 
@@ -75,22 +90,37 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         );
     }
 
-    private Student mapForm(ResultSet resultSet) throws SQLException {
-        Student student = new Student();
-        student.setId(resultSet.getLong(TableMapperConstants.STUDENT_ID));
-        student.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
-        student.setAverageGradeOverall(resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL));
+    private Student mapForm(ResultSet resultSet) {
+        Student student = mapStudent(resultSet);
         student.setGrades(new ArrayList<>());
 
-        do {
-            if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
-                Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
-
-                student.getGrades().add(grade);
-            }
-        } while (resultSet.next());
+        try {
+            do {
+                if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
+                    Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
+                    student.getGrades().add(grade);
+                }
+            } while (resultSet.next());
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map grades for Student ID: " + student.getId(), e);
+            throw new DataMappingException("Error mapping grades for Student ID: " + student.getId(), e);
+        }
 
         return student;
+    }
+
+    private Student mapStudent(ResultSet resultSet) {
+        try {
+            return new Student(
+                resultSet.getLong(TableMapperConstants.STUDENT_ID),
+                resultSet.getString(TableMapperConstants.STUDENT_USERNAME),
+                null,
+                resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL)
+            );
+        } catch (SQLException e) {
+            QueryLogger.logError("Failed to map Student object from ResultSet", e);
+            throw new DataMappingException("Error mapping database result to Student", e);
+        }
     }
 
     private List<Student> mapStudents(ResultSet resultSet)  {
@@ -107,7 +137,8 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
                             newStudent.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
                             newStudent.setGrades(new ArrayList<>());
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            QueryLogger.logError("Error mapping student within mapStudents()", e);
+                            throw new DataMappingException("Error mapping student with ID: " + id, e);
                         }
                         return newStudent;
                     });

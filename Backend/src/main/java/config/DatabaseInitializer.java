@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.sql.*;
 
+/**
+ *  DatabaseInitializer contains static methods used to create and insert rows into tables.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class DatabaseInitializer {
     private static final DatabaseProperties databaseProperties = DatabaseProperties.getUniqueInstance();
 
