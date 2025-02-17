@@ -1,7 +1,6 @@
 package utils.queries.update;
 
 import utils.queries.QueryUpdater;
-import utils.queries.select.*;
 
 public class UpdateQuery extends QueryUpdater {
     public void updateTeacherName(String name, Long id) {
@@ -21,6 +20,6 @@ public class UpdateQuery extends QueryUpdater {
     }
 
     public void updateGroupName(String name, Long id) {
-        updateSingleRow(UpdateStatements.updateGradeNameById(), name, id);
+        updateSingleRow(UpdateStatements.updateGroupNameById(), name, id);
     }
 }

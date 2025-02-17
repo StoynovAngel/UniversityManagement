@@ -56,7 +56,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         Map<Long, Student> studentMap = new HashMap<>();
 
         if (resultSet == null) {
-            QueryLogger.logMessage("ResultSet is null. Cannot map Group.");
+            QueryLogger.logError("ResultSet is null. Cannot map Group.");
             throw new DataMappingException("ResultSet is null. Mapping failed.");
         }
 

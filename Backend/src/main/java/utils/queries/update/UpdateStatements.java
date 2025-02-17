@@ -1,23 +1,25 @@
 package utils.queries.update;
 
+import utils.mappers.TableMapperConstants;
+
 public class UpdateStatements {
     public static String updateTeacherNameById() {
-        return "UPDATE public.teacher SET name = ? WHERE id = ?";
+        return "UPDATE " + TableMapperConstants.TEACHER_TABLE + " SET name = ? WHERE id = ?";
     }
 
     public static String updateSubjectDescriptionBySubjectName() {
-        return "UPDATE public.subject SET description = ? WHERE name = ?";
+        return "UPDATE " + TableMapperConstants.SUBJECT_TABLE + " SET description = ? WHERE name = ?";
     }
 
     public static String updateGradeByStudentId() {
-        return "UPDATE public.grade SET mark = ? WHERE student_id = ?";
+        return "UPDATE " + TableMapperConstants.GRADE_TABLE + " SET mark = ? WHERE student_id = ?";
     }
 
     public static String updateStudentUsernameById() {
-        return "UPDATE public.student SET username = ? WHERE id = ?";
+        return "UPDATE " + TableMapperConstants.STUDENT_TABLE + " SET username = ? WHERE id = ?";
     }
 
-    public static String updateGradeNameById() {
-        return "UPDATE public.university_group SET name = ? WHERE id = ?";
+    public static String updateGroupNameById() {
+        return "UPDATE " + TableMapperConstants.GROUP_TABLE + " SET name = ? WHERE id = ?";
     }
 }

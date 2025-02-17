@@ -83,9 +83,9 @@ class SelectQueryTest {
     }
 
     @Test
-    void getGradeByStudentName() {
+    void getGradesByStudentName() {
         String studentName = "jane_doe";
-        List<Grade> result = selectQuery.getGradeByStudentName(studentName, Mappers.getGradeMapper());
+        List<Grade> result = selectQuery.getGradesByStudentName(studentName, Mappers.getGradeMapper());
         assertNotNull(result, "Grade list should not be null");
         assertFalse(result.isEmpty(), "Grade list should not be empty for student: " + studentName);
 

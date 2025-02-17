@@ -2,12 +2,15 @@ package utils.queries;
 
 import config.QueryLogger;
 import interfaces.CustomRowMapper;
+import utils.exceptions.DataAccessException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QueryExecutor extends BaseQuery {
     public <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) {
+        inputValidator(params);
         List<T> results = executeQueryList(sql, mapper, params);
         return results.isEmpty() ? null : results.get(0);
     }
@@ -23,7 +26,8 @@ public class QueryExecutor extends BaseQuery {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to execute query: " + sql, e);
+            QueryLogger.logError("SQL execution failed for query: " + sql + " Params: " + Arrays.toString(params), e);
+            throw new DataAccessException("Database query execution failed", e);
         }
         return results;
     }

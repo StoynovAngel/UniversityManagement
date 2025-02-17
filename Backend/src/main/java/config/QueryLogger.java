@@ -33,8 +33,16 @@ public class QueryLogger {
         LOGGER.info(message);
     }
 
+    public static void logError(String message) {
+        LOGGER.log(Level.SEVERE, message);
+    }
+
     public static void logError(String message, Exception e) {
         LOGGER.log(Level.SEVERE, message, e);
+    }
+
+    public static void logError(String message, String exceptionBody) {
+        LOGGER.log(Level.SEVERE, message, exceptionBody);
     }
 
     private static void loggerInitializer() {

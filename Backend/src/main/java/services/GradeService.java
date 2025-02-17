@@ -13,8 +13,8 @@ public class GradeService extends BasicService implements GradeRepository {
     }
 
     @Override
-    public List<Grade> getGradeByStudentName(String studentName) {
-        return selectQuery.getGradeByStudentName(studentName, Mappers.getGradeMapper());
+    public List<Grade> getGradesByStudentName(String studentName) {
+        return selectQuery.getGradesByStudentName(studentName, Mappers.getGradeMapper());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package utils.queries.insert;
 
+import config.QueryLogger;
+import utils.exceptions.DataUpdateException;
 import utils.queries.QueryUpdater;
 
 public class InsertQuery extends QueryUpdater {
@@ -16,7 +18,12 @@ public class InsertQuery extends QueryUpdater {
     }
 
     public void insertGroup(String name) {
-        updateSingleRow(InsertStatements.insertGroup(), name);
+        try{
+            updateSingleRow(InsertStatements.insertGroup(), name);
+        } catch (DataUpdateException e) {
+            QueryLogger.logError("Failed to insert group: " + name, e);
+            throw e;
+        }
     }
 
     public void insertGrade(String name, double mark, String teacherName, String studentUsername, String gradeType) {

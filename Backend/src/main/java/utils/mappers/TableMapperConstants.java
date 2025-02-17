@@ -27,6 +27,9 @@ public class TableMapperConstants {
     public static final String SUBJECT_HOURS_PER_WEEK = "hours_per_week";
     public static final String SUBJECT_DESCRIPTION = "description";
 
+    public static final String GROUP_STUDENT_TABLE = "group_student";
+    public static final String SUBJECT_STUDENT_TABLE = "subject_student";
+
     private TableMapperConstants() {
         throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
