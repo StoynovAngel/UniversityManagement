@@ -8,9 +8,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Provides functionality for executing SELECT, UPDATE, DELETE, and INSERT SQL statements.
+ * <p>
+ * This class extends {@link BaseQuery} and includes method:
+ * </p>
+ * <ul>
+ *     <li>Parameterized SELECT queries that return a single result or a list of results</li>
+ * </ul>
+ */
+
 public class QueryExecutor extends BaseQuery {
     public <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) {
-        inputValidator(params);
+        QueryValidator.inputValidator(params);
         List<T> results = executeQueryList(sql, mapper, params);
         return results.isEmpty() ? null : results.get(0);
     }
