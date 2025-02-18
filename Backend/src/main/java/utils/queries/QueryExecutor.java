@@ -19,6 +19,7 @@ import java.util.List;
  */
 
 public class QueryExecutor extends BaseQuery {
+
     public <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) {
         QueryValidator.inputValidator(params);
         List<T> results = executeQueryList(sql, mapper, params);

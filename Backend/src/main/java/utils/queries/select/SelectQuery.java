@@ -25,8 +25,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectGroupByIdSql(), mapper, id);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Group ID: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Group ID: " + id, e);
+            QueryLogger.logError("Unexpected error while retrieving Group's id: " + id, e);
+            throw new DataRetrievalException("Unexpected error retrieving Group's id: " + id, e);
         }
     }
 
@@ -34,8 +34,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectSubjectByIdSql(), mapper, id);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Subject ID: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Subject ID: " + id, e);
+            QueryLogger.logError("Unexpected error while retrieving Subject's id: " + id, e);
+            throw new DataRetrievalException("Unexpected error retrieving Subject's id: " + id, e);
         }
     }
 
@@ -43,8 +43,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectSubjectByNameSql(), mapper, name);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Subject name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Subject name: " + name, e);
+            QueryLogger.logError("Unexpected error while retrieving Subject's name: " + name, e);
+            throw new DataRetrievalException("Unexpected error retrieving Subject's name: " + name, e);
         }
     }
 
@@ -52,8 +52,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectTeacherByIdSql(), mapper, id);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Teacher ID: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Teacher ID: " + id, e);
+            QueryLogger.logError("Unexpected error while retrieving Teacher's id: " + id, e);
+            throw new DataRetrievalException("Unexpected error retrieving Teacher's id: " + id, e);
         }
     }
 
@@ -61,8 +61,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectStudentByIdSql(), mapper, id);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Student ID: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Student ID: " + id, e);
+            QueryLogger.logError("Unexpected error while retrieving Student's id: " + id, e);
+            throw new DataRetrievalException("Unexpected error retrieving Student's id: " + id, e);
         }
     }
 
@@ -70,8 +70,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectStudentByUsernameSql(), mapper, username);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Student username: " + username, e);
-            throw new DataRetrievalException("Unexpected error retrieving Student username: " + username, e);
+            QueryLogger.logError("Unexpected error while retrieving Student's username: " + username, e);
+            throw new DataRetrievalException("Unexpected error retrieving Student's username: " + username, e);
         }
     }
 
@@ -79,8 +79,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeSelect(SelectStatements.selectGradeByGradeNameSql(), mapper, name);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Grade name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Grade name: " + name, e);
+            QueryLogger.logError("Unexpected error while retrieving Grade's name: " + name, e);
+            throw new DataRetrievalException("Unexpected error retrieving Grade's name: " + name, e);
         }
     }
 
@@ -88,8 +88,8 @@ public class SelectQuery extends QueryExecutor {
         try {
             return executeQueryList(SelectStatements.selectGradesByStudentNameSql(), mapper, name);
         } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Grades for Student name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Grades for Student name: " + name, e);
+            QueryLogger.logError("Unexpected error while retrieving Grades for Student's name: " + name, e);
+            throw new DataRetrievalException("Unexpected error retrieving Grades for Student's name: " + name, e);
         }
     }
 }

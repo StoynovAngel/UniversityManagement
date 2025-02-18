@@ -2,7 +2,6 @@ package utils.gson;
 
 import com.google.gson.GsonBuilder;
 
-
 /**
  *  Provides more structured output to the console.
  *  This class uses private constructor to prevent initialization.

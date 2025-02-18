@@ -13,6 +13,7 @@ import utils.queries.QueryUpdater;
  */
 
 public class DeleteQuery extends QueryUpdater {
+
     public void deleteSubjectById(Long id) {
         try {
             updateSingleRow(DeleteStatements.deleteSubjectById(), id);

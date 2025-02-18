@@ -8,6 +8,7 @@ import java.sql.*;
  */
 
 public class BaseQuery {
+
     protected Connection getConnection() {
         return DatabaseConnection.getConnection();
     }
