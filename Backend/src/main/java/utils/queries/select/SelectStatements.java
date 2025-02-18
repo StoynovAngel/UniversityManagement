@@ -2,7 +2,17 @@ package utils.queries.select;
 
 import utils.mappers.TableMapperConstants;
 
+/**
+ *  Contains all selectQueries.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class SelectStatements {
+
+    private SelectStatements() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+    }
+
     public static String selectGroupByIdSql() {
         return "SELECT university_group.id AS group_id, university_group.name AS group_name, " +
                 "student.id AS " + TableMapperConstants.STUDENT_ID + ", " +

@@ -4,6 +4,14 @@ import config.QueryLogger;
 import utils.exceptions.DataUpdateException;
 import utils.queries.QueryUpdater;
 
+/**
+ * The class provides methods for executing INSERT operations in the database.
+ * <p>
+ * This class extends {@link QueryUpdater} and provides a method to insert by different parameters.
+ * If the insertion fails, an error is logged, and a {@link DataUpdateException} is thrown.
+ * </p>
+ */
+
 public class InsertQuery extends QueryUpdater {
 
     public void insertTeacher(String name) {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ * Singleton class (double-checked locking) responsible for mapping between Student entities and StudentDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
  *  {@link #getUniqueInstance()} to obtain the properties.

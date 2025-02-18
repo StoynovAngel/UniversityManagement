@@ -7,7 +7,16 @@ import utils.mappers.*;
 import utils.queries.QueryExecutor;
 import java.util.List;
 
+/**
+ * The class provides methods for executing SELECT operations in the database.
+ * <p>
+ * This class extends {@link QueryExecutor} and provides a method to select different classes by different parameters.
+ * If the selection fails, an error is logged, and a {@link DataRetrievalException} is thrown.
+ * </p>
+ */
+
 public class SelectQuery extends QueryExecutor {
+
     public SelectQuery() {
         super();
     }

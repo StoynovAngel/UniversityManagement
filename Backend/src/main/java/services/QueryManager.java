@@ -6,7 +6,9 @@ import utils.queries.select.SelectQuery;
 import utils.queries.update.UpdateQuery;
 
 /**
- *  QueryManager contains basic CRUD queries.
+ *  The class provides centralized access to CRUD query operations
+ *  for database interactions. It serves as a utility class containing instances of
+ *  {@link SelectQuery}, {@link UpdateQuery}, {@link DeleteQuery}, and {@link InsertQuery}.
  *  This class uses private constructor to prevent initialization.
  */
 

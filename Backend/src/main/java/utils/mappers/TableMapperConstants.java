@@ -1,5 +1,11 @@
 package utils.mappers;
 
+
+/**
+ * The {@code TableMapperConstants} contains all constants used for mapping and queries.
+ * This class prevents instantiation by using private constructor.
+ */
+
 public class TableMapperConstants {
     public static final String STUDENT_TABLE = "public.student";
     public static final String STUDENT_ID = "student_id";

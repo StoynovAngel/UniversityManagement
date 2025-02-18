@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
+ * Singleton class (double-checked locking) responsible for mapping between Teacher entities and TeacherDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
  *  {@link #getUniqueInstance()} to obtain the properties.

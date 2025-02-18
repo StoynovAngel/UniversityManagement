@@ -2,7 +2,17 @@ package utils.queries.update;
 
 import utils.mappers.TableMapperConstants;
 
+/**
+ *  Contains all updateQueries.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class UpdateStatements {
+
+    private UpdateStatements() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+    }
+
     public static String updateTeacherNameById() {
         return "UPDATE " + TableMapperConstants.TEACHER_TABLE + " SET name = ? WHERE id = ?";
     }

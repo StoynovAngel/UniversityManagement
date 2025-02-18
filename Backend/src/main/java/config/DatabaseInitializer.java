@@ -1,5 +1,6 @@
 package config;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.sql.*;
@@ -35,7 +36,12 @@ public class DatabaseInitializer {
 
     private static String getSqlFile(String filename) {
         try {
-            return new String(Files.readAllBytes(Paths.get(filename)));
+            Path path = Paths.get(filename);
+            if (!Files.exists(path)) {
+                QueryLogger.logError("File with this name is not found: " + filename);
+                throw new FileNotFoundException("File with this name is not found: " + filename);
+            }
+            return new String(Files.readAllBytes(path));
         } catch (IOException e) {
             QueryLogger.logError("Failed to read SQL file: " + filename, e);
             throw new RuntimeException("Database initialization failed", e);

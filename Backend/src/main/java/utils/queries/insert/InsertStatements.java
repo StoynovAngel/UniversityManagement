@@ -2,7 +2,17 @@ package utils.queries.insert;
 
 import utils.mappers.TableMapperConstants;
 
+/**
+ *  Contains all insertQueries.
+ *  This class uses private constructor to prevent initialization.
+ */
+
 public class InsertStatements {
+
+    private InsertStatements() {
+        throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
+    }
+
     public static String insertTeacher() {
         return "INSERT INTO " + TableMapperConstants.TEACHER_TABLE + "(name) VALUES (?)";
     }

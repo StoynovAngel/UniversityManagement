@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class QueryUpdater extends BaseQuery{
+
     public void updateSingleRow(String sql, Object... params) {
         inputValidator(params);
         try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
