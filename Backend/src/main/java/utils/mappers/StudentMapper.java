@@ -61,6 +61,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     public Student mapStudentById(ResultSet resultSet, Long id) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             Student s = new Student();
             s.setId(id);
@@ -94,6 +95,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         Student student = mapStudent(resultSet);
         student.setGrades(new ArrayList<>());
 
+        Mappers.checkResultSetForNull(resultSet);
         try {
             do {
                 if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
@@ -110,6 +112,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     private Student mapStudent(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new Student(
                 resultSet.getLong(TableMapperConstants.STUDENT_ID),
@@ -126,6 +129,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     private List<Student> mapStudents(ResultSet resultSet)  {
         Map<Long, Student> studentMap = new HashMap<>();
 
+        Mappers.checkResultSetForNull(resultSet);
         try{
             do {
                 Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);

@@ -64,6 +64,7 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
     }
 
     private Teacher mapForm(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new Teacher(
                 resultSet.getLong(TableMapperConstants.TEACHER_ID),

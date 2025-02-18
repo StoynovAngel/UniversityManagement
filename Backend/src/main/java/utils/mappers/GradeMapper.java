@@ -53,6 +53,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
     }
 
     public Grade mapLight(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new GradeBG(
                     resultSet.getString(TableMapperConstants.GRADE_NAME),
@@ -91,6 +92,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
     }
 
     private Grade mapForm(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new GradeBG(
                 resultSet.getString(TableMapperConstants.GRADE_NAME),

@@ -1,5 +1,6 @@
 package utils.mappers;
 
+import java.sql.ResultSet;
 
 /**
  * The {@code Mappers} class provides centralized access to singleton instances of various mappers.
@@ -8,6 +9,7 @@ package utils.mappers;
  * {@link TeacherMapper}, {@link StudentMapper}, {@link GradeMapper}, {@link SubjectMapper},
  * and {@link GroupMapper}.
  * </p>
+ * <p>Mappers also provide method to check if {@link ResultSet} objects are not null before mapping operations.</p>
  */
 
 public class Mappers {
@@ -34,5 +36,11 @@ public class Mappers {
 
     public static GroupMapper getGroupMapper() {
         return GroupMapper.getUniqueInstance();
+    }
+
+    public static void checkResultSetForNull(ResultSet resultSet) {
+        if (resultSet == null) {
+            throw new IllegalArgumentException("Result set cannot be null.");
+        }
     }
 }

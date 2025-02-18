@@ -68,11 +68,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
     private Group mapForm(ResultSet resultSet) {
         Group group = null;
         Map<Long, Student> studentMap = new HashMap<>();
-
-        if (resultSet == null) {
-            QueryLogger.logError("ResultSet is null. Cannot map Group.");
-            throw new DataMappingException("ResultSet is null. Mapping failed.");
-        }
+        Mappers.checkResultSetForNull(resultSet);
 
         try{
             do {
@@ -98,6 +94,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
     }
 
     private Group mapGroup(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new Group(
                 resultSet.getLong(TableMapperConstants.GROUP_ID),

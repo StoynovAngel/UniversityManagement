@@ -71,6 +71,7 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
     }
 
     private Subject mapForm(ResultSet resultSet){
+        Mappers.checkResultSetForNull(resultSet);
         Subject subject = mapSubject(resultSet);
         Teacher teacher = TeacherMapper.getUniqueInstance().mapRow(resultSet);
         subject.setTeacher(teacher);
@@ -82,6 +83,7 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
     }
 
     private Subject mapSubject(ResultSet resultSet) {
+        Mappers.checkResultSetForNull(resultSet);
         try {
             return new Subject(
                     resultSet.getLong(TableMapperConstants.SUBJECT_ID),
