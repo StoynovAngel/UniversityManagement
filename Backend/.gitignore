@@ -40,3 +40,5 @@ build/
 ### Mac OS ###
 !/src/main/java/Main.java
 !/src/main/resources/database.properties
+
+!/javadoc/
