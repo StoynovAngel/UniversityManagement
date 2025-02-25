@@ -1,9 +1,9 @@
-import config.DatabaseConnection;
-import entity.*;
+import com.angel.uni.management.config.DatabaseConnection;
+import com.angel.uni.management.entity.*;
 import org.junit.jupiter.api.*;
-import services.QueryManager;
-import utils.mappers.*;
-import utils.queries.select.SelectQuery;
+import com.angel.uni.management.services.QueryManager;
+import com.angel.uni.management.utils.mappers.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
