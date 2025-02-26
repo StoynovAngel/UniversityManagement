@@ -92,4 +92,5 @@ public class SelectQuery extends QueryExecutor {
             throw new DataRetrievalException("Unexpected error retrieving Grades for Student's name: " + name, e);
         }
     }
+
 }

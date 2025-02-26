@@ -56,7 +56,7 @@ public class DatabaseProperties {
         }
     }
 
-    public static String getDatabaseUrl() {
+    public String getDatabaseUrl() {
         return properties.getProperty(DATABASE_URL);
     }
 

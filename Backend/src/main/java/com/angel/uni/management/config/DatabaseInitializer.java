@@ -29,8 +29,9 @@ public class DatabaseInitializer {
         try (Connection connection = DatabaseConnection.getConnection()) {
             executeSqlFile(getSqlFile(filename), connection);
         } catch (SQLException e) {
-            QueryLogger.logError("Error executing SQL from file: " + filename, e);
-            throw new RuntimeException("Database initialization failed", e);
+            String errorMessage = "Error executing SQL from file: " + filename;
+            QueryLogger.logError(errorMessage, e);
+            throw new RuntimeException(errorMessage, e);
         }
     }
 
@@ -38,13 +39,15 @@ public class DatabaseInitializer {
         try {
             Path path = Paths.get(filename);
             if (!Files.exists(path)) {
-                QueryLogger.logError("File with this name is not found: " + filename);
-                throw new FileNotFoundException("File with this name is not found: " + filename);
+                String errorMessage = "File with this name is not found"  + filename;
+                QueryLogger.logError(errorMessage);
+                throw new FileNotFoundException(errorMessage);
             }
             return new String(Files.readAllBytes(path));
         } catch (IOException e) {
-            QueryLogger.logError("Failed to read SQL file: " + filename, e);
-            throw new RuntimeException("Database initialization failed", e);
+            String errorMessage = "Failed to read SQL file: " + filename;
+            QueryLogger.logError(errorMessage, e);
+            throw new RuntimeException(errorMessage, e);
         }
     }
 
@@ -64,8 +67,9 @@ public class DatabaseInitializer {
                     preparedStatement.executeUpdate();
                     System.out.println(query.trim() + " was executed successfully.");
                 } catch (SQLException e) {
-                    QueryLogger.logError("Failed to execute query: " + query, e);
-                    throw new SQLException("Error executing query: " + query, e);
+                    String errorMessage = "Failed to execute query: " + query;
+                    QueryLogger.logError(errorMessage, e);
+                    throw new SQLException(errorMessage, e);
                 }
             }
         }
