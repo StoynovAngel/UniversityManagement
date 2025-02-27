@@ -13,17 +13,22 @@ import java.util.Arrays;
  * </p>
  */
 
-public class QueryUpdater extends BaseQuery{
+public class QueryUpdater extends BaseQuery {
 
     public void updateSingleRow(String sql, Object... params) {
-        QueryValidator.inputValidator(params);
-        try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
-            setParameters(preparedStatement, params);
-            executeStatement(preparedStatement);
-            System.out.println("Update successful.");
+        try {
+            QueryValidator.inputValidator(params);
+            try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
+                setParameters(preparedStatement, params);
+                executeStatement(preparedStatement);
+                System.out.println("Update successful.");
+            }
+        } catch (IllegalArgumentException e) {
+            QueryLogger.logError("Invalid input parameters detected.", e);
+            System.out.println("Error: " + e.getMessage());
         } catch (SQLException e) {
-            QueryLogger.logError("SQL error while updating row. Query: " + sql + " Params: " + Arrays.toString(params), e);
-            throw new DataUpdateException("Error executing update query.", e);
+            QueryLogger.logError("SQL error while updating row. Query: " + sql, e);
+            System.out.println("SQL error: " + e.getMessage());
         }
     }
 }

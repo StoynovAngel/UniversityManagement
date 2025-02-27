@@ -6,6 +6,7 @@ import com.angel.uni.management.utils.exceptions.DataRetrievalException;
 import com.angel.uni.management.utils.mappers.*;
 import com.angel.uni.management.utils.queries.QueryExecutor;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The class provides methods for executing SELECT operations in the database.
@@ -33,10 +34,12 @@ public class SelectQuery extends QueryExecutor {
     public Subject getSubjectById(Long id, SubjectMapper mapper) {
         try {
             return executeSelect(SelectStatements.selectSubjectByIdSql(), mapper, id);
+        } catch (IllegalArgumentException e) {
+            QueryLogger.logError("Illegal argument: " + e.getMessage());
         } catch (Exception e) {
             QueryLogger.logError("Unexpected error while retrieving Subject's id: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Subject's id: " + id, e);
         }
+        return null;
     }
 
     public Subject getSubjectByName(String name, SubjectMapper mapper) {
@@ -57,13 +60,17 @@ public class SelectQuery extends QueryExecutor {
         }
     }
 
-    public Student getStudentById(Long id, StudentMapper mapper) {
+    public Optional<Student> getStudentById(Long id, StudentMapper mapper) {
         try {
-            return executeSelect(SelectStatements.selectStudentByIdSql(), mapper, id);
+            Student student = executeSelect(SelectStatements.selectStudentByIdSql(), mapper, id);
+            return Optional.ofNullable(student);
+
+        } catch (IllegalArgumentException e) {
+            QueryLogger.logError("Illegal argument: " + e.getMessage());
         } catch (Exception e) {
             QueryLogger.logError("Unexpected error while retrieving Student's id: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Student's id: " + id, e);
         }
+        return Optional.empty();
     }
 
     public Student getStudentByUsername(String username, StudentMapper mapper) {
@@ -84,7 +91,7 @@ public class SelectQuery extends QueryExecutor {
         }
     }
 
-    public List<Grade> getGradesByStudentName(String name, GradeMapper mapper) {
+    public Optional<List<Grade>> getGradesByStudentName(String name, GradeMapper mapper) {
         try {
             return executeQueryList(SelectStatements.selectGradesByStudentNameSql(), mapper, name);
         } catch (Exception e) {

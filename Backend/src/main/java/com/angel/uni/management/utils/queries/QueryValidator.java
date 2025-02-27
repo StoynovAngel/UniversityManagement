@@ -1,6 +1,8 @@
 package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.QueryLogger;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -18,19 +20,23 @@ public class QueryValidator {
     }
 
     public static void inputValidator(Object... params) {
+        QueryLogger.logDebug("Validating input parameters: " + Arrays.toString(params));
+
         if (params == null || params.length == 0) {
-            throw new IllegalArgumentException("Parameters cannot be null or empty");
+            throw new IllegalArgumentException("Parameters cannot be null or empty.");
         }
 
         for (Object param : params) {
-            Objects.requireNonNull(param, "Input parameter cannot be null.");
+            if (param == null) {
+                throw new IllegalArgumentException("Input parameter cannot be null.");
+            }
 
             if (param instanceof String && ((String) param).trim().isEmpty()) {
-                throw new IllegalArgumentException("String parameter cannot be empty");
+                throw new IllegalArgumentException("String parameter cannot be empty.");
             }
 
             if (param instanceof Number && ((Number) param).longValue() < 0) {
-                throw new IllegalArgumentException("Numeric parameter cannot be negative");
+                throw new IllegalArgumentException("Numeric parameter cannot be negative.");
             }
         }
     }

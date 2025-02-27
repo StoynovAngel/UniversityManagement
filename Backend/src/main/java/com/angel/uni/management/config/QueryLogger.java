@@ -1,5 +1,7 @@
 package com.angel.uni.management.config;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -21,6 +23,13 @@ public class QueryLogger {
     }
 
     public static void logQuery(String sql, Object... params) {
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query cannot be null or empty.");
+        }
+        if (params == null) {
+            throw new IllegalArgumentException("Params array cannot be null.");
+        }
+
         StringBuilder logMessage = new StringBuilder("Executing Query: " + sql + " | Params: [");
 
         for (int i = 0; i < params.length; i++) {
@@ -38,12 +47,17 @@ public class QueryLogger {
         LOGGER.info(message);
     }
 
+    public static void logDebug(String message) {
+        LOGGER.log(Level.INFO, message);
+    }
+
     public static void logError(String message) {
         LOGGER.log(Level.SEVERE, message);
     }
 
     public static void logError(String message, Exception e) {
-        LOGGER.log(Level.SEVERE, message, e);
+        String errorMessage = message + " | Exception: " + e.getMessage();
+        LOGGER.log(Level.SEVERE, errorMessage, e);
     }
 
     public static void logError(String message, String exceptionBody) {
@@ -52,13 +66,22 @@ public class QueryLogger {
 
     private static void loggerInitializer() {
         try {
+            File file = new File(LOG_FILE);
+            if (!file.exists()) {
+                throw new FileNotFoundException("File with this name does not exists: " + LOG_FILE);
+            }
             loggerSpecifics(new FileHandler(LOG_FILE, true));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to initialize QueryLogger. Logging will not work.", e);
+            System.out.println("Query logger does not save exceptions in a specific file. It will console log.");
+            LOGGER.addHandler(new ConsoleHandler());
         }
+        LOGGER.setUseParentHandlers(false);
     }
 
     private static void loggerSpecifics(FileHandler fileHandler) {
+        if (fileHandler == null) {
+            throw new IllegalArgumentException("FileHandler cannot be null.");
+        }
         fileHandler.setFormatter(new SimpleFormatter());
         LOGGER.addHandler(fileHandler);
         LOGGER.setUseParentHandlers(false);

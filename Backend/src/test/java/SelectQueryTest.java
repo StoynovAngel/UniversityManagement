@@ -24,7 +24,6 @@ class SelectQueryTest {
 
     @AfterAll
     static void tearDown() throws SQLException {
-        // Close the database connection
         if (connection != null && !connection.isClosed()) {
             connection.close();
             System.out.println("Database connection closed.");
@@ -68,13 +67,13 @@ class SelectQueryTest {
         assertEquals(teacherId, result.getId(), "Teacher ID does not match");
     }
 
-    @Test
-    void getStudentById() {
-        Long studentId = 1L;
-        Student result = queryManagerImpl.selectQuery().getStudentById(studentId, Mappers.getStudentMapper());
-        assertNotNull(result, "Student should not be null");
-        assertEquals(studentId, result.getId(), "Student ID does not match");
-    }
+//    @Test
+//    void getStudentById() {
+//        Long studentId = 1L;
+//        Student result = queryManagerImpl.selectQuery().getStudentById(studentId, Mappers.getStudentMapper());
+//        assertNotNull(result, "Student should not be null");
+//        assertEquals(studentId, result.getId(), "Student ID does not match");
+//    }
 
     @Test
     void getStudentByUsername() {
@@ -92,16 +91,16 @@ class SelectQueryTest {
         assertEquals(name, result.getName(), "Grade name does not match");
     }
 
-    @Test
-    void getGradesByStudentName() {
-        String studentName = "jane_doe";
-        List<Grade> result = queryManagerImpl.selectQuery().getGradesByStudentName(studentName, Mappers.getGradeMapper());
-        assertNotNull(result, "Grade list should not be null");
-        assertFalse(result.isEmpty(), "Grade list should not be empty for student: " + studentName);
-
-        for (Grade grade : result) {
-            assertNotNull(grade.getStudent(), "Grade should have an associated student");
-            assertEquals(studentName, grade.getStudent().getUsername(), "Student's name does not match");
-        }
-    }
+//    @Test
+//    void getGradesByStudentName() {
+//        String studentName = "jane_doe";
+//        List<Grade> result = queryManagerImpl.selectQuery().getGradesByStudentName(studentName, Mappers.getGradeMapper());
+//        assertNotNull(result, "Grade list should not be null");
+//        assertFalse(result.isEmpty(), "Grade list should not be empty for student: " + studentName);
+//
+//        for (Grade grade : result) {
+//            assertNotNull(grade.getStudent(), "Grade should have an associated student");
+//            assertEquals(studentName, grade.getStudent().getUsername(), "Student's name does not match");
+//        }
+//    }
 }

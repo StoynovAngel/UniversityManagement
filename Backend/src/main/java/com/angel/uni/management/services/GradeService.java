@@ -5,6 +5,7 @@ import com.angel.uni.management.interfaces.GradeRepository;
 import com.angel.uni.management.interfaces.QueryManager;
 import com.angel.uni.management.utils.mappers.Mappers;
 import java.util.List;
+import java.util.Optional;
 
 public class GradeService implements GradeRepository {
     private final QueryManager queryManager;
@@ -19,7 +20,7 @@ public class GradeService implements GradeRepository {
     }
 
     @Override
-    public List<Grade> getGradesByStudentName(String studentName) {
+    public Optional<List<Grade>> getGradesByStudentName(String studentName) {
         return queryManager.selectQuery().getGradesByStudentName(studentName, Mappers.getGradeMapper());
     }
 
