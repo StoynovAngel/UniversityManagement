@@ -1,7 +1,10 @@
 package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.utils.exceptions.DataAccessException;
 import com.angel.uni.management.utils.exceptions.DataUpdateException;
+import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -15,7 +18,7 @@ import java.util.Arrays;
 
 public class QueryUpdater extends BaseQuery {
 
-    public void updateSingleRow(String sql, Object... params) {
+    public void updateSingleRow(String sql, Object... params) throws DatabaseConnectionException {
         try {
             QueryValidator.inputValidator(params);
             try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
@@ -23,12 +26,9 @@ public class QueryUpdater extends BaseQuery {
                 executeStatement(preparedStatement);
                 System.out.println("Update successful.");
             }
-        } catch (IllegalArgumentException e) {
-            QueryLogger.logError("Invalid input parameters detected.", e);
-            System.out.println("Error: " + e.getMessage());
-        } catch (SQLException e) {
-            QueryLogger.logError("SQL error while updating row. Query: " + sql, e);
-            System.out.println("SQL error: " + e.getMessage());
+        } catch (IllegalArgumentException | SQLException e) {
+            String errorMessage = "Failed to update query: " + sql + " | Params: " + Arrays.toString(params);
+            QueryLogger.logError(errorMessage, e);
         }
     }
 }

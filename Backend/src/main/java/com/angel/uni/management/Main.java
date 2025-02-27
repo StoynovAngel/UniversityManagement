@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         DependencyContainer container = new DependencyContainer();
         StudentService studentService = container.getStudentService();
-        Optional<Student> studentOptional = studentService.getStudentById(null);
+        Optional<Student> studentOptional = studentService.getStudentById(1L);
         if (studentOptional.isPresent()) {
             Student student = studentOptional.get();
             GsonFormatter.printObjectToJson(student);

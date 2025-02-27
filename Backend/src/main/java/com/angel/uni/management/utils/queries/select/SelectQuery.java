@@ -2,6 +2,7 @@ package com.angel.uni.management.utils.queries.select;
 
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.entity.*;
+import com.angel.uni.management.utils.exceptions.DataAccessException;
 import com.angel.uni.management.utils.exceptions.DataRetrievalException;
 import com.angel.uni.management.utils.mappers.*;
 import com.angel.uni.management.utils.queries.QueryExecutor;
@@ -91,7 +92,7 @@ public class SelectQuery extends QueryExecutor {
         }
     }
 
-    public Optional<List<Grade>> getGradesByStudentName(String name, GradeMapper mapper) {
+    public List<Grade> getGradesByStudentName(String name, GradeMapper mapper) {
         try {
             return executeQueryList(SelectStatements.selectGradesByStudentNameSql(), mapper, name);
         } catch (Exception e) {

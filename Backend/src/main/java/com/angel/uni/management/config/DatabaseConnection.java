@@ -1,6 +1,7 @@
 package com.angel.uni.management.config;
 
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+
 import java.sql.*;
 
 /**
@@ -15,7 +16,7 @@ public class DatabaseConnection {
         throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws DatabaseConnectionException {
         if (conn == null) {
             try {
                 DatabaseProperties databaseProperties = DatabaseProperties.getInstance();

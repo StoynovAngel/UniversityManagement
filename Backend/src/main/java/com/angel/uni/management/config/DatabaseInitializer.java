@@ -1,5 +1,7 @@
 package com.angel.uni.management.config;
 
+import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
@@ -31,11 +33,12 @@ public class DatabaseInitializer {
         } catch (SQLException e) {
             String errorMessage = "Error executing SQL from file: " + filename;
             QueryLogger.logError(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
+        } catch (DatabaseConnectionException e) {
+            QueryLogger.logError("Connection to database failed.");
         }
     }
 
-    private static String getSqlFile(String filename) {
+    private static String getSqlFile(String filename) throws DatabaseConnectionException {
         try {
             Path path = Paths.get(filename);
             if (!Files.exists(path)) {
@@ -47,11 +50,11 @@ public class DatabaseInitializer {
         } catch (IOException e) {
             String errorMessage = "Failed to read SQL file: " + filename;
             QueryLogger.logError(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
+            throw new DatabaseConnectionException("Failed to load database.properties file", e);
         }
     }
 
-    private static void executeSqlFile(String sql, Connection connection) throws SQLException {
+    private static void executeSqlFile(String sql, Connection connection) {
         String[] queries = splitSqlIntoQueries(sql);
         executeSqlStatements(queries, connection);
     }
@@ -60,7 +63,7 @@ public class DatabaseInitializer {
         return sql.split(";");
     }
 
-    private static void executeSqlStatements(String[] queries, Connection connection) throws SQLException {
+    private static void executeSqlStatements(String[] queries, Connection connection) {
         for (String query : queries) {
             if (!isQueryEmpty(query)) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(query.trim())) {
@@ -69,7 +72,6 @@ public class DatabaseInitializer {
                 } catch (SQLException e) {
                     String errorMessage = "Failed to execute query: " + query;
                     QueryLogger.logError(errorMessage, e);
-                    throw new SQLException(errorMessage, e);
                 }
             }
         }

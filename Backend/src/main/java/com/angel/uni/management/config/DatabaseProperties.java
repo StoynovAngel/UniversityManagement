@@ -1,6 +1,7 @@
 package com.angel.uni.management.config;
 
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +44,7 @@ public class DatabaseProperties {
         return instance;
     }
 
-    public Properties getProperties() {
+    public Properties getProperties() throws DatabaseConnectionException {
         try {
             Properties props = new Properties();
             props.setProperty("user", properties.getProperty(DATABASE_USERNAME));
@@ -51,8 +52,8 @@ public class DatabaseProperties {
             props.setProperty("ssl", properties.getProperty(DATABASE_SSL));
             return props;
         } catch (IllegalArgumentException e) {
-            QueryLogger.logError("Invalid database property found", e);
-            throw new DatabaseConnectionException("Invalid database property found", e);
+            QueryLogger.logError("Invalid database property found: ", e.getMessage());
+            throw new DatabaseConnectionException("Invalid database property found:", e);
         }
     }
 
@@ -76,7 +77,6 @@ public class DatabaseProperties {
             properties.load(input);
         } catch (IOException e) {
             QueryLogger.logError("Failed to load " + CONFIG_FILE + " file", e);
-            throw new DatabaseConnectionException("Failed to load " + CONFIG_FILE + " file", e);
         }
     }
 }
