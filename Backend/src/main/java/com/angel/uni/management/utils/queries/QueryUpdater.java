@@ -1,8 +1,6 @@
 package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.QueryLogger;
-import com.angel.uni.management.utils.exceptions.DataAccessException;
-import com.angel.uni.management.utils.exceptions.DataUpdateException;
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 
 import java.sql.PreparedStatement;
