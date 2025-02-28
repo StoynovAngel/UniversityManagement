@@ -50,7 +50,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
     }
 
     @Override
-    public Group mapRow(ResultSet resultSet) {
+    public Group mapRow(ResultSet resultSet) throws DataMappingException {
         return mapForm(resultSet);
     }
 
@@ -67,7 +67,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         );
     }
 
-    private Group mapForm(ResultSet resultSet) {
+    private Group mapForm(ResultSet resultSet) throws DataMappingException {
         Group group = null;
         Map<Long, Student> studentMap = new HashMap<>();
         Mappers.checkResultSetForNull(resultSet);
@@ -79,7 +79,13 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
                 }
 
                 Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
-                Student student = studentMap.computeIfAbsent(studentId, id -> Mappers.getStudentMapper().mapStudentById(resultSet, id));
+                Student student = studentMap.computeIfAbsent(studentId, id -> {
+                    try {
+                        return Mappers.getStudentMapper().mapStudentById(resultSet, id);
+                    } catch (DataMappingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
                 if (resultSet.getObject(TableMapperConstants.GRADE_ID) != null) {
                     Grade grade = Mappers.getGradeMapper().mapLight(resultSet);
@@ -90,12 +96,13 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
             group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
             return group;
         }  catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Group object within mapForm.", e);
-            throw new DataMappingException("Error mapping database result to Group.", e);
+            String errorMessage = "Failed to map ResultSet to Group object. Cause: " + e.getMessage();
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 
-    private Group mapGroup(ResultSet resultSet) {
+    private Group mapGroup(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Group(
@@ -104,8 +111,9 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
                 null
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Group object.", e);
-            throw new DataMappingException("Error mapping database result to Group.", e);
+            String errorMessage = "Failed to map ResultSet to Group object. Cause: " + e.getMessage();
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 }

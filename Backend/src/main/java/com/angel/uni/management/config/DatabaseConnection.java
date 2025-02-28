@@ -23,9 +23,8 @@ public class DatabaseConnection {
                 conn = DriverManager.getConnection(databaseProperties.getDatabaseUrl(), databaseProperties.getProperties());
                 System.out.println("Database connected successfully!");
             } catch (SQLException e) {
-                String errorMessage = "Failed to establish database connection";
+                String errorMessage = "Database access error or connection might be null.";
                 QueryLogger.logError(errorMessage, e);
-                throw new DatabaseConnectionException(errorMessage, e);
             }
         }
         return conn;

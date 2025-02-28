@@ -15,7 +15,6 @@ public class DependencyContainer {
     private final GroupService groupService = new GroupService(queryManager);
     private final GradeService gradeService = new GradeService(queryManager);
 
-
     public StudentService getStudentService() {
         return studentService;
     }

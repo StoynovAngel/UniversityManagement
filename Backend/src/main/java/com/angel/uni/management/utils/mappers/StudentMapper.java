@@ -52,15 +52,15 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     @Override
-    public Student mapRow(ResultSet resultSet) {
+    public Student mapRow(ResultSet resultSet) throws DataMappingException {
         return mapForm(resultSet);
     }
 
-    public List<Student> mapAllStudents(ResultSet resultSet) {
+    public List<Student> mapAllStudents(ResultSet resultSet) throws DataMappingException {
         return mapStudents(resultSet);
     }
 
-    public Student mapStudentById(ResultSet resultSet, Long id) {
+    public Student mapStudentById(ResultSet resultSet, Long id) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             Student s = new Student();
@@ -70,8 +70,9 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
             s.setGrades(new ArrayList<>());
             return s;
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to mapStudentById object with ID: " + id, e);
-            throw new DataMappingException("Error by mapStudentById object with ID: " + id, e);
+            String errorMessage = "Failed to mapStudentById object with ID: " + id;
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 
@@ -91,7 +92,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         );
     }
 
-    private Student mapForm(ResultSet resultSet) {
+    private Student mapForm(ResultSet resultSet) throws DataMappingException {
         Student student = mapStudent(resultSet);
         student.setGrades(new ArrayList<>());
 
@@ -104,14 +105,15 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
                 }
             } while (resultSet.next());
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map grades for Student ID: " + student.getId(), e);
-            throw new DataMappingException("Error mapping grades for Student ID: " + student.getId(), e);
+            String errorMessage = "Error mapping grades for Student ID: " + student.getId();
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
 
         return student;
     }
 
-    private Student mapStudent(ResultSet resultSet) {
+    private Student mapStudent(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Student(
@@ -121,12 +123,13 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
                 resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map Student object from ResultSet", e);
-            throw new DataMappingException("Error mapping database result to Student", e);
+            String errorMessage = "Error mapping database result to Student";
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 
-    private List<Student> mapStudents(ResultSet resultSet)  {
+    private List<Student> mapStudents(ResultSet resultSet) throws DataMappingException {
         Map<Long, Student> studentMap = new HashMap<>();
 
         Mappers.checkResultSetForNull(resultSet);
@@ -141,8 +144,8 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
                             newStudent.setUsername(resultSet.getString(TableMapperConstants.STUDENT_USERNAME));
                             newStudent.setGrades(new ArrayList<>());
                         } catch (SQLException e) {
-                            QueryLogger.logError("Error mapping student within mapStudents()", e);
-                            throw new DataMappingException("Error mapping student with ID: " + id, e);
+                            String messageBody = "Error mapping student with id: " + id;
+                            QueryLogger.logError(messageBody, e);
                         }
                         return newStudent;
                     });
@@ -157,8 +160,9 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
             return new ArrayList<>(studentMap.values());
 
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Student object", e);
-            throw new DataMappingException("Error mapping database result to Student", e);
+            String errorMessage = "Error mapping database result to Student";
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 }

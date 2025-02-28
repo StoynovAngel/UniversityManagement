@@ -48,7 +48,7 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
     }
 
     @Override
-    public Subject mapRow(ResultSet resultSet) {
+    public Subject mapRow(ResultSet resultSet) throws DataMappingException {
         return mapForm(resultSet);
     }
 
@@ -72,7 +72,7 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
         );
     }
 
-    private Subject mapForm(ResultSet resultSet){
+    private Subject mapForm(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         Subject subject = mapSubject(resultSet);
         Teacher teacher = TeacherMapper.getUniqueInstance().mapRow(resultSet);
@@ -84,7 +84,7 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
         return subject;
     }
 
-    private Subject mapSubject(ResultSet resultSet) {
+    private Subject mapSubject(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Subject(
@@ -96,8 +96,9 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
                     null
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Subject object", e);
-            throw new DataMappingException("Error mapping database result to Subject", e);
+            String errorMessage = "Error mapping database result to Subject";
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 }

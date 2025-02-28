@@ -34,8 +34,13 @@ public class DatabaseInitializer {
             String errorMessage = "Error executing SQL from file: " + filename;
             QueryLogger.logError(errorMessage, e);
         } catch (DatabaseConnectionException e) {
-            QueryLogger.logError("Connection to database failed.");
+            QueryLogger.logError("Cannot initialize the database tables nor insert into them.");
         }
+    }
+
+    private static void executeSqlFile(String sql, Connection connection) {
+        String[] queries = splitSqlIntoQueries(sql);
+        executeSqlStatements(queries, connection);
     }
 
     private static String getSqlFile(String filename) throws DatabaseConnectionException {
@@ -50,13 +55,8 @@ public class DatabaseInitializer {
         } catch (IOException e) {
             String errorMessage = "Failed to read SQL file: " + filename;
             QueryLogger.logError(errorMessage, e);
-            throw new DatabaseConnectionException("Failed to load database.properties file", e);
+            throw new DatabaseConnectionException(errorMessage, e);
         }
-    }
-
-    private static void executeSqlFile(String sql, Connection connection) {
-        String[] queries = splitSqlIntoQueries(sql);
-        executeSqlStatements(queries, connection);
     }
 
     private static String[] splitSqlIntoQueries(String sql) {
@@ -68,7 +68,7 @@ public class DatabaseInitializer {
             if (!isQueryEmpty(query)) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(query.trim())) {
                     preparedStatement.executeUpdate();
-                    System.out.println(query.trim() + " was executed successfully.");
+                    System.out.println("Query executed successfully: " + query.trim());
                 } catch (SQLException e) {
                     String errorMessage = "Failed to execute query: " + query;
                     QueryLogger.logError(errorMessage, e);

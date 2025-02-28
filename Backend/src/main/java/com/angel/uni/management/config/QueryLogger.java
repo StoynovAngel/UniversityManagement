@@ -74,8 +74,8 @@ public class QueryLogger {
         } catch (IOException e) {
             System.out.println("Query logger does not save exceptions in a specific file. It will console log.");
             LOGGER.addHandler(new ConsoleHandler());
+            LOGGER.setUseParentHandlers(true);
         }
-        LOGGER.setUseParentHandlers(false);
     }
 
     private static void loggerSpecifics(FileHandler fileHandler) {
@@ -84,7 +84,7 @@ public class QueryLogger {
         }
         fileHandler.setFormatter(new SimpleFormatter());
         LOGGER.addHandler(fileHandler);
-        LOGGER.setUseParentHandlers(false);
         LOGGER.setLevel(Level.INFO);
+        LOGGER.setUseParentHandlers(false);
     }
 }

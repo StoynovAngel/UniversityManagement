@@ -47,7 +47,7 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
     }
 
     @Override
-    public Teacher mapRow(ResultSet resultSet) {
+    public Teacher mapRow(ResultSet resultSet) throws DataMappingException {
         return mapForm(resultSet);
     }
 
@@ -63,7 +63,7 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
         );
     }
 
-    private Teacher mapForm(ResultSet resultSet) {
+    private Teacher mapForm(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Teacher(
@@ -71,8 +71,9 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
                 resultSet.getString(TableMapperConstants.TEACHER_NAME)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Teacher object.", e);
-            throw new DataMappingException("Error mapping database result to Teacher.", e);
+            String errorMessage = "Error mapping database result to Teacher.";
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 }

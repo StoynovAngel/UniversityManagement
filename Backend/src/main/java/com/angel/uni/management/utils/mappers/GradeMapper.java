@@ -51,11 +51,11 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
     }
 
     @Override
-    public Grade mapRow(ResultSet resultSet) {
+    public Grade mapRow(ResultSet resultSet) throws DataMappingException {
         return mapForm(resultSet);
     }
 
-    public Grade mapLight(ResultSet resultSet) {
+    public Grade mapLight(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new GradeBG(
@@ -67,8 +67,9 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
                     resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet within mapLight to Grade object.", e);
-            throw new DataMappingException("Error mapping database result to Grade.", e);
+            String errorMessage = "Failed to map ResultSet to GradeBG object. Cause: " + e.getMessage();
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 
@@ -94,7 +95,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
         );
     }
 
-    private Grade mapForm(ResultSet resultSet) {
+    private Grade mapForm(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new GradeBG(
@@ -106,8 +107,9 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
                 resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
-            QueryLogger.logError("Failed to map ResultSet to Grade object", e);
-            throw new DataMappingException("Error mapping database result to Grade", e);
+            String errorMessage = "Failed to map ResultSet to GradeBG object. Cause: " + e.getMessage();
+            QueryLogger.logError(errorMessage, e);
+            throw new DataMappingException(errorMessage, e);
         }
     }
 }
