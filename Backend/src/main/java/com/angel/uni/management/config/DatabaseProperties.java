@@ -38,15 +38,31 @@ public class DatabaseProperties {
     }
 
     public Properties getProperties() throws DatabaseConnectionException {
-        Properties props = new Properties();
-        try {
-            props.setProperty("user", properties.getProperty(DatabaseConstants.DATABASE_USERNAME));
-            props.setProperty("password", properties.getProperty(DatabaseConstants.DATABASE_PASSWORD));
-            props.setProperty("ssl", properties.getProperty(DatabaseConstants.DATABASE_SSL));
-        } catch (IllegalArgumentException e) {
-            QueryLogger.logError("Invalid database property found: ", e.getMessage());
-            throw new DatabaseConnectionException("Invalid database property found:", e);
+        if (properties == null) {
+            String errorMessage = "Properties object is null.";
+            QueryLogger.logError(errorMessage);
+            throw new DatabaseConnectionException(errorMessage);
         }
+
+        Properties props = new Properties();
+        String user = properties.getProperty(DatabaseConstants.DATABASE_USERNAME);
+        String password = properties.getProperty(DatabaseConstants.DATABASE_PASSWORD);
+        String ssl = properties.getProperty(DatabaseConstants.DATABASE_SSL);
+
+        if (user == null || user.trim().isEmpty()) {
+            throw new DatabaseConnectionException("Database username is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new DatabaseConnectionException("Database password is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+        }
+        if (ssl == null || ssl.trim().isEmpty()) {
+            throw new DatabaseConnectionException("Database SSL configuration  is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+        }
+
+        props.setProperty("user", user);
+        props.setProperty("password", password);
+        props.setProperty("ssl", ssl);
+
         return props;
     }
 

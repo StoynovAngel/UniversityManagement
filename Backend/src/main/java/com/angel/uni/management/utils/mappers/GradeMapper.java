@@ -16,28 +16,28 @@ import java.sql.SQLException;
  * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
- *  {@link #getUniqueInstance()} to obtain the properties.
+ *  {@link #getInstance()} to obtain the properties.
  *  </p>
  */
 
 public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
-    private static volatile GradeMapper uniqueInstance;
+    private static volatile GradeMapper instance;
 
     private GradeMapper() {
-        if (uniqueInstance != null) {
+        if (instance != null) {
             throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
         }
     }
 
-    public static GradeMapper getUniqueInstance() {
-        if (uniqueInstance == null) {
+    public static GradeMapper getInstance() {
+        if (instance == null) {
             synchronized (GradeMapper.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new GradeMapper();
+                if (instance == null) {
+                    instance = new GradeMapper();
                 }
             }
         }
-        return uniqueInstance;
+        return instance;
     }
 
     @Override
@@ -67,8 +67,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
                     resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
-            String errorMessage = "Failed to map ResultSet to GradeBG object. Cause: " + e.getMessage();
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Failed to map ResultSet to GradeBG object.";
             throw new DataMappingException(errorMessage, e);
         }
     }
@@ -107,8 +106,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
                 resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
-            String errorMessage = "Failed to map ResultSet to GradeBG object. Cause: " + e.getMessage();
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Failed to map ResultSet to GradeBG object.";
             throw new DataMappingException(errorMessage, e);
         }
     }

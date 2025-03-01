@@ -20,7 +20,7 @@ public class StudentService implements StudentRepository {
     }
 
     @Override
-    public Student getStudentByUsername(String username) {
+    public Optional<Student> getStudentByUsername(String username) {
         return queryManager.selectQuery().getStudentByUsername(username, Mappers.getStudentMapper());
     }
 

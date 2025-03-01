@@ -3,8 +3,11 @@ package com.angel.uni.management.utils.queries.select;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.entity.*;
 import com.angel.uni.management.utils.exceptions.DataRetrievalException;
+import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 import com.angel.uni.management.utils.mappers.*;
 import com.angel.uni.management.utils.queries.QueryExecutor;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,82 +25,47 @@ public class SelectQuery extends QueryExecutor {
         super();
     }
 
-    public Group getGroupById(Long id, GroupMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectGroupByIdSql(), mapper, id);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Group's id: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Group's id: " + id, e);
-        }
+    public Optional<Group> getGroupById(Long id, GroupMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectGroupByIdSql(), mapper, id);
     }
 
-    public Subject getSubjectById(Long id, SubjectMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectSubjectByIdSql(), mapper, id);
-        } catch (IllegalArgumentException e) {
-            QueryLogger.logError("Illegal argument: " + e.getMessage());
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Subject's id: " + id, e);
-        }
-        return null;
+    public Optional<Subject> getSubjectById(Long id, SubjectMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectSubjectByIdSql(), mapper, id);
     }
 
-    public Subject getSubjectByName(String name, SubjectMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectSubjectByNameSql(), mapper, name);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Subject's name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Subject's name: " + name, e);
-        }
+    public Optional<Subject> getSubjectByName(String name, SubjectMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectSubjectByNameSql(), mapper, name);
     }
 
-    public Teacher getTeacherById(Long id, TeacherMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectTeacherByIdSql(), mapper, id);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Teacher's id: " + id, e);
-            throw new DataRetrievalException("Unexpected error retrieving Teacher's id: " + id, e);
-        }
+    public Optional<Teacher> getTeacherById(Long id, TeacherMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectTeacherByIdSql(), mapper, id);
     }
 
     public Optional<Student> getStudentById(Long id, StudentMapper mapper) {
-        try {
-            Student student = executeSelect(SelectStatements.selectStudentByIdSql(), mapper, id);
-            return Optional.ofNullable(student);
+        return executeSelectQuery(SelectStatements.selectStudentByIdSql(), mapper, id);
+    }
 
+    public Optional<Student> getStudentByUsername(String username, StudentMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectStudentByUsernameSql(), mapper, username);
+    }
+
+    public Optional<Grade> getGradeByName(String name, GradeMapper mapper) {
+        return executeSelectQuery(SelectStatements.selectGradeByGradeNameSql(), mapper, name);
+    }
+
+    public Optional<List<Grade>> getGradesByStudentName(String name, GradeMapper mapper) {
+        try {
+            List<Grade> grades = executeQueryList(SelectStatements.selectGradesByStudentNameSql(), mapper, name);
+            return Optional.ofNullable(grades);
         } catch (IllegalArgumentException e) {
             QueryLogger.logError("Illegal argument: " + e.getMessage());
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Student's id: " + id, e);
-        }
-        return Optional.empty();
-    }
-
-    public Student getStudentByUsername(String username, StudentMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectStudentByUsernameSql(), mapper, username);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Student's username: " + username, e);
-            throw new DataRetrievalException("Unexpected error retrieving Student's username: " + username, e);
+            return Optional.empty();
+        } catch (QueryExecutionException e) {
+            QueryLogger.logError("Failed to retrieve grades for student: " + name, e);
+            return Optional.empty();
+        } catch (DatabaseConnectionException e) {
+            QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
+            return Optional.empty();
         }
     }
-
-    public Grade getGradeByName(String name, GradeMapper mapper) {
-        try {
-            return executeSelect(SelectStatements.selectGradeByGradeNameSql(), mapper, name);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Grade's name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Grade's name: " + name, e);
-        }
-    }
-
-    public List<Grade> getGradesByStudentName(String name, GradeMapper mapper) {
-        try {
-            return executeQueryList(SelectStatements.selectGradesByStudentNameSql(), mapper, name);
-        } catch (Exception e) {
-            QueryLogger.logError("Unexpected error while retrieving Grades for Student's name: " + name, e);
-            throw new DataRetrievalException("Unexpected error retrieving Grades for Student's name: " + name, e);
-        }
-    }
-
 }

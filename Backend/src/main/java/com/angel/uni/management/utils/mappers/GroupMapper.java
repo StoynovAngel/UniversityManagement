@@ -15,28 +15,28 @@ import java.util.*;
  * Singleton class (double-checked locking) responsible for mapping between Group entities and GroupDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
- *  {@link #getUniqueInstance()} to obtain the properties.
+ *  {@link #getInstance()} to obtain the properties.
  *  </p>
  */
 
 public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
-    private static volatile GroupMapper uniqueInstance;
+    private static volatile GroupMapper instance;
 
     private GroupMapper() {
-        if (uniqueInstance != null) {
+        if (instance != null) {
             throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
         }
     }
 
-    public static GroupMapper getUniqueInstance() {
-        if (uniqueInstance == null) {
+    public static GroupMapper getInstance() {
+        if (instance == null) {
             synchronized (GroupMapper.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new GroupMapper();
+                if (instance == null) {
+                    instance = new GroupMapper();
                 }
             }
         }
-        return uniqueInstance;
+        return instance;
     }
 
     @Override
@@ -96,8 +96,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
             group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
             return group;
         }  catch (SQLException e) {
-            String errorMessage = "Failed to map ResultSet to Group object. Cause: " + e.getMessage();
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Failed to map ResultSet to Group object.";
             throw new DataMappingException(errorMessage, e);
         }
     }
@@ -111,8 +110,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
                 null
             );
         } catch (SQLException e) {
-            String errorMessage = "Failed to map ResultSet to Group object. Cause: " + e.getMessage();
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Failed to map ResultSet to Group object.";
             throw new DataMappingException(errorMessage, e);
         }
     }

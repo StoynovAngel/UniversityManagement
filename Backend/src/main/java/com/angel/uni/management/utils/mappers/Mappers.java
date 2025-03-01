@@ -19,23 +19,23 @@ public class Mappers {
     }
 
     public static TeacherMapper getTeacherMapper() {
-        return TeacherMapper.getUniqueInstance();
+        return TeacherMapper.getInstance();
     }
 
     public static StudentMapper getStudentMapper() {
-        return StudentMapper.getUniqueInstance();
+        return StudentMapper.getInstance();
     }
 
     public static GradeMapper getGradeMapper() {
-        return GradeMapper.getUniqueInstance();
+        return GradeMapper.getInstance();
     }
 
     public static SubjectMapper getSubjectMapper() {
-        return SubjectMapper.getUniqueInstance();
+        return SubjectMapper.getInstance();
     }
 
     public static GroupMapper getGroupMapper() {
-        return GroupMapper.getUniqueInstance();
+        return GroupMapper.getInstance();
     }
 
     public static void checkResultSetForNull(ResultSet resultSet) {

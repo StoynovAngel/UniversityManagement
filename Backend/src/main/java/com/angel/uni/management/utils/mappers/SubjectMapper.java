@@ -15,28 +15,28 @@ import java.util.*;
  * Singleton class (double-checked locking) responsible for mapping between Subject entities and SubjectDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
- *  {@link #getUniqueInstance()} to obtain the properties.
+ *  {@link #getInstance()} to obtain the properties.
  *  </p>
  */
 
 public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
-    private static volatile SubjectMapper uniqueInstance;
+    private static volatile SubjectMapper instance;
 
     private SubjectMapper() {
-        if (uniqueInstance != null) {
+        if (instance != null) {
             throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
         }
     }
 
-    public static SubjectMapper getUniqueInstance() {
-        if (uniqueInstance == null) {
+    public static SubjectMapper getInstance() {
+        if (instance == null) {
             synchronized (SubjectMapper.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new SubjectMapper();
+                if (instance == null) {
+                    instance = new SubjectMapper();
                 }
             }
         }
-        return uniqueInstance;
+        return instance;
     }
 
     public Subject mapToEntity(SubjectDTO subjectDTO) {
@@ -75,10 +75,10 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
     private Subject mapForm(ResultSet resultSet) throws DataMappingException {
         Mappers.checkResultSetForNull(resultSet);
         Subject subject = mapSubject(resultSet);
-        Teacher teacher = TeacherMapper.getUniqueInstance().mapRow(resultSet);
+        Teacher teacher = TeacherMapper.getInstance().mapRow(resultSet);
         subject.setTeacher(teacher);
 
-        List<Student> students = StudentMapper.getUniqueInstance().mapAllStudents(resultSet);
+        List<Student> students = StudentMapper.getInstance().mapAllStudents(resultSet);
         subject.setStudentsAssignedToSubject(students);
 
         return subject;
@@ -97,7 +97,6 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
             );
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Subject";
-            QueryLogger.logError(errorMessage, e);
             throw new DataMappingException(errorMessage, e);
         }
     }

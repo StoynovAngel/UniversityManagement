@@ -8,5 +8,5 @@ import java.sql.SQLException;
 public interface CustomRowMapper<DTO, Entity> {
     Entity mapToEntity(DTO dto);
     DTO mapToDTO(Entity entity);
-    Entity mapRow(ResultSet resultSet) throws SQLException, DataMappingException;
+    Entity mapRow(ResultSet resultSet) throws DataMappingException;
 }

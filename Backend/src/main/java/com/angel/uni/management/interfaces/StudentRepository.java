@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface StudentRepository {
     Optional<Student> getStudentById(Long id);
-    Student getStudentByUsername(String username);
+    Optional<Student> getStudentByUsername(String username);
     void updateStudentUsername(String username, Long id);
     void insertStudent(String username);
 }

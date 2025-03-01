@@ -5,6 +5,8 @@ import com.angel.uni.management.interfaces.QueryManager;
 import com.angel.uni.management.interfaces.TeacherRepository;
 import com.angel.uni.management.utils.mappers.Mappers;
 
+import java.util.Optional;
+
 public class TeacherService implements TeacherRepository {
     private final QueryManager queryManager;
 
@@ -13,7 +15,7 @@ public class TeacherService implements TeacherRepository {
     }
 
     @Override
-    public Teacher getTeacherById(Long id) {
+    public Optional<Teacher> getTeacherById(Long id) {
         return queryManager.selectQuery().getTeacherById(id, Mappers.getTeacherMapper());
     }
 

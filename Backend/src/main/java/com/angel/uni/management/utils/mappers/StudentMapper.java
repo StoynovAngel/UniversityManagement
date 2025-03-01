@@ -18,27 +18,27 @@ import java.util.Map;
  * Singleton class (double-checked locking) responsible for mapping between Student entities and StudentDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
- *  {@link #getUniqueInstance()} to obtain the properties.
+ *  {@link #getInstance()} to obtain the properties.
  *  </p>
  */
 public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
-    private static volatile StudentMapper uniqueInstance;
+    private static volatile StudentMapper instance;
 
     private StudentMapper() {
-        if (uniqueInstance != null) {
+        if (instance != null) {
             throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
         }
     }
 
-    public static StudentMapper getUniqueInstance() {
-        if (uniqueInstance == null) {
+    public static StudentMapper getInstance() {
+        if (instance == null) {
             synchronized (StudentMapper.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new StudentMapper();
+                if (instance == null) {
+                    instance = new StudentMapper();
                 }
             }
         }
-        return uniqueInstance;
+        return instance;
     }
 
     @Override
@@ -70,8 +70,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
             s.setGrades(new ArrayList<>());
             return s;
         } catch (SQLException e) {
-            String errorMessage = "Failed to mapStudentById object with ID: " + id;
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Failed to mapStudentById object with id: " + id;
             throw new DataMappingException(errorMessage, e);
         }
     }
@@ -105,8 +104,7 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
                 }
             } while (resultSet.next());
         } catch (SQLException e) {
-            String errorMessage = "Error mapping grades for Student ID: " + student.getId();
-            QueryLogger.logError(errorMessage, e);
+            String errorMessage = "Error mapping grades for Student id: " + student.getId();
             throw new DataMappingException(errorMessage, e);
         }
 
@@ -124,7 +122,6 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
             );
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Student";
-            QueryLogger.logError(errorMessage, e);
             throw new DataMappingException(errorMessage, e);
         }
     }
@@ -161,7 +158,6 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
 
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Student";
-            QueryLogger.logError(errorMessage, e);
             throw new DataMappingException(errorMessage, e);
         }
     }

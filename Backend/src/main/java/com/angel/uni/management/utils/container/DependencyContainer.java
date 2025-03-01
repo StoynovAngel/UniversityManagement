@@ -1,4 +1,5 @@
 package com.angel.uni.management.utils.container;
+
 import com.angel.uni.management.interfaces.QueryManager;
 import com.angel.uni.management.services.*;
 import com.angel.uni.management.utils.queries.delete.DeleteQuery;
@@ -7,31 +8,67 @@ import com.angel.uni.management.utils.queries.select.SelectQuery;
 import com.angel.uni.management.utils.queries.update.UpdateQuery;
 
 public class DependencyContainer {
-    private final QueryManager queryManager = new QueryManagerImpl(new SelectQuery(), new UpdateQuery(), new DeleteQuery(), new InsertQuery());
+    private static final QueryManager queryManager = new QueryManagerImpl(new SelectQuery(), new UpdateQuery(), new DeleteQuery(), new InsertQuery());
 
-    private final StudentService studentService = new StudentService(queryManager);
-    private final TeacherService teacherService = new TeacherService(queryManager);
-    private final SubjectService subjectService = new SubjectService(queryManager);
-    private final GroupService groupService = new GroupService(queryManager);
-    private final GradeService gradeService = new GradeService(queryManager);
+    private static volatile StudentService studentInstance;
+    private static volatile TeacherService teacherInstance;
+    private static volatile SubjectService subjectInstance;
+    private static volatile GroupService groupInstance;
+    private static volatile GradeService gradeInstance;
 
-    public StudentService getStudentService() {
-        return studentService;
+
+    public StudentService getStudentInstance() {
+        if (null == studentInstance) {
+            synchronized (DependencyContainer.class) {
+                if (null == studentInstance) {
+                    studentInstance = new StudentService(queryManager);
+                }
+            }
+        }
+        return studentInstance;
     }
 
-    public TeacherService getTeacherService() {
-        return teacherService;
+    public TeacherService getTeacherInstance() {
+        if (null == teacherInstance) {
+            synchronized (DependencyContainer.class) {
+                if (null == teacherInstance) {
+                    teacherInstance = new TeacherService(queryManager);
+                }
+            }
+        }
+        return teacherInstance;
     }
 
-    public SubjectService getSubjectService() {
-        return subjectService;
+    public SubjectService getSubjectInstance() {
+        if (null == subjectInstance) {
+            synchronized (DependencyContainer.class) {
+                if (null == subjectInstance) {
+                    subjectInstance = new SubjectService(queryManager);
+                }
+            }
+        }
+        return subjectInstance;
     }
 
-    public GroupService getGroupService() {
-        return groupService;
+    public GroupService getGroupInstance() {
+        if (null == groupInstance) {
+            synchronized (DependencyContainer.class) {
+                if (null == groupInstance) {
+                    groupInstance = new GroupService(queryManager);
+                }
+            }
+        }
+        return groupInstance;
     }
 
-    public GradeService getGradeService() {
-        return gradeService;
+    public GradeService getGradeInstance() {
+        if (null == gradeInstance) {
+            synchronized (DependencyContainer.class) {
+                if (null == gradeInstance) {
+                    gradeInstance = new GradeService(queryManager);
+                }
+            }
+        }
+        return gradeInstance;
     }
 }

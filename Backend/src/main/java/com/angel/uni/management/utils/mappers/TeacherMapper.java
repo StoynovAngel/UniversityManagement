@@ -12,28 +12,28 @@ import java.sql.SQLException;
  * Singleton class (double-checked locking) responsible for mapping between Teacher entities and TeacherDTO objects.
  *  <p>
  *  This class prevents instantiation and provides a static method
- *  {@link #getUniqueInstance()} to obtain the properties.
+ *  {@link #getInstance()} to obtain the properties.
  *  </p>
  */
 
 public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
-    private static volatile TeacherMapper uniqueInstance;
+    private static volatile TeacherMapper instance;
 
     private TeacherMapper() {
-        if (uniqueInstance != null) {
+        if (instance != null) {
             throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
         }
     }
 
-    public static TeacherMapper getUniqueInstance() {
-        if (uniqueInstance == null) {
+    public static TeacherMapper getInstance() {
+        if (instance == null) {
             synchronized (TeacherMapper.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new TeacherMapper();
+                if (instance == null) {
+                    instance = new TeacherMapper();
                 }
             }
         }
-        return uniqueInstance;
+        return instance;
     }
 
     @Override
@@ -72,7 +72,6 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
             );
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Teacher.";
-            QueryLogger.logError(errorMessage, e);
             throw new DataMappingException(errorMessage, e);
         }
     }

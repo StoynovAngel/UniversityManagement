@@ -20,11 +20,14 @@ public class DatabaseConnection {
         if (conn == null) {
             try {
                 DatabaseProperties databaseProperties = DatabaseProperties.getInstance();
-                conn = DriverManager.getConnection(databaseProperties.getDatabaseUrl(), databaseProperties.getProperties());
+                conn = DriverManager.getConnection(
+                        databaseProperties.getDatabaseUrl(),
+                        databaseProperties.getProperties()
+                );
                 System.out.println("Database connected successfully!");
             } catch (SQLException e) {
-                String errorMessage = "Database access error or connection might be null.";
-                QueryLogger.logError(errorMessage, e);
+                String errorMessage = "Failed to establish a database connection: " + e.getMessage();
+                throw new DatabaseConnectionException(errorMessage, e);
             }
         }
         return conn;

@@ -3,6 +3,7 @@ package com.angel.uni.management.config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.*;
 
 /**
@@ -29,7 +30,6 @@ public class QueryLogger {
         if (params == null) {
             throw new IllegalArgumentException("Params array cannot be null.");
         }
-
         StringBuilder logMessage = new StringBuilder("Executing Query: " + sql + " | Params: [");
 
         for (int i = 0; i < params.length; i++) {
@@ -39,7 +39,6 @@ public class QueryLogger {
             }
         }
         logMessage.append("]");
-
         LOGGER.info(logMessage.toString());
     }
 
@@ -62,6 +61,13 @@ public class QueryLogger {
 
     public static void logError(String message, String exceptionBody) {
         LOGGER.log(Level.SEVERE, message, exceptionBody);
+    }
+
+    public static void logError(String methodName, String sql, Object[] params, Exception e) {
+        String errorMessage = String.format(
+                "Error in %s | Query: %s | Params: %s | Error: %s", methodName, sql, Arrays.toString(params), e.getMessage()
+        );
+        QueryLogger.logError(errorMessage, e);
     }
 
     private static void loggerInitializer() {

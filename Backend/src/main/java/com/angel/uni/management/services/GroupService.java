@@ -5,6 +5,8 @@ import com.angel.uni.management.interfaces.GroupRepository;
 import com.angel.uni.management.interfaces.QueryManager;
 import com.angel.uni.management.utils.mappers.Mappers;
 
+import java.util.Optional;
+
 public class GroupService implements GroupRepository {
     private final QueryManager queryManager;
 
@@ -13,7 +15,7 @@ public class GroupService implements GroupRepository {
     }
 
     @Override
-    public Group getGroupById(Long id) {
+    public Optional<Group> getGroupById(Long id) {
         return queryManager.selectQuery().getGroupById(id, Mappers.getGroupMapper());
     }
 

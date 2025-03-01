@@ -4,6 +4,8 @@ import com.angel.uni.management.interfaces.QueryManager;
 import com.angel.uni.management.interfaces.SubjectRepository;
 import com.angel.uni.management.utils.mappers.Mappers;
 
+import java.util.Optional;
+
 public class SubjectService implements SubjectRepository {
     private final QueryManager queryManager;
 
@@ -12,12 +14,12 @@ public class SubjectService implements SubjectRepository {
     }
 
     @Override
-    public Subject getSubjectById(Long id) {
+    public Optional<Subject> getSubjectById(Long id) {
         return queryManager.selectQuery().getSubjectById(id, Mappers.getSubjectMapper());
     }
 
     @Override
-    public Subject getSubjectByName(String name) {
+    public Optional<Subject> getSubjectByName(String name) {
         return queryManager.selectQuery().getSubjectByName(name, Mappers.getSubjectMapper());
     }
 

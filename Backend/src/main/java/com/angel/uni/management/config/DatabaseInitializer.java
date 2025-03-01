@@ -28,6 +28,9 @@ public class DatabaseInitializer {
     }
 
     private static void processSqlFile(String filename) {
+        if (filename == null || filename.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filename cannot be null or empty.");
+        }
         try (Connection connection = DatabaseConnection.getConnection()) {
             executeSqlFile(getSqlFile(filename), connection);
         } catch (SQLException e) {
@@ -47,8 +50,7 @@ public class DatabaseInitializer {
         try {
             Path path = Paths.get(filename);
             if (!Files.exists(path)) {
-                String errorMessage = "File with this name is not found"  + filename;
-                QueryLogger.logError(errorMessage);
+                String errorMessage = "File with this name is not found: "  + filename;
                 throw new FileNotFoundException(errorMessage);
             }
             return new String(Files.readAllBytes(path));
@@ -64,13 +66,16 @@ public class DatabaseInitializer {
     }
 
     private static void executeSqlStatements(String[] queries, Connection connection) {
+        if (connection == null) {
+            throw new IllegalArgumentException("Connection cannot be null.");
+        }
         for (String query : queries) {
             if (!isQueryEmpty(query)) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(query.trim())) {
                     preparedStatement.executeUpdate();
                     System.out.println("Query executed successfully: " + query.trim());
                 } catch (SQLException e) {
-                    String errorMessage = "Failed to execute query: " + query;
+                    String errorMessage = "Failed to execute the query.";
                     QueryLogger.logError(errorMessage, e);
                 }
             }
