@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.logging.*;
 
 /**
- *  QueryLogger contains static methods used to log queries and display error messages.
- *  This class uses private constructor to prevent initialization.
+ * QueryLogger contains static methods used to log queries and display error messages.
+ * This class uses private constructor to prevent initialization.
  */
 
 public class QueryLogger {

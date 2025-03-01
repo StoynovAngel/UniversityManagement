@@ -1,19 +1,19 @@
 package com.angel.uni.management.utils.mappers;
 
-import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.TeacherDTO;
 import com.angel.uni.management.entity.Teacher;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * Singleton class (double-checked locking) responsible for mapping between Teacher entities and TeacherDTO objects.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 
 public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
@@ -67,8 +67,8 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Teacher(
-                resultSet.getLong(TableMapperConstants.TEACHER_ID),
-                resultSet.getString(TableMapperConstants.TEACHER_NAME)
+                    resultSet.getLong(TableMapperConstants.TEACHER_ID),
+                    resultSet.getString(TableMapperConstants.TEACHER_NAME)
             );
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Teacher.";

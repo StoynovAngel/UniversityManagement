@@ -3,8 +3,8 @@ package com.angel.uni.management.utils.queries.delete;
 import com.angel.uni.management.utils.mappers.TableMapperConstants;
 
 /**
- *  Contains all deleteQueries.
- *  This class uses private constructor to prevent initialization.
+ * Contains all deleteQueries.
+ * This class uses private constructor to prevent initialization.
  */
 
 public class DeleteStatements {

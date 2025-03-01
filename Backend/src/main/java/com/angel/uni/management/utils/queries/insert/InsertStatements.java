@@ -3,8 +3,8 @@ package com.angel.uni.management.utils.queries.insert;
 import com.angel.uni.management.utils.mappers.TableMapperConstants;
 
 /**
- *  Contains all insertQueries.
- *  This class uses private constructor to prevent initialization.
+ * Contains all insertQueries.
+ * This class uses private constructor to prevent initialization.
  */
 
 public class InsertStatements {

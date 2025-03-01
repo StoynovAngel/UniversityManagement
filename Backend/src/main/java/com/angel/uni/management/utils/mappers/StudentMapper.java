@@ -16,10 +16,10 @@ import java.util.Map;
 
 /**
  * Singleton class (double-checked locking) responsible for mapping between Student entities and StudentDTO objects.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     private static volatile StudentMapper instance;
@@ -115,10 +115,10 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Student(
-                resultSet.getLong(TableMapperConstants.STUDENT_ID),
-                resultSet.getString(TableMapperConstants.STUDENT_USERNAME),
-                null,
-                resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL)
+                    resultSet.getLong(TableMapperConstants.STUDENT_ID),
+                    resultSet.getString(TableMapperConstants.STUDENT_USERNAME),
+                    null,
+                    resultSet.getDouble(TableMapperConstants.STUDENT_AVERAGE_GRADE_OVERALL)
             );
         } catch (SQLException e) {
             String errorMessage = "Error mapping database result to Student";
@@ -130,9 +130,9 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         Map<Long, Student> studentMap = new HashMap<>();
 
         Mappers.checkResultSetForNull(resultSet);
-        try{
+        try {
             do {
-                Long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
+                long studentId = resultSet.getLong(TableMapperConstants.STUDENT_ID);
                 if (studentId != 0) {
                     Student student = studentMap.computeIfAbsent(studentId, id -> {
                         Student newStudent = new Student();

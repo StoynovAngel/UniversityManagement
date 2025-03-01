@@ -8,11 +8,11 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- *  DatabaseProperties sets the database properties. It implements eager singleton.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * DatabaseProperties sets the database properties. It implements eager singleton.
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 
 public class DatabaseProperties {
@@ -81,7 +81,7 @@ public class DatabaseProperties {
     private void loadProperties() {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(DatabaseConstants.CONFIG_FILE)) {
             if (input == null) {
-                throw new FileNotFoundException(DatabaseConstants.CONFIG_FILE +" file not found in resources folder.");
+                throw new FileNotFoundException(DatabaseConstants.CONFIG_FILE + " file not found in resources folder.");
             }
             properties.load(input);
         } catch (IOException e) {

@@ -1,6 +1,5 @@
 package com.angel.uni.management.utils.mappers;
 
-import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.GradeDTO;
 import com.angel.uni.management.entity.Grade;
 import com.angel.uni.management.entity.GradeBG;
@@ -9,15 +8,16 @@ import com.angel.uni.management.entity.Teacher;
 import com.angel.uni.management.enums.GradeType;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * Singleton class (double-checked locking) responsible for mapping between Grade entities and GradeDTO objects.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 
 public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
@@ -98,12 +98,12 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new GradeBG(
-                resultSet.getString(TableMapperConstants.GRADE_NAME),
-                new Student(resultSet.getLong(TableMapperConstants.STUDENT_ID), resultSet.getString(TableMapperConstants.STUDENT_USERNAME)),
-                new Teacher(resultSet.getLong(TableMapperConstants.TEACHER_ID), resultSet.getString(TableMapperConstants.TEACHER_NAME)),
-                GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
-                resultSet.getDouble(TableMapperConstants.GRADE_MARK),
-                resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
+                    resultSet.getString(TableMapperConstants.GRADE_NAME),
+                    new Student(resultSet.getLong(TableMapperConstants.STUDENT_ID), resultSet.getString(TableMapperConstants.STUDENT_USERNAME)),
+                    new Teacher(resultSet.getLong(TableMapperConstants.TEACHER_ID), resultSet.getString(TableMapperConstants.TEACHER_NAME)),
+                    GradeType.valueOf(resultSet.getString(TableMapperConstants.GRADE_TYPE)),
+                    resultSet.getDouble(TableMapperConstants.GRADE_MARK),
+                    resultSet.getDate(TableMapperConstants.GRADE_DATE_OF_GRADING)
             );
         } catch (SQLException e) {
             String errorMessage = "Failed to map ResultSet to GradeBG object.";

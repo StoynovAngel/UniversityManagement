@@ -4,12 +4,16 @@ import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.*;
-import java.sql.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
- *  DatabaseInitializer contains static methods used to create and insert rows into tables.
- *  This class uses private constructor to prevent initialization.
+ * DatabaseInitializer contains static methods used to create and insert rows into tables.
+ * This class uses private constructor to prevent initialization.
  */
 
 public class DatabaseInitializer {
@@ -50,7 +54,7 @@ public class DatabaseInitializer {
         try {
             Path path = Paths.get(filename);
             if (!Files.exists(path)) {
-                String errorMessage = "File with this name is not found: "  + filename;
+                String errorMessage = "File with this name is not found: " + filename;
                 throw new FileNotFoundException(errorMessage);
             }
             return new String(Files.readAllBytes(path));

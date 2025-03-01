@@ -1,22 +1,24 @@
 package com.angel.uni.management.utils.mappers;
 
-import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.GroupDTO;
 import com.angel.uni.management.entity.Grade;
 import com.angel.uni.management.entity.Group;
 import com.angel.uni.management.entity.Student;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Singleton class (double-checked locking) responsible for mapping between Group entities and GroupDTO objects.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 
 public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
@@ -72,7 +74,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         Map<Long, Student> studentMap = new HashMap<>();
         Mappers.checkResultSetForNull(resultSet);
 
-        try{
+        try {
             do {
                 if (group == null) {
                     group = mapGroup(resultSet);
@@ -95,7 +97,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
 
             group.setStudentsAssignedToGroup(new ArrayList<>(studentMap.values()));
             return group;
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             String errorMessage = "Failed to map ResultSet to Group object.";
             throw new DataMappingException(errorMessage, e);
         }
@@ -105,9 +107,9 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         Mappers.checkResultSetForNull(resultSet);
         try {
             return new Group(
-                resultSet.getLong(TableMapperConstants.GROUP_ID),
-                resultSet.getString(TableMapperConstants.GROUP_NAME),
-                null
+                    resultSet.getLong(TableMapperConstants.GROUP_ID),
+                    resultSet.getString(TableMapperConstants.GROUP_NAME),
+                    null
             );
         } catch (SQLException e) {
             String errorMessage = "Failed to map ResultSet to Group object.";

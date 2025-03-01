@@ -1,11 +1,6 @@
 package com.angel.uni.management.utils.queries.insert;
 
-import com.angel.uni.management.config.QueryLogger;
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
-import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 import com.angel.uni.management.utils.queries.QueryUpdater;
-
-import java.util.Optional;
 
 /**
  * The class provides methods for executing INSERT operations in the database.

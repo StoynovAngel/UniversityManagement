@@ -6,8 +6,13 @@ import com.angel.uni.management.utils.exceptions.DataMappingException;
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides functionality for executing SELECT, UPDATE, DELETE, and INSERT SQL statements.
@@ -21,7 +26,7 @@ import java.util.*;
 
 public class QueryExecutor extends BaseQuery {
 
-    protected  <T> Optional<T> executeSelectQuery(String sql, CustomRowMapper<?, T> mapper, Object... params) {
+    protected <T> Optional<T> executeSelectQuery(String sql, CustomRowMapper<?, T> mapper, Object... params) {
         try {
             T result = executeSelect(sql, mapper, params);
             return Optional.ofNullable(result);
@@ -37,7 +42,7 @@ public class QueryExecutor extends BaseQuery {
         }
     }
 
-    protected  <T> List<T> executeQueryList(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
+    protected <T> List<T> executeQueryList(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
         validateInputs(sql, mapper, params);
         QueryLogger.logDebug("Executing query: " + sql + " | Params: " + Arrays.toString(params));
 
@@ -58,6 +63,7 @@ public class QueryExecutor extends BaseQuery {
         List<T> results = executeQueryList(sql, mapper, params);
         return results.isEmpty() ? null : results.get(0);
     }
+
     private void validateInputs(String sql, CustomRowMapper<?, ?> mapper, Object[] params) {
         if (sql == null || sql.trim().isEmpty()) {
             throw new IllegalArgumentException("SQL query cannot be null or empty.");

@@ -1,22 +1,22 @@
 package com.angel.uni.management.utils.mappers;
 
-import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.SubjectDTO;
 import com.angel.uni.management.entity.Student;
 import com.angel.uni.management.entity.Subject;
 import com.angel.uni.management.entity.Teacher;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
 
 /**
  * Singleton class (double-checked locking) responsible for mapping between Subject entities and SubjectDTO objects.
- *  <p>
- *  This class prevents instantiation and provides a static method
- *  {@link #getInstance()} to obtain the properties.
- *  </p>
+ * <p>
+ * This class prevents instantiation and provides a static method
+ * {@link #getInstance()} to obtain the properties.
+ * </p>
  */
 
 public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {

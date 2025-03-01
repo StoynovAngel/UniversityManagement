@@ -3,8 +3,8 @@ package com.angel.uni.management.utils.queries.select;
 import com.angel.uni.management.utils.mappers.TableMapperConstants;
 
 /**
- *  Contains all selectQueries.
- *  This class uses private constructor to prevent initialization.
+ * Contains all selectQueries.
+ * This class uses private constructor to prevent initialization.
  */
 
 public class SelectStatements {
