@@ -2,6 +2,7 @@ package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.interfaces.CustomRowMapper;
+import com.angel.uni.management.utils.QueryResult;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
@@ -26,26 +27,26 @@ import java.util.Optional;
 
 public class QueryExecutor extends BaseQuery {
 
-    protected <T> Optional<T> executeSelectQuery(String sql, CustomRowMapper<?, T> mapper, Object... params) {
+    protected <T> QueryResult<T> executeSelectQuery(String sql, CustomRowMapper<?, T> mapper, Object... params) {
         try {
             T result = executeSelect(sql, mapper, params);
-            return Optional.ofNullable(result);
-        } catch (IllegalArgumentException e) {
-            QueryLogger.logError("Illegal argument: " + e.getMessage());
-            return Optional.empty();
+            return new QueryResult<>(result, null);
         } catch (QueryExecutionException e) {
-            QueryLogger.logError("executeSelectQuery", sql, params, e);
-            return Optional.empty();
+            QueryLogger.logError("Failed to execute query: " + sql, e);
+            return new QueryResult<>(null, "Failed to execute query: " + e.getMessage());
         } catch (DatabaseConnectionException e) {
-            QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
-            return Optional.empty();
+            QueryLogger.logError("Database connection error", e);
+            return new QueryResult<>(null, "Database connection error: " + e.getMessage());
         }
+    }
+
+    private <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
+        List<T> results = executeQueryList(sql, mapper, params);
+        return results.isEmpty() ? null : results.get(0);
     }
 
     protected <T> List<T> executeQueryList(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
         validateInputs(sql, mapper, params);
-        QueryLogger.logDebug("Executing query: " + sql + " | Params: " + Arrays.toString(params));
-
         List<T> results = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = getPreparedStatement(sql); ResultSet resultSet = executeQuery(preparedStatement, params)) {
@@ -59,10 +60,6 @@ public class QueryExecutor extends BaseQuery {
         return results;
     }
 
-    private <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
-        List<T> results = executeQueryList(sql, mapper, params);
-        return results.isEmpty() ? null : results.get(0);
-    }
 
     private void validateInputs(String sql, CustomRowMapper<?, ?> mapper, Object[] params) {
         if (sql == null || sql.trim().isEmpty()) {

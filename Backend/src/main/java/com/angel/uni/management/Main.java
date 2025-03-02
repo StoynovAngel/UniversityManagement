@@ -10,13 +10,11 @@ import java.util.Optional;
 public class Main {
     public static void main(String[] args) {
         DependencyContainer container = new DependencyContainer();
-        StudentService studentService = container.getStudentService();
+        StudentService studentService = container.getStudentInstance();
         Optional<Student> studentOptional = studentService.getStudentById(1L);
         if (studentOptional.isPresent()) {
             Student student = studentOptional.get();
             GsonFormatter.printObjectToJson(student);
-        } else {
-            System.out.println("Sorry we couldn't return such student");
         }
     }
 }

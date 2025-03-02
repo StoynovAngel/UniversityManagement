@@ -2,6 +2,8 @@ package com.angel.uni.management.utils.queries.select;
 
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.entity.*;
+import com.angel.uni.management.interfaces.CustomRowMapper;
+import com.angel.uni.management.utils.QueryResult;
 import com.angel.uni.management.utils.exceptions.DataRetrievalException;
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
@@ -26,31 +28,31 @@ public class SelectQuery extends QueryExecutor {
     }
 
     public Optional<Group> getGroupById(Long id, GroupMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectGroupByIdSql(), mapper, id);
+        return resultToOptional(SelectStatements.selectGroupByIdSql(), mapper, id);
     }
 
     public Optional<Subject> getSubjectById(Long id, SubjectMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectSubjectByIdSql(), mapper, id);
+        return resultToOptional(SelectStatements.selectSubjectByIdSql(), mapper, id);
     }
 
     public Optional<Subject> getSubjectByName(String name, SubjectMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectSubjectByNameSql(), mapper, name);
+        return resultToOptional(SelectStatements.selectSubjectByNameSql(), mapper, name);
     }
 
     public Optional<Teacher> getTeacherById(Long id, TeacherMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectTeacherByIdSql(), mapper, id);
+        return resultToOptional(SelectStatements.selectTeacherByIdSql(), mapper, id);
     }
 
     public Optional<Student> getStudentById(Long id, StudentMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectStudentByIdSql(), mapper, id);
+        return resultToOptional(SelectStatements.selectStudentByIdSql(), mapper, id);
     }
 
     public Optional<Student> getStudentByUsername(String username, StudentMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectStudentByUsernameSql(), mapper, username);
+        return resultToOptional(SelectStatements.selectStudentByUsernameSql(), mapper, username);
     }
 
     public Optional<Grade> getGradeByName(String name, GradeMapper mapper) {
-        return executeSelectQuery(SelectStatements.selectGradeByGradeNameSql(), mapper, name);
+        return resultToOptional(SelectStatements.selectGradeByGradeNameSql(), mapper, name);
     }
 
     public Optional<List<Grade>> getGradesByStudentName(String name, GradeMapper mapper) {
@@ -67,5 +69,15 @@ public class SelectQuery extends QueryExecutor {
             QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
             return Optional.empty();
         }
+    }
+    private <T> Optional<T> resultToOptional(String sqlStatement, CustomRowMapper<?, T> mapper, Object... param) {
+        QueryResult<T> result = executeSelectQuery(sqlStatement, mapper, param);
+
+        if (result.hasError()) {
+            System.err.println("Sorry, we couldn't retrieve the necessary information. Please try again later.");
+            return Optional.empty();
+        }
+        QueryLogger.logMessage(sqlStatement);
+        return Optional.ofNullable(result.getData());
     }
 }
