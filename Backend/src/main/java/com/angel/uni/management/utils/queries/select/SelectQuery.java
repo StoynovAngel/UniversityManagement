@@ -31,6 +31,10 @@ public class SelectQuery extends QueryExecutor {
         return resultToOptional(SelectStatements.selectGroupByIdSql(), mapper, id);
     }
 
+    public Optional<Group> getGroupByName(String name, GroupMapper mapper) {
+        return resultToOptional(SelectStatements.selectGroupByNameSql(), mapper, name);
+    }
+
     public Optional<Subject> getSubjectById(Long id, SubjectMapper mapper) {
         return resultToOptional(SelectStatements.selectSubjectByIdSql(), mapper, id);
     }
@@ -43,12 +47,20 @@ public class SelectQuery extends QueryExecutor {
         return resultToOptional(SelectStatements.selectTeacherByIdSql(), mapper, id);
     }
 
+    public Optional<Teacher> getTeacherByName(String name, TeacherMapper mapper) {
+        return resultToOptional(SelectStatements.selectTeacherByNameSql(), mapper, name);
+    }
+
     public Optional<Student> getStudentById(Long id, StudentMapper mapper) {
         return resultToOptional(SelectStatements.selectStudentByIdSql(), mapper, id);
     }
 
     public Optional<Student> getStudentByUsername(String username, StudentMapper mapper) {
         return resultToOptional(SelectStatements.selectStudentByUsernameSql(), mapper, username);
+    }
+
+    public Optional<Grade> getGradeById(Long id, GradeMapper mapper) {
+        return resultToOptional(SelectStatements.selectGradeByGradeIdSql(), mapper, id);
     }
 
     public Optional<Grade> getGradeByName(String name, GradeMapper mapper) {

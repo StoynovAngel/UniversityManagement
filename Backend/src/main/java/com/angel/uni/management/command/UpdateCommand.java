@@ -3,18 +3,18 @@ package com.angel.uni.management.command;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
 
-public class DeleteCommand<T> implements Command {
+public class UpdateCommand<T, U> implements Command {
 
-    private final Service<T, ?, ?> service;
-    private Long id;
+    private final Service<T, U, ?> service;
+    private final U dto;
 
-    public DeleteCommand(Service<T, ?, ?> service, Long id) {
+    public UpdateCommand(Service<T, U, ?> service, U dto) {
         this.service = service;
-        this.id = id;
+        this.dto = dto;
     }
 
     @Override
     public void execute() {
-        service.delete(id);
+        service.update(dto);
     }
 }
