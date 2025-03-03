@@ -15,7 +15,10 @@ public class InitialMenu implements Menu {
 
     @Override
     public void run() {
-        handleUserChoice();
+        while (true) {
+            displayMenu();
+            handleUserChoice();
+        }
     }
 
     @Override
@@ -32,8 +35,7 @@ public class InitialMenu implements Menu {
 
     @Override
     public void handleUserChoice() {
-        displayMenu();
-        System.out.print("Please enter your choice(0-4): ");
+        System.out.print("Please enter your choice (0-4): ");
         int choice = in.nextInt();
         handleNavigation(choice);
     }
@@ -41,15 +43,18 @@ public class InitialMenu implements Menu {
     @Override
     public void handleNavigation(int choice) {
         switch (choice) {
-            case 0 -> {
-                System.out.println("Byeee...");
-                System.exit(1);
-            }
-            case 1 -> {
-                Menu searchMenu = new SearchMenu(container, this);
-                searchMenu.run();
-            }
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-4)");
+            case 0 -> exitApplication();
+            case 1 -> navigateTo(new SearchMenu(container, this));
+            default -> System.err.println("Invalid choice. Please enter a number between 0 and 4.");
         }
+    }
+
+    private void navigateTo(Menu menu) {
+        menu.run();
+    }
+
+    private void exitApplication() {
+        System.out.println("Goodbye!");
+        System.exit(0);
     }
 }
