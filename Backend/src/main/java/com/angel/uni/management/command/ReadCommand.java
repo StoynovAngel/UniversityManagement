@@ -2,6 +2,7 @@ package com.angel.uni.management.command;
 
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.utils.gson.GsonFormatter;
 
 import java.util.Optional;
 
@@ -26,12 +27,20 @@ public class ReadCommand<T> implements Command {
     public void execute() {
         if (id != null) {
             Optional<T> result = service.read(id);
-            result.ifPresent(System.out::println);
+            printToConsole(result);
         } else if (name != null) {
             Optional<T> result = service.read(name);
-            result.ifPresent(System.out::println);
+            printToConsole(result);
         } else {
             throw new IllegalStateException("Neither id nor name was provided.");
+        }
+    }
+
+    private void printToConsole(Optional<T> result) {
+        if (result.isPresent()) {
+            GsonFormatter.printObjectToJson(result.get());
+        } else {
+            System.out.println("No result found.");
         }
     }
 }
