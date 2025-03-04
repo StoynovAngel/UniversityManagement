@@ -1,7 +1,6 @@
 package com.angel.uni.management.interfaces;
 
-public interface Menu {
-    void run();
+public interface IMenu {
     void displayMenu();
     void handleUserChoice();
     void handleNavigation(int choice);

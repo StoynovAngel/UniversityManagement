@@ -1,39 +1,37 @@
 package com.angel.uni.management.menu;
 
-import com.angel.uni.management.interfaces.Menu;
-import com.angel.uni.management.utils.container.DependencyContainer;
-
 import java.util.Scanner;
 
 public class SearchByNameMenu extends SearchMenu {
+    private static volatile SearchByNameMenu instance;
     private final Scanner in = new Scanner(System.in);
 
-    public SearchByNameMenu(DependencyContainer container, Menu initialMenu) {
-        super(container, initialMenu);
-    }
-
-    public void searchByName() {
-        displaySpecifics();
-        int choice = in.nextInt();
-        if (choice == 0) {
-            System.exit(1);
-        } else if (choice >= 1 && choice <= 5) {
-            String name = nameHandler();
-            getSpecificAttributeByName(choice, name);
-        } else if (choice == 6) {
-            run();
-        } else {
-            System.err.println("Invalid choice.");
+    public static SearchByNameMenu getInstance() {
+        if (instance == null) {
+            synchronized (SearchByNameMenu.class) {
+                if (instance == null) {
+                    instance = new SearchByNameMenu();
+                }
+            }
         }
+        return instance;
     }
 
-    protected void getSpecificAttributeByName(int choice, String name) {
+    public void execute() {
+        displaySpecifics();
+        System.out.print("Please enter your choice (0-6): ");
+        int choice = in.nextInt();
+        getSpecificAttributeByName(choice);
+    }
+
+    protected void getSpecificAttributeByName(int choice) {
+        String name = nameHandler();
         switch (choice) {
-            case 1 -> searchType(container.getTeacherInstance(), name);
-            case 2 -> searchType(container.getStudentInstance(), name);
-            case 3 -> searchType(container.getGroupInstance(), name);
-            case 4 -> searchType(container.getGradeInstance(), name);
-            case 5 -> searchType(container.getSubjectInstance(), name);
+            case 1 -> searchType(getContainer().getTeacherInstance(), name);
+            case 2 -> searchType(getContainer().getStudentInstance(), name);
+            case 3 -> searchType(getContainer().getGroupInstance(), name);
+            case 4 -> searchType(getContainer().getGradeInstance(), name);
+            case 5 -> searchType(getContainer().getSubjectInstance(), name);
             default -> System.err.println("Invalid choice.");
         }
     }

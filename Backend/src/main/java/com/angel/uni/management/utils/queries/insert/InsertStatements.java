@@ -18,7 +18,8 @@ public class InsertStatements {
     }
 
     public static String insertSubject() {
-        return "INSERT INTO " + TableMapperConstants.SUBJECT_TABLE + "(name, hours_per_week, teacher_id, description) VALUES (?, ?, (SELECT id FROM public.teacher WHERE name = ? LIMIT 1), ?)";
+        return "INSERT INTO " + TableMapperConstants.SUBJECT_TABLE + "(name, hours_per_week, teacher_id, description) " +
+                "VALUES (?, ?, (SELECT id FROM public.teacher WHERE name = ? LIMIT 1), ?)";
     }
 
     public static String insertStudent() {

@@ -15,7 +15,18 @@ public class DependencyContainer {
     private static volatile SubjectService subjectInstance;
     private static volatile GroupService groupInstance;
     private static volatile GradeService gradeInstance;
+    private static volatile DependencyContainer dependencyContainer;
 
+    public static DependencyContainer getDependencyContainer() {
+        if (null == dependencyContainer) {
+            synchronized (DependencyContainer.class) {
+                if (null == dependencyContainer) {
+                    dependencyContainer = new DependencyContainer();
+                }
+            }
+        }
+        return dependencyContainer;
+    }
 
     public StudentService getStudentInstance() {
         if (null == studentInstance) {

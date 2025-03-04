@@ -1,25 +1,30 @@
 package com.angel.uni.management.menu;
 
 import com.angel.uni.management.command.ReadCommand;
+import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.interfaces.Command;
-import com.angel.uni.management.interfaces.Menu;
+import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
-import com.angel.uni.management.utils.container.DependencyContainer;
 
-import java.util.Scanner;
+import java.util.InputMismatchException;
 
-public class SearchMenu implements Menu {
-    protected final DependencyContainer container;
-    private final Scanner in = new Scanner(System.in);
-    private final Menu initialMenu;
+public class SearchMenu extends Menu implements IMenu {
+    private static volatile SearchMenu instance;
 
-    public SearchMenu(DependencyContainer container, Menu initialMenu) {
-        this.container = container;
-        this.initialMenu = initialMenu;
+    public static SearchMenu getInstance() {
+        if (instance == null) {
+            synchronized (SearchMenu.class) {
+                if (instance == null) {
+                    instance = new SearchMenu();
+                }
+            }
+        }
+        return instance;
     }
 
+
     @Override
-    public void run() {
+    public void execute() {
         while (true) {
             displayMenu();
             handleUserChoice();
@@ -40,17 +45,23 @@ public class SearchMenu implements Menu {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-3): ");
-        int choice = in.nextInt();
-        handleNavigation(choice);
+        try {
+            int choice = in.nextInt();
+            handleNavigation(choice);
+        } catch (InputMismatchException e) {
+            QueryLogger.logError("Input should be an integer" , e.getMessage());
+            System.err.println("Cannot proceed because the input is not correct. Try again.");
+            exitApplication();
+        }
     }
 
     @Override
     public void handleNavigation(int choice) {
         switch (choice) {
+            case 1 -> getSearchByIdMenu().execute();
+            case 2 -> getSearchByNameMenu().execute();
+            case 3 -> getInitialMenu().execute();
             case 0 -> exitApplication();
-            case 1 -> new SearchByIdMenu(container, this).searchById();
-            case 2 -> new SearchByNameMenu(container, this).searchByName();
-            case 3 -> initialMenu.run();
             default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }
@@ -75,20 +86,5 @@ public class SearchMenu implements Menu {
     protected <T, U, S> void searchType(Service<T, U, S> service, long id) {
         Command readCommand = new ReadCommand<>(service, id);
         readCommand.execute();
-    }
-
-    protected long idHandler() {
-        System.out.print("Enter valid id: ");
-        return in.nextLong();
-    }
-
-    protected String nameHandler() {
-        System.out.print("Enter valid name: ");
-        return in.next();
-    }
-
-    private void exitApplication() {
-        System.out.println("Goodbye!");
-        System.exit(0);
     }
 }
