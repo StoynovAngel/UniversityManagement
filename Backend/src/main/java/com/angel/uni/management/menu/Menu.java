@@ -1,9 +1,7 @@
 package com.angel.uni.management.menu;
 
-import com.angel.uni.management.command.ReadCommand;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
-import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.utils.container.DependencyContainer;
 
 import java.util.Scanner;
@@ -12,6 +10,9 @@ public abstract class Menu implements IMenu, Command {
     protected final Scanner in = new Scanner(System.in);
 
     protected  <T extends Command> void navigateTo(T menu) {
+        if(menu == null) {
+            throw new NullPointerException("The menu you are trying to access does not exist");
+        }
         menu.execute();
     }
 
@@ -50,7 +51,15 @@ public abstract class Menu implements IMenu, Command {
         return SearchByIdMenu.getInstance();
     }
 
+    protected UpdateMenu getUpdateMenu() {
+        return UpdateMenu.getInstance();
+    }
+
     protected CreateMenu getCreateMenu() {
         return CreateMenu.getInstance();
+    }
+
+    protected DeleteMenu getDeleteMenu() {
+        return DeleteMenu.getInstance();
     }
 }

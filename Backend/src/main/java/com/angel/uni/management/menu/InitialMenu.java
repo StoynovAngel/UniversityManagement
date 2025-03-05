@@ -50,6 +50,8 @@ public class InitialMenu extends Menu implements IMenu, Command {
             case 0 -> exitApplication();
             case 1 -> navigateTo(getSearchMenu());
             case 2 -> navigateTo(getCreateMenu());
+            case 3 -> navigateTo(getDeleteMenu());
+            case 4 -> navigateTo(getUpdateMenu());
             default -> System.err.println("Invalid choice. Please enter a number between 0 and 4.");
         }
     }

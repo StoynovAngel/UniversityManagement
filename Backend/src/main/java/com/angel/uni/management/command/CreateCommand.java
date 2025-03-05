@@ -5,10 +5,10 @@ import com.angel.uni.management.interfaces.Service;
 
 public class CreateCommand<T, C> implements Command {
 
-    private final Service<T, ?, C> service;
+    private final Service<?, ?, C> service;
     private final C dto;
 
-    public CreateCommand(Service<T, ?, C> service, C dto) {
+    public CreateCommand(Service<?, ?, C> service, C dto) {
         this.service = service;
         this.dto = dto;
     }

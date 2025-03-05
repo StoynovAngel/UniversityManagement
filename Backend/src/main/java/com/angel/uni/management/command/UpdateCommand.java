@@ -5,10 +5,10 @@ import com.angel.uni.management.interfaces.Service;
 
 public class UpdateCommand<T, U> implements Command {
 
-    private final Service<T, U, ?> service;
+    private final Service<?, U, ?> service;
     private final U dto;
 
-    public UpdateCommand(Service<T, U, ?> service, U dto) {
+    public UpdateCommand(Service<?, U, ?> service, U dto) {
         this.service = service;
         this.dto = dto;
     }
