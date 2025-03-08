@@ -5,14 +5,16 @@ import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.update.*;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.menu.inputs.UpdateForm;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
 
 public class UpdateMenu extends Menu implements Command {
+
     private static volatile UpdateMenu instance;
+    private final UpdateForm updateForm = new UpdateForm();
 
     public static UpdateMenu getInstance() {
         if (instance == null) {
@@ -81,7 +83,7 @@ public class UpdateMenu extends Menu implements Command {
 
     private void updateTeacherName() {
         try {
-            UpdateTeacherDTO updateTeacherDTO = updateGenericForm(this::inputTeacherForm);
+            UpdateTeacherDTO updateTeacherDTO = updateGenericForm(updateForm.inputTeacherForm());
             update(getContainer().getTeacherInstance(), updateTeacherDTO);
         } catch (IncorrectInputException e) {
             System.out.println("Unsuccessful update. Returning to UpdateMenu");
@@ -91,7 +93,7 @@ public class UpdateMenu extends Menu implements Command {
 
     private void updateSubjectDescription() {
         try {
-            UpdateSubjectDTO updateSubjectDTO = updateGenericForm(this::inputSubjectForm);
+            UpdateSubjectDTO updateSubjectDTO = updateGenericForm(updateForm.inputSubjectForm());
             update(getContainer().getSubjectInstance(), updateSubjectDTO);
         } catch (IncorrectInputException e) {
             System.out.println("Unsuccessful update. Returning to UpdateMenu");
@@ -101,7 +103,7 @@ public class UpdateMenu extends Menu implements Command {
 
     private void updateGradeMark() {
         try {
-            UpdateGradeDTO updateGradeDTO = updateGenericForm(this::inputGradeForm);
+            UpdateGradeDTO updateGradeDTO = updateGenericForm(updateForm.inputGradeForm());
             update(getContainer().getGradeInstance(), updateGradeDTO);
         } catch (IncorrectInputException e) {
             System.out.println("Unsuccessful update. Returning to UpdateMenu");
@@ -111,7 +113,7 @@ public class UpdateMenu extends Menu implements Command {
 
     private void updateStudentUsername() {
         try {
-            UpdateStudentDTO updateStudentDTO = updateGenericForm(this::inputStudentForm);
+            UpdateStudentDTO updateStudentDTO = updateGenericForm(updateForm.inputStudentForm());
             update(getContainer().getStudentInstance(), updateStudentDTO);
         } catch (IncorrectInputException e) {
             System.out.println("Unsuccessful update. Returning to UpdateMenu");
@@ -121,7 +123,7 @@ public class UpdateMenu extends Menu implements Command {
 
     private void updateGroupName() {
         try {
-            UpdateGroupDTO updateGroupDTO = updateGenericForm(this::inputGroupForm);
+            UpdateGroupDTO updateGroupDTO = updateGenericForm(updateForm.inputGroupForm());
             update(getContainer().getGroupInstance(), updateGroupDTO);
         } catch (IncorrectInputException e) {
             System.out.println("Unsuccessful update. Returning to UpdateMenu");
@@ -129,9 +131,9 @@ public class UpdateMenu extends Menu implements Command {
         }
     }
 
-    private <T> T updateGenericForm(Supplier<T> formSupplier) throws IncorrectInputException {
+    private <T> T updateGenericForm(T dto) throws IncorrectInputException {
         try {
-            return formSupplier.get();
+            return dto;
         } catch (InputMismatchException e) {
             String errorMessage = "Token does not match the Integer regular expression, or is out of range";
             System.err.println("Incorrect id provided. Please write a integer value next time.");
@@ -143,70 +145,5 @@ public class UpdateMenu extends Menu implements Command {
             QueryLogger.logError(errorMessage, e.getMessage());
             throw new IncorrectInputException(errorMessage);
         }
-    }
-
-    private UpdateTeacherDTO inputTeacherForm() {
-        System.out.print("Teacher id: ");
-        if (!in.hasNextLong()) {
-            in.nextLine();
-            throw new InputMismatchException("Invalid input for teacher id. Expected a long.");
-        }
-        long id = in.nextLong();
-        in.nextLine();
-        System.out.print("New name: ");
-        String newTeacherName = in.nextLine();
-        return new UpdateTeacherDTO(newTeacherName, id);
-    }
-
-    private UpdateSubjectDTO inputSubjectForm() {
-        in.nextLine();
-        System.out.print("What is the name of the subject: ");
-        String subjectName = in.nextLine();
-        System.out.print("New description: ");
-        String subjectDescription = in.nextLine();
-        return new UpdateSubjectDTO(subjectDescription, subjectName);
-    }
-
-    private UpdateGradeDTO inputGradeForm() {
-        System.out.print("Grade id: ");
-        if (!in.hasNextLong()) {
-            in.nextLine();
-            throw new InputMismatchException("Invalid input for grade id. Expected a long.");
-        }
-        long id = in.nextLong();
-
-        System.out.print("New grade mark: ");
-        if (!in.hasNextDouble()) {
-            in.nextLine();
-            throw new InputMismatchException("Invalid input for grade mark. Expected a double.");
-        }
-        double mark = in.nextDouble();
-        return new UpdateGradeDTO(mark, id);
-    }
-
-    private UpdateStudentDTO inputStudentForm() {
-        System.out.print("What is the id of the student: ");
-        if (!in.hasNextLong()) {
-            in.nextLine();
-            throw new InputMismatchException("Invalid input for student id. Expected a long.");
-        }
-        long id = in.nextLong();
-        in.nextLine();
-        System.out.print("New username: ");
-        String studentUsername = in.nextLine();
-        return new UpdateStudentDTO(studentUsername, id);
-    }
-
-    private UpdateGroupDTO inputGroupForm() {
-        System.out.print("What is the id of the group: ");
-        if (!in.hasNextLong()) {
-            in.nextLine();
-            throw new InputMismatchException("Invalid input for group id. Expected a long.");
-        }
-        long id = in.nextLong();
-        in.nextLine();
-        System.out.print("New name: ");
-        String name = in.nextLine();
-        return new UpdateGroupDTO(name, id);
     }
 }
