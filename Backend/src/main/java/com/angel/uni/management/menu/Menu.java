@@ -28,7 +28,7 @@ public abstract class Menu implements IMenu, Command {
         System.exit(0);
     }
 
-    protected long idHandler() {
+    protected Long idHandler() {
         System.out.print("Enter valid id: ");
         return in.nextLong();
     }

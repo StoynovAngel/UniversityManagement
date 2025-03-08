@@ -2,7 +2,8 @@ package com.angel.uni.management.menu.search;
 
 import com.angel.uni.management.command.ReadCommand;
 import com.angel.uni.management.config.QueryLogger;
-import com.angel.uni.management.enums.MenuOptions;
+import com.angel.uni.management.enums.ClassOptions;
+import com.angel.uni.management.enums.SearchOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
@@ -25,7 +26,6 @@ public class SearchMenu extends Menu implements IMenu {
         return instance;
     }
 
-
     @Override
     public void execute() {
         while (true) {
@@ -36,13 +36,7 @@ public class SearchMenu extends Menu implements IMenu {
 
     @Override
     public void displayMenu() {
-        System.out.println("""
-                Search:
-                1. Search by id
-                2. Search by name
-                3. Go back to initial menu
-                0. Exit
-                """);
+        SearchOptions.displayAllOptions();
     }
 
     @Override
@@ -50,6 +44,7 @@ public class SearchMenu extends Menu implements IMenu {
         System.out.print("Please enter your choice (0-3): ");
         try {
             int choice = in.nextInt();
+            System.out.println(choice);
             handleNavigation(choice);
         } catch (InputMismatchException e) {
             QueryLogger.logError("Input should be an integer" , e.getMessage());
@@ -60,37 +55,33 @@ public class SearchMenu extends Menu implements IMenu {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (choice) {
-            case 1 -> getSearchByIdMenu().execute();
-            case 2 -> getSearchByNameMenu().execute();
-            case 3 -> getInitialMenu().execute();
-            case 0 -> exitApplication();
+        switch (SearchOptions.getByOptionNumber(choice)) {
+            case SEARCH_BY_ID -> getSearchByIdMenu().execute();
+            case SEARCH_BY_NAME -> getSearchByNameMenu().execute();
+            case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
+            case EXIT -> exitApplication();
             default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }
 
     public void displaySpecifics() {
-        MenuOptions.displaySpecifics();
+        ClassOptions.displayAllOptions();
     }
 
-    protected <T, P> void searchType(Service<T, ?, ?> service, P param) {
+    private <T, P> void searchType(Service<T, ?, ?> service, P param) {
         Command readCommand = new ReadCommand<>(service, param);
         readCommand.execute();
     }
 
-    protected <T, U, S> void searchType(Service<T, U, S> service, long id) {
-        Command readCommand = new ReadCommand<>(service, id);
-        readCommand.execute();
-    }
-
     protected <T> void getSpecificAttribute(int choice, T param) {
-        switch (MenuOptions.getByOptionNumber(choice)) {
-            case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
+        switch (ClassOptions.getByOptionNumber(choice)) {
             case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
             case STUDENT -> searchType(getContainer().getStudentInstance(), param);
             case GROUP -> searchType(getContainer().getGroupInstance(), param);
             case GRADE -> searchType(getContainer().getGradeInstance(), param);
             case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
+            case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
+            case EXIT -> exitApplication();
             default -> System.err.println("Invalid choice.");
         }
     }

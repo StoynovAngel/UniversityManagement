@@ -29,7 +29,7 @@ public class InitialMenu extends Menu implements IMenu, Command {
     @Override
     public void displayMenu() {
         System.out.println("Options: ");
-        MenuOptions.displayBaseMenu();
+        MenuOptions.displayAllOptions();
     }
 
     @Override
@@ -41,12 +41,12 @@ public class InitialMenu extends Menu implements IMenu, Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (choice) {
-            case 0 -> exitApplication();
-            case 1 -> navigateTo(getSearchMenu());
-            case 2 -> navigateTo(getCreateMenu());
-            case 3 -> navigateTo(getDeleteMenu());
-            case 4 -> navigateTo(getUpdateMenu());
+        switch (MenuOptions.getByOptionNumber(choice)) {
+            case EXIT -> exitApplication();
+            case SEARCH -> navigateTo(getSearchMenu());
+            case CREATE -> navigateTo(getCreateMenu());
+            case DELETE -> navigateTo(getDeleteMenu());
+            case UPDATE -> navigateTo(getUpdateMenu());
             default -> System.err.println("Invalid choice. Please enter a number between 0 and 4.");
         }
     }

@@ -2,6 +2,7 @@ package com.angel.uni.management.menu.create;
 
 import com.angel.uni.management.command.CreateCommand;
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
@@ -35,15 +36,7 @@ public class CreateMenu extends Menu implements IMenu, Command {
 
     @Override
     public void displayMenu() {
-        System.out.println("""
-                1. Create specific student
-                2. Create specific group
-                3. Create specific grade
-                4. Create specific subject
-                5. Create specific teacher
-                6. Go back to search menu
-                0. Exit
-                """);
+        ClassOptions.displayAllOptions();
     }
 
     @Override
@@ -62,14 +55,14 @@ public class CreateMenu extends Menu implements IMenu, Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (choice) {
-            case 1 -> createStudent();
-            case 2 -> createGroup();
-            case 3 -> createGrade();
-            case 4 -> createSubject();
-            case 5 -> createTeacher();
-            case 6 -> getInitialMenu().execute();
-            case 0 -> exitApplication();
+        switch (ClassOptions.getByOptionNumber(choice)) {
+            case STUDENT -> createStudent();
+            case GROUP -> createGroup();
+            case GRADE -> createGrade();
+            case SUBJECT -> createSubject();
+            case TEACHER -> createTeacher();
+            case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
+            case EXIT -> exitApplication();
             default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-5)");
         }
     }

@@ -18,6 +18,7 @@ public class SearchByIdMenu extends SearchMenu {
         displaySpecifics();
         System.out.print("Please enter your choice (0-6): ");
         int choice = in.nextInt();
-        getSpecificAttribute(choice, idHandler());
+        Long id = idHandler();
+        getSpecificAttribute(choice, id);
     }
 }

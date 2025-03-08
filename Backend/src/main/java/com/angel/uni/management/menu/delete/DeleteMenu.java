@@ -2,6 +2,7 @@ package com.angel.uni.management.menu.delete;
 
 import com.angel.uni.management.command.DeleteCommand;
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.Menu;
@@ -35,8 +36,8 @@ public class DeleteMenu extends Menu implements Command {
     public void displayMenu() {
         System.out.println("""
                 Search:
-                1. Delete subject
-                2. Return to initial menu
+                2. Delete subject
+                6. Return to initial menu
                 0. Exit
                 """);
     }
@@ -56,10 +57,10 @@ public class DeleteMenu extends Menu implements Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (choice) {
-            case 1 -> deleteSubject();
-            case 2 -> navigateTo(getInitialMenu());
-            case 0 -> exitApplication();
+        switch (ClassOptions.getByOptionNumber(choice)) {
+            case SUBJECT -> deleteSubject();
+            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+            case EXIT -> exitApplication();
             default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }

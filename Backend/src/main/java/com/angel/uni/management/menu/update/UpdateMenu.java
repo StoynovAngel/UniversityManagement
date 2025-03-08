@@ -3,7 +3,7 @@ package com.angel.uni.management.menu.update;
 import com.angel.uni.management.command.UpdateCommand;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.update.*;
-import com.angel.uni.management.enums.MenuOptions;
+import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.Menu;
@@ -40,7 +40,7 @@ public class UpdateMenu extends Menu implements Command {
     @Override
     public void displayMenu() {
         System.out.println("Update menu: ");
-        MenuOptions.displaySpecifics();
+        ClassOptions.displayAllOptions();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class UpdateMenu extends Menu implements Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (MenuOptions.getByOptionNumber(choice)) {
+        switch (ClassOptions.getByOptionNumber(choice)) {
             case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
             case TEACHER -> updateTeacherName();
             case SUBJECT -> updateSubjectDescription();
