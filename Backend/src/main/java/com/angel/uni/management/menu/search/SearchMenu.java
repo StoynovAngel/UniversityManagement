@@ -1,10 +1,13 @@
-package com.angel.uni.management.menu;
+package com.angel.uni.management.menu.search;
 
 import com.angel.uni.management.command.ReadCommand;
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.enums.MenuOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.menu.InitialMenu;
+import com.angel.uni.management.menu.Menu;
 
 import java.util.InputMismatchException;
 
@@ -67,24 +70,28 @@ public class SearchMenu extends Menu implements IMenu {
     }
 
     public void displaySpecifics() {
-        System.out.println("""
-                1. Search specific teacher
-                2. Search specific student
-                3. Search specific group
-                4. Search specific grade
-                5. Search specific subject
-                6. Go back to search menu
-                0. Exit
-                """);
+        MenuOptions.displaySpecifics();
     }
 
-    protected  <T, U, S> void searchType(Service<T, U, S> service, String name) {
-        Command readCommand = new ReadCommand<>(service, name);
+    protected <T, P> void searchType(Service<T, ?, ?> service, P param) {
+        Command readCommand = new ReadCommand<>(service, param);
         readCommand.execute();
     }
 
     protected <T, U, S> void searchType(Service<T, U, S> service, long id) {
         Command readCommand = new ReadCommand<>(service, id);
         readCommand.execute();
+    }
+
+    protected <T> void getSpecificAttribute(int choice, T param) {
+        switch (MenuOptions.getByOptionNumber(choice)) {
+            case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
+            case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
+            case STUDENT -> searchType(getContainer().getStudentInstance(), param);
+            case GROUP -> searchType(getContainer().getGroupInstance(), param);
+            case GRADE -> searchType(getContainer().getGradeInstance(), param);
+            case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
+            default -> System.err.println("Invalid choice.");
+        }
     }
 }

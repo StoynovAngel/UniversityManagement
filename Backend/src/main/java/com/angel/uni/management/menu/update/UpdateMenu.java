@@ -1,10 +1,12 @@
-package com.angel.uni.management.menu;
+package com.angel.uni.management.menu.update;
 
 import com.angel.uni.management.command.UpdateCommand;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.update.*;
+import com.angel.uni.management.enums.MenuOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.menu.Menu;
 import com.angel.uni.management.menu.inputs.UpdateForm;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
@@ -37,16 +39,8 @@ public class UpdateMenu extends Menu implements Command {
 
     @Override
     public void displayMenu() {
-        System.out.println("""
-                Search:
-                1. Update teacher's name
-                2. Update subject's description
-                3. Update grade's mark
-                4. Update student's username
-                5. Update group's name
-                6. Return to initial menu
-                0. Exit
-                """);
+        System.out.println("Update menu: ");
+        MenuOptions.displaySpecifics();
     }
 
     @Override
@@ -64,20 +58,20 @@ public class UpdateMenu extends Menu implements Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (choice) {
-            case 1 -> updateTeacherName();
-            case 2 -> updateSubjectDescription();
-            case 3 -> updateGradeMark();
-            case 4 -> updateStudentUsername();
-            case 5 -> updateGroupName();
-            case 6 -> navigateTo(getInitialMenu());
-            case 0 -> exitApplication();
+        switch (MenuOptions.getByOptionNumber(choice)) {
+            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+            case TEACHER -> updateTeacherName();
+            case SUBJECT -> updateSubjectDescription();
+            case GRADE -> updateGradeMark();
+            case STUDENT -> updateStudentUsername();
+            case GROUP -> updateGroupName();
+            case EXIT -> exitApplication();
             default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }
 
     private <U> void update(Service<?, U, ?> service, U dto) {
-        UpdateCommand updateCommand = new UpdateCommand(service, dto);
+        Command updateCommand = new UpdateCommand<>(service, dto);
         updateCommand.execute();
     }
 

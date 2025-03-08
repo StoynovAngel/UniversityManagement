@@ -1,10 +1,11 @@
-package com.angel.uni.management.menu;
+package com.angel.uni.management.menu.create;
 
 import com.angel.uni.management.command.CreateCommand;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.menu.Menu;
 import com.angel.uni.management.menu.inputs.CreateInput;
 import java.util.InputMismatchException;
 

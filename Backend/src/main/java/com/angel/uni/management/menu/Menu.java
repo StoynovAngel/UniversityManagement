@@ -2,11 +2,18 @@ package com.angel.uni.management.menu;
 
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
+import com.angel.uni.management.menu.create.CreateMenu;
+import com.angel.uni.management.menu.delete.DeleteMenu;
+import com.angel.uni.management.menu.search.SearchByIdMenu;
+import com.angel.uni.management.menu.search.SearchByNameMenu;
+import com.angel.uni.management.menu.search.SearchMenu;
+import com.angel.uni.management.menu.update.UpdateMenu;
 import com.angel.uni.management.utils.container.DependencyContainer;
 
 import java.util.Scanner;
 
 public abstract class Menu implements IMenu, Command {
+
     protected final Scanner in = new Scanner(System.in);
 
     protected  <T extends Command> void navigateTo(T menu) {

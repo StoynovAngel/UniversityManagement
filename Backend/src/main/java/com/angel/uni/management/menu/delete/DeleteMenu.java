@@ -1,9 +1,10 @@
-package com.angel.uni.management.menu;
+package com.angel.uni.management.menu.delete;
 
 import com.angel.uni.management.command.DeleteCommand;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
+import com.angel.uni.management.menu.Menu;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.InputMismatchException;
@@ -64,7 +65,7 @@ public class DeleteMenu extends Menu implements Command {
     }
 
     private <T> void delete(Service<T, ?, ?> service, Long id) {
-        DeleteCommand deleteCommand = new DeleteCommand(service, id);
+        Command deleteCommand = new DeleteCommand<>(service, id);
         deleteCommand.execute();
     }
 

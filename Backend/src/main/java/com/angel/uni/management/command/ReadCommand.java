@@ -6,30 +6,22 @@ import com.angel.uni.management.utils.gson.GsonFormatter;
 
 import java.util.Optional;
 
-public class ReadCommand<T> implements Command {
+public class ReadCommand<T, P> implements Command {
     private final Service<T, ?, ?> service;
-    private Long id;
-    private String name;
+    private final P param;
 
-    public ReadCommand(Service<T, ?, ?> service, Long id) {
+    public ReadCommand(Service<T, ?, ?> service, P param) {
         this.service = service;
-        this.id = id;
-        this.name = null;
-    }
-
-    public ReadCommand(Service<T, ?, ?> service, String name) {
-        this.service = service;
-        this.name = name;
-        this.id = null;
+        this.param = param;
     }
 
     @Override
     public void execute() {
-        if (id != null) {
-            Optional<T> result = service.read(id);
+        if (param instanceof String) {
+            Optional<T> result = service.read((String) param);
             printToConsole(result);
-        } else if (name != null) {
-            Optional<T> result = service.read(name);
+        } else if (param instanceof Long) {
+            Optional<T> result = service.read((Long) param);
             printToConsole(result);
         } else {
             throw new IllegalStateException("Neither id nor name was provided.");

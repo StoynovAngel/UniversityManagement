@@ -1,5 +1,6 @@
 package com.angel.uni.management.menu;
 
+import com.angel.uni.management.enums.MenuOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 
@@ -27,19 +28,13 @@ public class InitialMenu extends Menu implements IMenu, Command {
 
     @Override
     public void displayMenu() {
-        System.out.println("""
-                Options:
-                1. Search menu
-                2. Create menu
-                3. Delete menu
-                4. Update menu
-                0. Exit
-                """);
+        System.out.println("Options: ");
+        MenuOptions.displayBaseMenu();
     }
 
     @Override
     public void handleUserChoice() {
-        System.out.print("Please enter your choice (0-4): ");
+        System.out.print("Please enter your choice (1-4): ");
         int choice = in.nextInt();
         handleNavigation(choice);
     }
