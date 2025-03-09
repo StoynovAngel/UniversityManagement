@@ -1,4 +1,4 @@
-package com.angel.uni.management.menu.search;
+package com.angel.uni.management.menu.console.search;
 
 import java.util.Scanner;
 

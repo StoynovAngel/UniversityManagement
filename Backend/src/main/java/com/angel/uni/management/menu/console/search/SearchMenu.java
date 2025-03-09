@@ -1,4 +1,4 @@
-package com.angel.uni.management.menu.search;
+package com.angel.uni.management.menu.console.search;
 
 import com.angel.uni.management.command.ReadCommand;
 import com.angel.uni.management.config.QueryLogger;
@@ -7,8 +7,8 @@ import com.angel.uni.management.enums.SearchOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
-import com.angel.uni.management.menu.InitialMenu;
-import com.angel.uni.management.menu.Menu;
+import com.angel.uni.management.menu.console.InitialMenu;
+import com.angel.uni.management.menu.console.Menu;
 
 import java.util.InputMismatchException;
 

@@ -1,4 +1,4 @@
-package com.angel.uni.management.menu.search;
+package com.angel.uni.management.menu.console.search;
 
 public class SearchByIdMenu extends SearchMenu {
     private static volatile SearchByIdMenu instance;

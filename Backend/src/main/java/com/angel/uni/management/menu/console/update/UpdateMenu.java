@@ -1,4 +1,4 @@
-package com.angel.uni.management.menu.update;
+package com.angel.uni.management.menu.console.update;
 
 import com.angel.uni.management.command.UpdateCommand;
 import com.angel.uni.management.config.QueryLogger;
@@ -6,8 +6,8 @@ import com.angel.uni.management.dto.update.*;
 import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
-import com.angel.uni.management.menu.Menu;
-import com.angel.uni.management.menu.inputs.UpdateForm;
+import com.angel.uni.management.menu.console.Menu;
+import com.angel.uni.management.menu.console.inputs.UpdateForm;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.InputMismatchException;

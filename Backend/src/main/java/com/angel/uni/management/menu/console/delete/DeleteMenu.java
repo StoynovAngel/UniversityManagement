@@ -1,11 +1,11 @@
-package com.angel.uni.management.menu.delete;
+package com.angel.uni.management.menu.console.delete;
 
 import com.angel.uni.management.command.DeleteCommand;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
-import com.angel.uni.management.menu.Menu;
+import com.angel.uni.management.menu.console.Menu;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.InputMismatchException;

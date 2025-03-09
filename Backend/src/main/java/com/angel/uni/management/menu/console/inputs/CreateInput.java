@@ -1,4 +1,4 @@
-package com.angel.uni.management.menu.inputs;
+package com.angel.uni.management.menu.console.inputs;
 
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.simple.*;

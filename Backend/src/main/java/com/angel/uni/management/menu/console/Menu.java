@@ -1,13 +1,13 @@
-package com.angel.uni.management.menu;
+package com.angel.uni.management.menu.console;
 
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
-import com.angel.uni.management.menu.create.CreateMenu;
-import com.angel.uni.management.menu.delete.DeleteMenu;
-import com.angel.uni.management.menu.search.SearchByIdMenu;
-import com.angel.uni.management.menu.search.SearchByNameMenu;
-import com.angel.uni.management.menu.search.SearchMenu;
-import com.angel.uni.management.menu.update.UpdateMenu;
+import com.angel.uni.management.menu.console.create.CreateMenu;
+import com.angel.uni.management.menu.console.delete.DeleteMenu;
+import com.angel.uni.management.menu.console.search.SearchByIdMenu;
+import com.angel.uni.management.menu.console.search.SearchByNameMenu;
+import com.angel.uni.management.menu.console.search.SearchMenu;
+import com.angel.uni.management.menu.console.update.UpdateMenu;
 import com.angel.uni.management.utils.container.DependencyContainer;
 
 import java.util.Scanner;
