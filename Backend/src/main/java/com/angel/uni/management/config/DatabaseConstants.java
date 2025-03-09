@@ -1,6 +1,6 @@
 package com.angel.uni.management.config;
 
-public class DatabaseConstants {
+public final class DatabaseConstants {
     public static final String DATABASE_USERNAME = "db.username";
     public static final String DATABASE_PASSWORD = "db.password";
     public static final String DATABASE_SSL = "db.ssl";

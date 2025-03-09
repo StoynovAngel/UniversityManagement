@@ -1,10 +1,11 @@
 package com.angel.uni.management.menu.console.inputs;
 
 import com.angel.uni.management.dto.update.*;
+import com.angel.uni.management.interfaces.SimpleDTO;
 
 import java.util.InputMismatchException;
 
-public class UpdateForm extends InputForms {
+public class UpdateForm extends InputForms<SimpleDTO> {
 
     @Override
     public UpdateTeacherDTO inputTeacherForm() {

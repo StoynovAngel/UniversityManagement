@@ -1,8 +1,10 @@
 package com.angel.uni.management.menu.console.inputs;
 
+import com.angel.uni.management.interfaces.SimpleDTO;
+
 import java.util.Scanner;
 
-public abstract class InputForms<T> {
+public abstract class InputForms<T extends SimpleDTO > {
 
     protected Scanner in = new Scanner(System.in);
 

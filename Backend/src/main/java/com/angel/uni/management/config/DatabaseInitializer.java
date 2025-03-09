@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * This class uses private constructor to prevent initialization.
  */
 
-public class DatabaseInitializer {
+public final class DatabaseInitializer {
     private static final DatabaseProperties databaseProperties = DatabaseProperties.getInstance();
 
     private DatabaseInitializer() {
@@ -69,7 +69,7 @@ public class DatabaseInitializer {
         return sql.split(";");
     }
 
-    private static void executeSqlStatements(String[] queries, Connection connection) {
+    private static void executeSqlStatements(String[] queries, final Connection connection) {
         if (connection == null) {
             throw new IllegalArgumentException("Connection cannot be null.");
         }

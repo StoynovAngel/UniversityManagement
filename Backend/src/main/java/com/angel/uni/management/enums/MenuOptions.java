@@ -1,5 +1,8 @@
 package com.angel.uni.management.enums;
 
+import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.utils.exceptions.IncorrectInputException;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -26,13 +29,15 @@ public enum MenuOptions {
                 .forEach((menuOptions -> System.out.println(menuOptions.getOptionsNumber() + ". " + menuOptions.getDescription())));
     }
 
-    public static MenuOptions getByOptionNumber(int optionNumber) {
+    public static MenuOptions getByOptionNumber(int optionNumber) throws IncorrectInputException {
         for (MenuOptions option : MenuOptions.values()) {
             if (option.getOptionsNumber() == optionNumber) {
                 return option;
             }
         }
-        throw new IllegalArgumentException("Invalid option number: " + optionNumber);
+        String errorMessage = "Invalid option number: " + optionNumber;
+        QueryLogger.logError(errorMessage);
+        throw new IncorrectInputException(errorMessage);
     }
 
     public int getOptionsNumber() {

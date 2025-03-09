@@ -9,6 +9,7 @@ import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.console.InitialMenu;
 import com.angel.uni.management.menu.console.Menu;
+import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.InputMismatchException;
 
@@ -55,12 +56,17 @@ public class SearchMenu extends Menu implements IMenu {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (SearchOptions.getByOptionNumber(choice)) {
-            case SEARCH_BY_ID -> getSearchByIdMenu().execute();
-            case SEARCH_BY_NAME -> getSearchByNameMenu().execute();
-            case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
-            case EXIT -> exitApplication();
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+        try{
+            switch (SearchOptions.getByOptionNumber(choice)) {
+                case SEARCH_BY_ID -> getSearchByIdMenu().execute();
+                case SEARCH_BY_NAME -> getSearchByNameMenu().execute();
+                case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
+                case EXIT -> exitApplication();
+                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+            }
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            getInitialMenu().execute();
         }
     }
 
@@ -74,15 +80,20 @@ public class SearchMenu extends Menu implements IMenu {
     }
 
     protected <T> void getSpecificAttribute(int choice, T param) {
-        switch (ClassOptions.getByOptionNumber(choice)) {
-            case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
-            case STUDENT -> searchType(getContainer().getStudentInstance(), param);
-            case GROUP -> searchType(getContainer().getGroupInstance(), param);
-            case GRADE -> searchType(getContainer().getGradeInstance(), param);
-            case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
-            case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
-            case EXIT -> exitApplication();
-            default -> System.err.println("Invalid choice.");
+        try {
+            switch (ClassOptions.getByOptionNumber(choice)) {
+                case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
+                case STUDENT -> searchType(getContainer().getStudentInstance(), param);
+                case GROUP -> searchType(getContainer().getGroupInstance(), param);
+                case GRADE -> searchType(getContainer().getGradeInstance(), param);
+                case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
+                case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
+                case EXIT -> exitApplication();
+                default -> System.err.println("Invalid choice.");
+            }
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            getInitialMenu().execute();
         }
     }
 }

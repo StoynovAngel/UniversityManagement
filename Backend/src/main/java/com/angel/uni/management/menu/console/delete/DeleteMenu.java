@@ -34,12 +34,7 @@ public class DeleteMenu extends Menu implements Command {
 
     @Override
     public void displayMenu() {
-        System.out.println("""
-                Search:
-                2. Delete subject
-                6. Return to initial menu
-                0. Exit
-                """);
+        ClassOptions.displayDeleteMenu();
     }
 
     @Override
@@ -57,11 +52,16 @@ public class DeleteMenu extends Menu implements Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (ClassOptions.getByOptionNumber(choice)) {
-            case SUBJECT -> deleteSubject();
-            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
-            case EXIT -> exitApplication();
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+        try {
+            switch (ClassOptions.getByOptionNumber(choice)) {
+                case SUBJECT -> deleteSubject();
+                case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+                case EXIT -> exitApplication();
+                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+            }
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            getInitialMenu().execute();
         }
     }
 

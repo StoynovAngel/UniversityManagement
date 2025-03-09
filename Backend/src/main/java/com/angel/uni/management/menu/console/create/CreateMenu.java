@@ -8,6 +8,8 @@ import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.console.Menu;
 import com.angel.uni.management.menu.console.inputs.CreateInput;
+import com.angel.uni.management.utils.exceptions.IncorrectInputException;
+
 import java.util.InputMismatchException;
 
 public class CreateMenu extends Menu implements IMenu, Command {
@@ -55,19 +57,24 @@ public class CreateMenu extends Menu implements IMenu, Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (ClassOptions.getByOptionNumber(choice)) {
-            case STUDENT -> createStudent();
-            case GROUP -> createGroup();
-            case GRADE -> createGrade();
-            case SUBJECT -> createSubject();
-            case TEACHER -> createTeacher();
-            case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
-            case EXIT -> exitApplication();
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-5)");
+        try {
+            switch (ClassOptions.getByOptionNumber(choice)) {
+                case STUDENT -> createStudent();
+                case GROUP -> createGroup();
+                case GRADE -> createGrade();
+                case SUBJECT -> createSubject();
+                case TEACHER -> createTeacher();
+                case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
+                case EXIT -> exitApplication();
+                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-5)");
+            }
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            getInitialMenu().execute();
         }
     }
 
-    private  <T, U, S> void create(Service<T, U, S> service, S dto) {
+    private <T, U, S> void create(final Service<T, U, S> service, S dto) {
         Command createCommand = new CreateCommand<>(service, dto);
         createCommand.execute();
     }

@@ -15,7 +15,8 @@ import java.util.Properties;
  * </p>
  */
 
-public class DatabaseProperties {
+public final class DatabaseProperties {
+
     private static final Properties properties = new Properties();
     private static volatile DatabaseProperties instance;
 

@@ -3,12 +3,13 @@ package com.angel.uni.management.menu.console.inputs;
 import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.dto.simple.*;
 import com.angel.uni.management.enums.GradeType;
+import com.angel.uni.management.interfaces.SimpleDTO;
 
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-public class CreateInput extends InputForms {
+public class CreateInput extends InputForms<SimpleDTO> {
 
     @Override
     public SimpleSubjectDTO inputSubjectForm() {
@@ -131,7 +132,7 @@ public class CreateInput extends InputForms {
     }
 
     private String getGradeTypeToString(int choice) {
-        while(true) {
+        while (true) {
             switch (choice) {
                 case 1 -> {
                     return GradeType.FINAL_EXAM.toString();

@@ -58,15 +58,20 @@ public class UpdateMenu extends Menu implements Command {
 
     @Override
     public void handleNavigation(int choice) {
-        switch (ClassOptions.getByOptionNumber(choice)) {
-            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
-            case TEACHER -> updateTeacherName();
-            case SUBJECT -> updateSubjectDescription();
-            case GRADE -> updateGradeMark();
-            case STUDENT -> updateStudentUsername();
-            case GROUP -> updateGroupName();
-            case EXIT -> exitApplication();
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+        try {
+            switch (ClassOptions.getByOptionNumber(choice)) {
+                case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+                case TEACHER -> updateTeacherName();
+                case SUBJECT -> updateSubjectDescription();
+                case GRADE -> updateGradeMark();
+                case STUDENT -> updateStudentUsername();
+                case GROUP -> updateGroupName();
+                case EXIT -> exitApplication();
+                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+            }
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            getInitialMenu().execute();
         }
     }
 

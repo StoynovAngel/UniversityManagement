@@ -2,14 +2,17 @@ package com.angel.uni.management.config;
 
 import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *  DatabaseConnection used to establish connection to the database.
  *  This class uses private constructor to prevent initialization.
  */
 
-public class DatabaseConnection {
+public final class DatabaseConnection {
+
     private static Connection conn;
 
     private DatabaseConnection() {
