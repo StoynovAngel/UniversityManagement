@@ -41,12 +41,12 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
     }
 
     @Override
-    public Grade mapToEntity(GradeDTO dto) {
+    public Grade mapToEntity(GradeDTO dto) throws DataMappingException {
         return entityForm(dto);
     }
 
     @Override
-    public GradeDTO mapToDTO(Grade entity) {
+    public GradeDTO mapToDTO(Grade entity) throws DataMappingException {
         return dtoForm(entity);
     }
 
@@ -72,7 +72,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
         }
     }
 
-    private Grade entityForm(GradeDTO dto) {
+    private Grade entityForm(GradeDTO dto) throws DataMappingException {
         return new GradeBG(
                 dto.name(),
                 Mappers.getStudentMapper().mapToEntity(dto.student()),
@@ -83,7 +83,7 @@ public class GradeMapper implements CustomRowMapper<GradeDTO, Grade> {
         );
     }
 
-    private GradeDTO dtoForm(Grade entity) {
+    private GradeDTO dtoForm(Grade entity) throws DataMappingException {
         return new GradeDTO(
                 entity.getName(),
                 Mappers.getStudentMapper().mapToDTO(entity.getStudent()),

@@ -1,6 +1,7 @@
 package com.angel.uni.management.utils.mappers;
 
 import com.angel.uni.management.dto.GroupDTO;
+import com.angel.uni.management.dto.StudentDTO;
 import com.angel.uni.management.entity.Grade;
 import com.angel.uni.management.entity.Group;
 import com.angel.uni.management.entity.Student;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +49,7 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
     }
 
     @Override
-    public GroupDTO mapToDTO(Group group) {
+    public GroupDTO mapToDTO(Group group) throws DataMappingException {
         return dtoForm(group);
     }
 
@@ -62,10 +64,14 @@ public class GroupMapper implements CustomRowMapper<GroupDTO, Group> {
         return group;
     }
 
-    private GroupDTO dtoForm(Group group) {
+    private GroupDTO dtoForm(Group group) throws DataMappingException {
+        List<StudentDTO> students = new ArrayList<>();
+        for (Student student: group.getStudentsAssignedToGroup()) {
+            students.add(StudentMapper.getInstance().mapToDTO(student));
+        }
         return new GroupDTO(
                 group.getGroupName(),
-                group.getStudentsAssignedToGroup().stream().map(Mappers.getStudentMapper()::mapToDTO).toList()
+                students
         );
     }
 

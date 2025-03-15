@@ -36,4 +36,12 @@ public class Subject {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> studentsAssignedToSubject;
+
+    public Subject(String name, int hoursPerWeek, String description, Teacher teacher, List<Student> studentsAssignedToSubject) {
+        this.name = name;
+        this.hoursPerWeek = hoursPerWeek;
+        this.description = description;
+        this.teacher = teacher;
+        this.studentsAssignedToSubject = studentsAssignedToSubject;
+    }
 }

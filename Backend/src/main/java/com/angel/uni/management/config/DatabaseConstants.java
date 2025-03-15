@@ -7,7 +7,7 @@ public final class DatabaseConstants {
     public static final String DATABASE_URL = "db.url";
     public static final String DATABASE_CREATE_TABLE_FILE_PATH = "db.file_path";
     public static final String DATABASE_INSERT_TABLE_FILE_PATH = "db.insert_into_tables";
-    public static final String CONFIG_FILE = "database.properties";
+    public static final String CONFIG_FILE = "application.properties";
 
     private DatabaseConstants() {
         throw new UnsupportedOperationException("Cannot initialize this class: " + getClass().getSimpleName());

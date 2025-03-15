@@ -37,12 +37,12 @@ public class TeacherMapper implements CustomRowMapper<TeacherDTO, Teacher> {
     }
 
     @Override
-    public Teacher mapToEntity(TeacherDTO teacherDTO) {
+    public Teacher mapToEntity(TeacherDTO teacherDTO) throws DataMappingException {
         return entityForm(teacherDTO);
     }
 
     @Override
-    public TeacherDTO mapToDTO(Teacher teacher) {
+    public TeacherDTO mapToDTO(Teacher teacher) throws DataMappingException {
         return dtoForm(teacher);
     }
 

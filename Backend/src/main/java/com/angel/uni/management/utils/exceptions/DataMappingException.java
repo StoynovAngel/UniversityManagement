@@ -1,6 +1,6 @@
 package com.angel.uni.management.utils.exceptions;
 
-public class DataMappingException extends Exception {
+public class DataMappingException extends BadRequestException {
 
     public DataMappingException(String message) {
         super(message);

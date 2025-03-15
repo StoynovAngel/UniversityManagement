@@ -1,10 +1,12 @@
 package com.angel.uni.management.utils.mappers;
 
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.dto.GradeDTO;
 import com.angel.uni.management.dto.StudentDTO;
 import com.angel.uni.management.entity.Grade;
 import com.angel.uni.management.entity.Student;
 import com.angel.uni.management.interfaces.CustomRowMapper;
+import com.angel.uni.management.menu.gui.Page;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
 
 import java.sql.ResultSet;
@@ -42,12 +44,12 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
     }
 
     @Override
-    public Student mapToEntity(StudentDTO studentDTO) {
+    public Student mapToEntity(StudentDTO studentDTO) throws DataMappingException {
         return entityForm(studentDTO);
     }
 
     @Override
-    public StudentDTO mapToDTO(Student student) {
+    public StudentDTO mapToDTO(Student student) throws DataMappingException {
         return dtoForm(student);
     }
 
@@ -75,18 +77,26 @@ public class StudentMapper implements CustomRowMapper<StudentDTO, Student> {
         }
     }
 
-    private Student entityForm(StudentDTO studentDTO) {
-        Student newStudent = new Student();
-        newStudent.setUsername(studentDTO.username());
-        newStudent.setGrades(studentDTO.grades().stream().map(Mappers.getGradeMapper()::mapToEntity).toList());
-        newStudent.setAverageGradeOverall(studentDTO.averageGradeOverall());
-        return newStudent;
+    private Student entityForm(StudentDTO studentDTO) throws DataMappingException {
+        List<Grade> gradeList = new ArrayList<>();
+        for (GradeDTO grade : studentDTO.grades()) {
+            gradeList.add(GradeMapper.getInstance().mapToEntity(grade));
+        }
+        return new Student(
+              studentDTO.username(),
+              gradeList,
+              studentDTO.averageGradeOverall()
+        );
     }
 
-    private StudentDTO dtoForm(Student student) {
+    private StudentDTO dtoForm(Student student) throws DataMappingException {
+        List<GradeDTO> gradesList = new ArrayList<>();
+        for (Grade grade: student.getGrades()) {
+            gradesList.add(GradeMapper.getInstance().mapToDTO(grade));
+        }
         return new StudentDTO(
                 student.getUsername(),
-                student.getGrades().stream().map(Mappers.getGradeMapper()::mapToDTO).toList(),
+                gradesList,
                 student.getAverageGradeOverall()
         );
     }

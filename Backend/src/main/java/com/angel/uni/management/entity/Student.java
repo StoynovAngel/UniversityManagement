@@ -32,4 +32,10 @@ public class Student {
         this.id = id;
         this.username = username;
     }
+
+    public Student(String username, List<Grade> grades, double averageGradeOverall) {
+        this.username = username;
+        this.grades = grades;
+        this.averageGradeOverall = averageGradeOverall;
+    }
 }

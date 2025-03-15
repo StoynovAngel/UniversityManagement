@@ -1,5 +1,6 @@
 package com.angel.uni.management.utils.mappers;
 
+import com.angel.uni.management.dto.StudentDTO;
 import com.angel.uni.management.dto.SubjectDTO;
 import com.angel.uni.management.entity.Student;
 import com.angel.uni.management.entity.Subject;
@@ -9,6 +10,7 @@ import com.angel.uni.management.utils.exceptions.DataMappingException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,11 +41,11 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
         return instance;
     }
 
-    public Subject mapToEntity(SubjectDTO subjectDTO) {
+    public Subject mapToEntity(SubjectDTO subjectDTO) throws DataMappingException {
         return entityForm(subjectDTO);
     }
 
-    public SubjectDTO mapToDTO(Subject subject) {
+    public SubjectDTO mapToDTO(Subject subject) throws DataMappingException {
         return dtoForm(subject);
     }
 
@@ -52,23 +54,35 @@ public class SubjectMapper implements CustomRowMapper<SubjectDTO, Subject> {
         return mapForm(resultSet);
     }
 
-    private Subject entityForm(SubjectDTO subjectDTO) {
-        Subject newSubject = new Subject();
-        newSubject.setName(subjectDTO.name());
-        newSubject.setHoursPerWeek(subjectDTO.hoursPerWeek());
-        newSubject.setDescription(subjectDTO.description());
-        newSubject.setTeacher(Mappers.getTeacherMapper().mapToEntity(subjectDTO.teacher()));
-        newSubject.setStudentsAssignedToSubject(subjectDTO.students().stream().map(Mappers.getStudentMapper()::mapToEntity).toList());
-        return newSubject;
+    private Subject entityForm(SubjectDTO subjectDTO) throws DataMappingException {
+        Teacher teacher = TeacherMapper.getInstance().mapToEntity(subjectDTO.teacher());
+        List<Student> studentList = new ArrayList<>();
+
+        for(StudentDTO studentDTO: subjectDTO.students()) {
+            studentList.add(StudentMapper.getInstance().mapToEntity(studentDTO));
+        }
+        return new Subject(
+                subjectDTO.name(),
+                subjectDTO.hoursPerWeek(),
+                subjectDTO.description(),
+                teacher,
+                studentList
+        );
     }
 
-    private SubjectDTO dtoForm(Subject subject) {
+    private SubjectDTO dtoForm(Subject subject) throws DataMappingException {
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+
+        for(Student student: subject.getStudentsAssignedToSubject()) {
+            studentDTOS.add(StudentMapper.getInstance().mapToDTO(student));
+        }
+
         return new SubjectDTO(
                 subject.getName(),
                 subject.getHoursPerWeek(),
                 subject.getDescription(),
                 Mappers.getTeacherMapper().mapToDTO(subject.getTeacher()),
-                subject.getStudentsAssignedToSubject().stream().map(Mappers.getStudentMapper()::mapToDTO).toList()
+                studentDTOS
         );
     }
 
