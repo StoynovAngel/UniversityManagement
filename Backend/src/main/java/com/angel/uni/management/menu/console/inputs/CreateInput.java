@@ -6,8 +6,6 @@ import com.angel.uni.management.enums.GradeType;
 import com.angel.uni.management.interfaces.SimpleDTO;
 import com.angel.uni.management.utils.container.DependencyContainer;
 
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class CreateInput extends InputForms<SimpleDTO> {
@@ -16,33 +14,20 @@ public class CreateInput extends InputForms<SimpleDTO> {
     @Override
     public SimpleSubjectDTO inputSubjectForm() {
         while (true) {
-            try {
-                System.out.print("Please enter subject's name: ");
-                String subjectName = in.nextLine().trim();
+            System.out.print("Please enter subject's name: ");
+            String subjectName = in.nextLine().trim();
 
-                System.out.print("Please enter how many hours per week the subject is being studied: ");
-                int hoursPerWeek = in.nextInt();
-                in.nextLine();
+            System.out.print("Please enter how many hours per week the subject is being studied: ");
+            int hoursPerWeek = in.nextInt();
+            in.nextLine();
 
-                System.out.print("Please enter teacher's name. User must exist: ");
-                String teacherName = in.nextLine().trim();
+            System.out.print("Please enter teacher's name. User must exist: ");
+            String teacherName = in.nextLine().trim();
 
-                System.out.print("Please enter subject's description: ");
-                String subjectDescription = in.nextLine().trim();
+            System.out.print("Please enter subject's description: ");
+            String subjectDescription = in.nextLine().trim();
 
-                return new SimpleSubjectDTO(subjectName, hoursPerWeek, teacherName, subjectDescription);
-
-            } catch (InputMismatchException e) {
-                String errorMessage = "Hours per week must be an integer. Please try again.";
-                QueryLogger.logError(errorMessage, e.getMessage());
-                System.err.println(errorMessage);
-                in.nextLine();
-            } catch (NoSuchElementException e) {
-                String errorMessage = "No input found. Please try again.";
-                QueryLogger.logError(errorMessage, e.getMessage());
-                System.err.println(errorMessage);
-                in.nextLine();
-            }
+            return new SimpleSubjectDTO(subjectName, hoursPerWeek, teacherName, subjectDescription);
         }
     }
 
@@ -52,7 +37,7 @@ public class CreateInput extends InputForms<SimpleDTO> {
             System.out.print("Please enter grade's name: ");
             String gradeName = in.nextLine().trim();
             if (gradeName.isEmpty()) {
-                System.err.println("Grade name cannot be empty. Try again.");
+                System.out.println("Grade name cannot be empty. Try again.");
                 continue;
             }
 
@@ -60,7 +45,7 @@ public class CreateInput extends InputForms<SimpleDTO> {
             while (true) {
                 System.out.print("Student's mark: ");
                 if (!in.hasNextDouble()) {
-                    System.err.println("Input is not a valid number. Try again.");
+                    System.out.println("Input is not a valid number. Try again.");
                     QueryLogger.logError("Non-numeric input for mark in " + getClass().getSimpleName());
                     in.nextLine();
                     continue;
@@ -75,11 +60,11 @@ public class CreateInput extends InputForms<SimpleDTO> {
                 System.out.print("Please enter teacher's name. This user MUST exist: ");
                 teacherName = in.nextLine();
                 if (teacherName.isEmpty()) {
-                    System.err.println("Teacher's name cannot be empty. Try again.");
+                    System.out.println("Teacher's name cannot be empty. Try again.");
                     continue;
                 }
                 if (dependencyContainer.getTeacherInstance().read(teacherName).isEmpty()) {
-                    System.err.println("No such teacher found: " + teacherName + ". Try again.");
+                    System.out.println("No such teacher found: " + teacherName + ". Try again.");
                     continue;
                 }
                 break;
@@ -90,11 +75,11 @@ public class CreateInput extends InputForms<SimpleDTO> {
                 System.out.print("Please enter student's name. This user MUST exist: ");
                 studentName = in.nextLine();
                 if (studentName.isEmpty()) {
-                    System.err.println("Student's name cannot be empty. Try again.");
+                    System.out.println("Student's name cannot be empty. Try again.");
                     continue;
                 }
                 if (dependencyContainer.getStudentInstance().read(studentName).isEmpty()) {
-                    System.err.println("No such student found: " + studentName + ". Try again.");
+                    System.out.println("No such student found: " + studentName + ". Try again.");
                     continue;
                 }
                 break;
@@ -130,6 +115,7 @@ public class CreateInput extends InputForms<SimpleDTO> {
                 System.out.println("Invalid input. Please try again.");
                 QueryLogger.logError(errorMessage + " In " + getClass().getSimpleName());
             } else {
+
                 return dtoConstructor.apply(input);
             }
         }
@@ -168,17 +154,24 @@ public class CreateInput extends InputForms<SimpleDTO> {
 
     private String getGradeTypeToString(int choice) {
         while (true) {
-            return switch (choice) {
-                case 1 -> GradeType.FINAL_EXAM.toString();
-                case 2 -> GradeType.MID_EXAM.toString();
-                case 3 -> GradeType.ORAL.toString();
-                case 4 -> GradeType.PROJECT_EXAM.toString();
-                case 5 -> GradeType.HOMEWORK.toString();
-                default -> {
-                    System.err.println("Invalid choice. Must be between 1 and 5.");
-                    yield null;
+            switch (choice) {
+                case 1 -> {
+                    return GradeType.FINAL_EXAM.toString();
                 }
-            };
+                case 2 -> {
+                    return GradeType.MID_EXAM.toString();
+                }
+                case 3 -> {
+                    return GradeType.ORAL.toString();
+                }
+                case 4 -> {
+                    return GradeType.PROJECT_EXAM.toString();
+                }
+                case 5 -> {
+                    return GradeType.HOMEWORK.toString();
+                }
+                default -> System.out.println("Invalid choice");
+            }
         }
     }
 }

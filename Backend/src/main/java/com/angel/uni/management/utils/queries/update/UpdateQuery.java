@@ -18,7 +18,6 @@ public class UpdateQuery extends QueryUpdater {
     }
 
     public void updateSubjectDescription(String description, String name) {
-
         updateAndHandleExceptions(UpdateStatements.updateSubjectDescriptionBySubjectName(), description, name);
     }
 

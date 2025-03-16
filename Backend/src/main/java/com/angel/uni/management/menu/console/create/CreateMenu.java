@@ -42,10 +42,12 @@ public class CreateMenu extends Menu implements IMenu, Command {
         System.out.print("Please enter your choice (0-6): ");
 
         if (!in.hasNextInt()) {
-            System.err.println("Input is not a valid integer. Try again.");
+            System.out.flush();
+            System.out.println("Input is not a valid integer. Try again.");
             QueryLogger.logError("Non-integer input provided in " + getClass().getSimpleName());
             in.nextLine();
             navigateTo(getCreateMenu());
+            return;
         }
         int choice = in.nextInt();
         in.nextLine();
@@ -56,7 +58,7 @@ public class CreateMenu extends Menu implements IMenu, Command {
     public void handleNavigation(int choice) {
         ClassOptions option = ClassOptions.getByOptionNumber(choice);
         if (option == null) {
-            System.err.println("Choice out of range. Please select a valid option.");
+            System.out.println("Choice out of range. Please select a valid option.");
             QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
             return;
         }

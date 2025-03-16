@@ -23,16 +23,10 @@ public class QueryUpdater extends BaseQuery {
         } catch (IllegalArgumentException e) {
             QueryLogger.logError("Illegal argument: " + e.getMessage());
             System.err.println("Update unsuccessful.");
-        } catch (QueryExecutionException e) {
-            QueryLogger.logError("updateSingleException", sql, params, e);
-            System.err.println("Update unsuccessful.");
-        } catch (DatabasePropertiesException e) {
-            QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
-            System.err.println("Update unsuccessful.");
         }
     }
 
-    private void updateSingleRow(String sql, Object... params) throws DatabasePropertiesException, QueryExecutionException {
+    private void updateSingleRow(String sql, Object... params) {
         QueryValidator.inputValidator(params);
         try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
             setParameters(preparedStatement, params);
@@ -41,7 +35,6 @@ public class QueryUpdater extends BaseQuery {
         } catch (SQLException e) {
             String errorMessage = "Failed to update query: " + sql + " | Params: " + Arrays.toString(params);
             QueryLogger.logError(errorMessage, e);
-            throw new QueryExecutionException(errorMessage, e);
         }
     }
 }
