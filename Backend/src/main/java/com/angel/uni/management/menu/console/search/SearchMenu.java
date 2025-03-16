@@ -80,20 +80,21 @@ public class SearchMenu extends Menu implements IMenu {
     }
 
     protected <T> void getSpecificAttribute(int choice, T param) {
-        try {
-            switch (ClassOptions.getByOptionNumber(choice)) {
-                case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
-                case STUDENT -> searchType(getContainer().getStudentInstance(), param);
-                case GROUP -> searchType(getContainer().getGroupInstance(), param);
-                case GRADE -> searchType(getContainer().getGradeInstance(), param);
-                case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
-                case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
-                case EXIT -> exitApplication();
-                default -> System.err.println("Invalid choice.");
-            }
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            getInitialMenu().execute();
+        ClassOptions option = ClassOptions.getByOptionNumber(choice);
+        if (option == null) {
+            System.err.println("Choice out of range. Please select a valid option.");
+            QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
+            return;
+        }
+        switch (option) {
+            case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
+            case STUDENT -> searchType(getContainer().getStudentInstance(), param);
+            case GROUP -> searchType(getContainer().getGroupInstance(), param);
+            case GRADE -> searchType(getContainer().getGradeInstance(), param);
+            case SUBJECT -> searchType(getContainer().getSubjectInstance(), param);
+            case RETURN_TO_INITIAL_MENU -> InitialMenu.getInstance().execute();
+            case EXIT -> exitApplication();
+            default -> System.err.println("Invalid choice.");
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.QueryLogger;
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.DatabasePropertiesException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 
 import java.sql.PreparedStatement;
@@ -26,13 +26,13 @@ public class QueryUpdater extends BaseQuery {
         } catch (QueryExecutionException e) {
             QueryLogger.logError("updateSingleException", sql, params, e);
             System.err.println("Update unsuccessful.");
-        } catch (DatabaseConnectionException e) {
+        } catch (DatabasePropertiesException e) {
             QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
             System.err.println("Update unsuccessful.");
         }
     }
 
-    private void updateSingleRow(String sql, Object... params) throws DatabaseConnectionException, QueryExecutionException {
+    private void updateSingleRow(String sql, Object... params) throws DatabasePropertiesException, QueryExecutionException {
         QueryValidator.inputValidator(params);
         try (PreparedStatement preparedStatement = getPreparedStatement(sql)) {
             setParameters(preparedStatement, params);

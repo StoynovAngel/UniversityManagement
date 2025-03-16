@@ -8,10 +8,6 @@ import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.console.Menu;
 import com.angel.uni.management.menu.console.inputs.UpdateForm;
-import com.angel.uni.management.utils.exceptions.IncorrectInputException;
-
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 
 public class UpdateMenu extends Menu implements Command {
 
@@ -46,32 +42,33 @@ public class UpdateMenu extends Menu implements Command {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-6): ");
-        try {
-            int choice = in.nextInt();
-            handleNavigation(choice);
-        } catch (InputMismatchException e) {
-            QueryLogger.logError("Input should be an integer", e.getMessage());
-            System.err.println("Cannot proceed because the input is not correct. Try again.");
-            exitApplication();
+        if (!in.hasNextInt()) {
+            System.err.println("Input is not a valid integer. Try again.");
+            QueryLogger.logError("Non-integer input provided in " + getClass().getSimpleName());
+            in.nextLine();
+            navigateTo(getUpdateMenu());
         }
+        int choice = in.nextInt();
+        in.nextLine();
+        handleNavigation(choice);
     }
 
     @Override
     public void handleNavigation(int choice) {
-        try {
-            switch (ClassOptions.getByOptionNumber(choice)) {
-                case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
-                case TEACHER -> updateTeacherName();
-                case SUBJECT -> updateSubjectDescription();
-                case GRADE -> updateGradeMark();
-                case STUDENT -> updateStudentUsername();
-                case GROUP -> updateGroupName();
-                case EXIT -> exitApplication();
-                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
-            }
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            getInitialMenu().execute();
+        ClassOptions option = ClassOptions.getByOptionNumber(choice);
+        if (option == null) {
+            System.err.println("Choice out of range. Please select a valid option.");
+            QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
+            return;
+        }
+        switch (option) {
+            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+            case TEACHER -> updateTeacherName();
+            case SUBJECT -> updateSubjectDescription();
+            case GRADE -> updateGradeMark();
+            case STUDENT -> updateStudentUsername();
+            case GROUP -> updateGroupName();
+            case EXIT -> exitApplication();
         }
     }
 
@@ -81,68 +78,27 @@ public class UpdateMenu extends Menu implements Command {
     }
 
     private void updateTeacherName() {
-        try {
-            UpdateTeacherDTO updateTeacherDTO = updateGenericForm(updateForm.inputTeacherForm());
-            update(getContainer().getTeacherInstance(), updateTeacherDTO);
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
+        UpdateTeacherDTO updateTeacherDTO = updateForm.inputTeacherForm();
+        update(getContainer().getTeacherInstance(), updateTeacherDTO);
     }
 
     private void updateSubjectDescription() {
-        try {
-            UpdateSubjectDTO updateSubjectDTO = updateGenericForm(updateForm.inputSubjectForm());
-            update(getContainer().getSubjectInstance(), updateSubjectDTO);
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
+        UpdateSubjectDTO updateSubjectDTO = updateForm.inputSubjectForm();
+        update(getContainer().getSubjectInstance(), updateSubjectDTO);
     }
 
     private void updateGradeMark() {
-        try {
-            UpdateGradeDTO updateGradeDTO = updateGenericForm(updateForm.inputGradeForm());
-            update(getContainer().getGradeInstance(), updateGradeDTO);
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
+        UpdateGradeDTO updateGradeDTO = updateForm.inputGradeForm();
+        update(getContainer().getGradeInstance(), updateGradeDTO);
     }
 
     private void updateStudentUsername() {
-        try {
-            UpdateStudentDTO updateStudentDTO = updateGenericForm(updateForm.inputStudentForm());
-            update(getContainer().getStudentInstance(), updateStudentDTO);
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
+        UpdateStudentDTO updateStudentDTO = updateForm.inputStudentForm();
+        update(getContainer().getStudentInstance(), updateStudentDTO);
     }
 
     private void updateGroupName() {
-        try {
-            UpdateGroupDTO updateGroupDTO = updateGenericForm(updateForm.inputGroupForm());
-            update(getContainer().getGroupInstance(), updateGroupDTO);
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
-    }
-
-    private <T> T updateGenericForm(T dto) throws IncorrectInputException {
-        try {
-            return dto;
-        } catch (InputMismatchException e) {
-            String errorMessage = "Token does not match the Integer regular expression, or is out of range";
-            System.err.println("Incorrect id provided. Please write a integer value next time.");
-            QueryLogger.logError(errorMessage, e.getMessage());
-            throw new IncorrectInputException(errorMessage);
-        } catch (NoSuchElementException e) {
-            String errorMessage = "Element being requested does not exist";
-            System.err.println("Some of the elements might be missing. Try again.");
-            QueryLogger.logError(errorMessage, e.getMessage());
-            throw new IncorrectInputException(errorMessage);
-        }
+        UpdateGroupDTO updateGroupDTO = updateForm.inputGroupForm();
+        update(getContainer().getGroupInstance(), updateGroupDTO);
     }
 }

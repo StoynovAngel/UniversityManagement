@@ -43,25 +43,23 @@ public class DeleteMenu extends Menu implements Command {
         try {
             int choice = in.nextInt();
             handleNavigation(choice);
+        } catch (IncorrectInputException e) {
+            System.err.println("Returning to initial menu");
+            navigateTo(getDeleteMenu());
         } catch (InputMismatchException e) {
             QueryLogger.logError("Input should be an integer", e.getMessage());
             System.err.println("Cannot proceed because the input is not correct. Try again.");
-            exitApplication();
+            navigateTo(getDeleteMenu());
         }
     }
 
     @Override
-    public void handleNavigation(int choice) {
-        try {
-            switch (ClassOptions.getByOptionNumber(choice)) {
-                case SUBJECT -> deleteSubject();
-                case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
-                case EXIT -> exitApplication();
-                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
-            }
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            getInitialMenu().execute();
+    public void handleNavigation(int choice) throws IncorrectInputException {
+        switch (ClassOptions.getByOptionNumber(choice)) {
+            case SUBJECT -> deleteSubject();
+            case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
+            case EXIT -> exitApplication();
+            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }
 
@@ -70,28 +68,19 @@ public class DeleteMenu extends Menu implements Command {
         deleteCommand.execute();
     }
 
-    private void deleteSubject() {
-        try {
-            delete(getContainer().getSubjectInstance(), deleteSubjectForm());
-        } catch (IncorrectInputException e) {
-            System.out.println("Unsuccessful update. Returning to UpdateMenu");
-            navigateTo(getUpdateMenu());
-        }
+    private void deleteSubject() throws IncorrectInputException {
+        delete(getContainer().getSubjectInstance(), deleteSubjectForm());
     }
 
     private long deleteSubjectForm() throws IncorrectInputException {
-        try {
-            System.out.print("Subject id to be deleted: ");
-            if (!in.hasNextLong()) {
-                in.nextLine();
-                throw new InputMismatchException("Invalid input for Subject id. Expected a long.");
-            }
-            return in.nextLong();
-        } catch (InputMismatchException e) {
-            String errorMessage = "Token does not match the Integer regular expression, or is out of range";
-            System.err.println("Incorrect id provided. Please write a integer value next time.");
-            QueryLogger.logError(errorMessage, e.getMessage());
+        System.out.print("Subject id to be deleted: ");
+        if (!in.hasNextLong()) {
+            in.nextLine();
+            String errorMessage = "Invalid input for Subject id. Expected a long.";
+            System.err.println("Incorrect id provided. Please write an integer value next time.");
+            QueryLogger.logError(errorMessage);
             throw new IncorrectInputException(errorMessage);
         }
+        return in.nextLong();
     }
 }

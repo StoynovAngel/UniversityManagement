@@ -16,7 +16,7 @@ public abstract class Menu implements IMenu, Command {
 
     protected final Scanner in = new Scanner(System.in);
 
-    protected  <T extends Command> void navigateTo(T menu) {
+    protected <T extends Command> void navigateTo(T menu) {
         if(menu == null) {
             throw new NullPointerException("The menu you are trying to access does not exist");
         }

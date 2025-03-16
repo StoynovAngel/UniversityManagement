@@ -4,7 +4,7 @@ import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.QueryResult;
 import com.angel.uni.management.utils.exceptions.DataMappingException;
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.DatabasePropertiesException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 
 import java.sql.PreparedStatement;
@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Provides functionality for executing SELECT, UPDATE, DELETE, and INSERT SQL statements.
@@ -34,18 +33,18 @@ public class QueryExecutor extends BaseQuery {
         } catch (QueryExecutionException e) {
             QueryLogger.logError("Failed to execute query: " + sql, e);
             return new QueryResult<>(null, "Failed to execute query: " + e.getMessage());
-        } catch (DatabaseConnectionException e) {
+        } catch (DatabasePropertiesException e) {
             QueryLogger.logError("Database connection error", e);
             return new QueryResult<>(null, "Database connection error: " + e.getMessage());
         }
     }
 
-    private <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
+    private <T> T executeSelect(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabasePropertiesException {
         List<T> results = executeQueryList(sql, mapper, params);
         return results.isEmpty() ? null : results.get(0);
     }
 
-    protected <T> List<T> executeQueryList(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException, DatabaseConnectionException {
+    protected <T> List<T> executeQueryList(String sql, CustomRowMapper<?, T> mapper, Object... params) throws QueryExecutionException {
         validateInputs(sql, mapper, params);
         List<T> results = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 package com.angel.uni.management.config;
 
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.DatabasePropertiesException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +19,7 @@ public final class DatabaseConnection {
         throw new UnsupportedOperationException("Should not instantiate " + getClass().getSimpleName());
     }
 
-    public static Connection getConnection() throws DatabaseConnectionException {
+    public static Connection getConnection() {
         if (conn == null) {
             try {
                 DatabaseProperties databaseProperties = DatabaseProperties.getInstance();
@@ -27,10 +27,14 @@ public final class DatabaseConnection {
                         databaseProperties.getDatabaseUrl(),
                         databaseProperties.getProperties()
                 );
-                System.out.println("Database connected successfully!");
             } catch (SQLException e) {
-                String errorMessage = "Failed to establish a database connection: " + e.getMessage();
-                throw new DatabaseConnectionException(errorMessage, e);
+                String errorMessage = "Exiting the program. Failed to establish a database connection: " + e.getMessage();
+                QueryLogger.logError(errorMessage);
+                System.exit(1);
+            } catch (DatabasePropertiesException e) {
+                String errorMessage = "Exiting the program. Properties were not correct: " + e.getMessage();
+                QueryLogger.logError(errorMessage);
+                System.exit(1);
             }
         }
         return conn;

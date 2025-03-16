@@ -1,6 +1,6 @@
 package com.angel.uni.management.config;
 
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.DatabasePropertiesException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,11 +38,11 @@ public final class DatabaseProperties {
         return instance;
     }
 
-    public Properties getProperties() throws DatabaseConnectionException {
+    public Properties getProperties() throws DatabasePropertiesException {
         if (properties == null) {
             String errorMessage = "Properties object is null.";
             QueryLogger.logError(errorMessage);
-            throw new DatabaseConnectionException(errorMessage);
+            throw new DatabasePropertiesException(errorMessage);
         }
 
         Properties props = new Properties();
@@ -51,13 +51,13 @@ public final class DatabaseProperties {
         String ssl = properties.getProperty(DatabaseConstants.DATABASE_SSL);
 
         if (user == null || user.trim().isEmpty()) {
-            throw new DatabaseConnectionException("Database username is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+            throw new DatabasePropertiesException("Database username is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
         }
         if (password == null || password.trim().isEmpty()) {
-            throw new DatabaseConnectionException("Database password is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+            throw new DatabasePropertiesException("Database password is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
         }
         if (ssl == null || ssl.trim().isEmpty()) {
-            throw new DatabaseConnectionException("Database SSL configuration  is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
+            throw new DatabasePropertiesException("Database SSL configuration  is incorrectly set up. Also it could be missing or empty. Check " + DatabaseConstants.class.getSimpleName());
         }
 
         props.setProperty("user", user);

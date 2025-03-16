@@ -3,7 +3,7 @@ package com.angel.uni.management.command;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.Service;
 
-public class CreateCommand<T, C> implements Command {
+public class CreateCommand<C> implements Command {
 
     private final Service<?, ?, C> service;
     private final C dto;

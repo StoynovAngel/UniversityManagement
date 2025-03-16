@@ -1,6 +1,6 @@
 package com.angel.uni.management.config;
 
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
+import com.angel.uni.management.utils.exceptions.DatabasePropertiesException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,8 +40,9 @@ public final class DatabaseInitializer {
         } catch (SQLException e) {
             String errorMessage = "Error executing SQL from file: " + filename;
             QueryLogger.logError(errorMessage, e);
-        } catch (DatabaseConnectionException e) {
-            QueryLogger.logError("Cannot initialize the database tables nor insert into them.");
+        } catch (IOException e) {
+            String errorMessage = "Failed to read SQL file: " + filename;
+            QueryLogger.logError(errorMessage, e);
         }
     }
 
@@ -50,19 +51,13 @@ public final class DatabaseInitializer {
         executeSqlStatements(queries, connection);
     }
 
-    private static String getSqlFile(String filename) throws DatabaseConnectionException {
-        try {
-            Path path = Paths.get(filename);
-            if (!Files.exists(path)) {
-                String errorMessage = "File with this name is not found: " + filename;
-                throw new FileNotFoundException(errorMessage);
-            }
-            return new String(Files.readAllBytes(path));
-        } catch (IOException e) {
-            String errorMessage = "Failed to read SQL file: " + filename;
-            QueryLogger.logError(errorMessage, e);
-            throw new DatabaseConnectionException(errorMessage, e);
+    private static String getSqlFile(String filename) throws IOException {
+        Path path = Paths.get(filename);
+        if (!Files.exists(path)) {
+            String errorMessage = "File with this name is not found: " + filename;
+            throw new FileNotFoundException(errorMessage);
         }
+        return new String(Files.readAllBytes(path));
     }
 
     private static String[] splitSqlIntoQueries(String sql) {

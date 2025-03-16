@@ -1,7 +1,6 @@
 package com.angel.uni.management.utils.queries;
 
 import com.angel.uni.management.config.DatabaseConnection;
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 
 import java.sql.*;
 
@@ -11,7 +10,7 @@ import java.sql.*;
 
 public class BaseQuery {
 
-    protected Connection getConnection() throws DatabaseConnectionException {
+    protected Connection getConnection() {
         return DatabaseConnection.getConnection();
     }
 
@@ -20,7 +19,7 @@ public class BaseQuery {
         preparedStatement.executeUpdate();
     }
 
-    protected PreparedStatement getPreparedStatement(String query) throws DatabaseConnectionException, SQLException {
+    protected PreparedStatement getPreparedStatement(String query) throws SQLException {
         if (query == null || query.isEmpty()) throw new IllegalArgumentException("Query is null or empty.");
         return getConnection().prepareStatement(query);
     }

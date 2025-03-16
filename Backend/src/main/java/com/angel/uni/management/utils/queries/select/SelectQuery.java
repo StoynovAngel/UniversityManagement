@@ -5,7 +5,6 @@ import com.angel.uni.management.entity.*;
 import com.angel.uni.management.interfaces.CustomRowMapper;
 import com.angel.uni.management.utils.QueryResult;
 import com.angel.uni.management.utils.exceptions.DataRetrievalException;
-import com.angel.uni.management.utils.exceptions.DatabaseConnectionException;
 import com.angel.uni.management.utils.exceptions.QueryExecutionException;
 import com.angel.uni.management.utils.mappers.*;
 import com.angel.uni.management.utils.queries.QueryExecutor;
@@ -76,9 +75,6 @@ public class SelectQuery extends QueryExecutor {
             return Optional.empty();
         } catch (QueryExecutionException e) {
             QueryLogger.logError("Failed to retrieve grades for student: " + name, e);
-            return Optional.empty();
-        } catch (DatabaseConnectionException e) {
-            QueryLogger.logError("Connection failed to be established. Message: " + e.getMessage());
             return Optional.empty();
         }
     }
