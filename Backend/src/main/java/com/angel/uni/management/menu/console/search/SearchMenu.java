@@ -1,7 +1,6 @@
 package com.angel.uni.management.menu.console.search;
 
 import com.angel.uni.management.command.ReadCommand;
-import com.angel.uni.management.config.QueryLogger;
 import com.angel.uni.management.enums.ClassOptions;
 import com.angel.uni.management.enums.SearchOptions;
 import com.angel.uni.management.interfaces.Command;
@@ -9,9 +8,6 @@ import com.angel.uni.management.interfaces.IMenu;
 import com.angel.uni.management.interfaces.Service;
 import com.angel.uni.management.menu.console.InitialMenu;
 import com.angel.uni.management.menu.console.Menu;
-import com.angel.uni.management.utils.exceptions.IncorrectInputException;
-
-import java.util.InputMismatchException;
 
 public class SearchMenu extends Menu implements IMenu {
     private static volatile SearchMenu instance;
@@ -65,6 +61,9 @@ public class SearchMenu extends Menu implements IMenu {
 
     private <T, P> void searchType(Service<T, ?, ?> service, P param) {
         Command readCommand = new ReadCommand<>(service, param);
+        if (readCommand == null) {
+            navigateTo(getSearchMenu());
+        }
         readCommand.execute();
     }
 

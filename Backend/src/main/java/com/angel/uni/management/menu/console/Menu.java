@@ -34,15 +34,17 @@ public abstract class Menu implements IMenu, Command {
     }
 
     protected Long idHandler() {
-        System.out.print("Enter valid id: ");
-        if (!in.hasNextLong()) {
-            System.out.flush();
-            System.out.println("Input is not a valid long. Try again.");
-            QueryLogger.logError("Non-long input provided in " + getClass().getSimpleName());
-            in.nextLine();
-            navigateTo(getSearchByIdMenu());
+        while (true) {
+            System.out.print("Enter valid id: ");
+            if (in.hasNextLong()) {
+                return in.nextLong();
+            } else {
+                System.out.flush();
+                System.out.println("Input is not a valid long. Try again.");
+                QueryLogger.logError("Non-long input provided in " + getClass().getSimpleName());
+                in.next();
+            }
         }
-        return in.nextLong();
     }
 
     protected String nameHandler() {

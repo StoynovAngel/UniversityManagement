@@ -51,7 +51,7 @@ public class DeleteMenu extends Menu implements Command {
             case SUBJECT -> deleteSubject();
             case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
             case EXIT -> exitApplication();
-            default -> System.out.println("Incorrect choice provided " + choice + ". It must be either 0,2 or 6)");
+            default -> System.out.println("Incorrect choice provided " + choice + ". It must be either 0,2 or 6");
         }
     }
 

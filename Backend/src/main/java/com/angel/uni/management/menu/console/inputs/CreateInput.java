@@ -13,57 +13,29 @@ public class CreateInput extends InputForms<SimpleDTO> {
 
     @Override
     public SimpleSubjectDTO inputSubjectForm() {
-        while (true) {
-            System.out.print("Please enter subject's name: ");
-            String subjectName = in.nextLine().trim();
-            while (checkIfStringIsEmpty(subjectName)) {
-                System.out.println("Subject's name cannot be empty.");
-                System.out.print("Please enter subject's name: ");
-                subjectName = in.nextLine().trim();
-            }
+        System.out.print("Please enter subject's name: ");
+        String subjectName = validateStringInput();
 
-            System.out.print("Please enter how many hours per week the subject is being studied: ");
-            while (!in.hasNextInt()) {
-                System.out.println("Please enter a valid number for hours.");
-                System.out.print("Please enter how many hours per week the subject is being studied: ");
-                in.next();
-            }
-            int hoursPerWeek = in.nextInt();
-            while (hoursPerWeek <= 0) {
-                System.out.println("Hours per week must be greater than 0.");
-                System.out.print("Please enter how many hours per week the subject is being studied: ");
-                hoursPerWeek = in.nextInt();
-            }
-            in.nextLine();
-            String teacherName = searchForTeacher();
+        System.out.print("Please enter how many hours per week the subject is being studied: ");
+        int hoursPerWeek = validateHoursPerWeek();
+        in.nextLine();
 
-            System.out.print("Please enter subject's description: ");
-            String subjectDescription = in.nextLine().trim();
-            while (subjectDescription.isEmpty()) {
-                System.out.println("Subject's description cannot be empty.");
-                System.out.print("Please enter subject's description: ");
-                subjectDescription = in.nextLine().trim();
-            }
+        String teacherName = searchForTeacher();
+        System.out.print("Please enter subject's description: ");
+        String subjectDescription = validateStringInput();
 
-            return new SimpleSubjectDTO(subjectName, hoursPerWeek, teacherName, subjectDescription);
-        }
+        return new SimpleSubjectDTO(subjectName, hoursPerWeek, teacherName, subjectDescription);
     }
 
     @Override
     public SimpleGradeDTO inputGradeForm() {
-        while (true) {
-            System.out.print("Please enter grade's name: ");
-            String gradeName = in.nextLine().trim();
-            if (checkIfStringIsEmpty(gradeName)) {
-                System.out.println("Grade name cannot be empty. Try again.");
-                continue;
-            }
-            double mark = validateStudentMark();
-            String teacherName = searchForTeacher();
-            String studentName = searchForStudent();
-            String gradeType = chooseGradeType();
-            return new SimpleGradeDTO(gradeName, mark, teacherName, studentName, gradeType);
-        }
+        System.out.print("Please enter grade's name: ");
+        String gradeName = validateStringInput();
+        double mark = validateStudentMark();
+        String teacherName = searchForTeacher();
+        String studentName = searchForStudent();
+        String gradeType = chooseGradeType();
+        return new SimpleGradeDTO(gradeName, mark, teacherName, studentName, gradeType);
     }
 
     @Override
@@ -79,6 +51,33 @@ public class CreateInput extends InputForms<SimpleDTO> {
     @Override
     public SimpleGroupDTO inputGroupForm() {
         return createFormForSingleStringInput(SimpleGroupDTO::new, "Enter group name: ");
+    }
+
+    private String validateStringInput() {
+        while (true) {
+            String string = in.nextLine().trim();
+            if (checkIfStringIsEmpty(string)) {
+                System.out.print("String must not be null or empty. Retry: ");
+                continue;
+            }
+            return string;
+        }
+    }
+
+    private int validateHoursPerWeek() {
+        System.out.print("Please enter how many hours per week the subject is being studied: ");
+        while (!in.hasNextInt()) {
+            System.out.println("Please enter a valid number for hours.");
+            System.out.print("Please enter how many hours per week the subject is being studied: ");
+            in.next();
+        }
+        int hoursPerWeek = in.nextInt();
+        while (hoursPerWeek <= 0) {
+            System.out.println("Hours per week must be greater than 0.");
+            System.out.print("Please enter how many hours per week the subject is being studied: ");
+            hoursPerWeek = in.nextInt();
+        }
+        return hoursPerWeek;
     }
 
     private double validateStudentMark() {
@@ -144,11 +143,10 @@ public class CreateInput extends InputForms<SimpleDTO> {
             String input = in.nextLine();
 
             if (input == null || input.trim().isEmpty()) {
-                String errorMessage = "Input is either null or empty for: " + prompt;
-                System.out.println("Invalid input. Please try again.");
-                QueryLogger.logError(errorMessage + " In " + getClass().getSimpleName());
+                System.out.println("Invalid input. Empty input. Please try again.");
+            } else if(input.matches(".*\\d.*")) {
+                System.out.println("Invalid input. It must not contain numeric value.");
             } else {
-
                 return dtoConstructor.apply(input);
             }
         }
