@@ -37,12 +37,17 @@ public final class DatabaseInitializer {
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
             executeSqlFile(getSqlFile(filename), connection);
+        } catch (IllegalArgumentException e) {
+            QueryLogger.logError("Error occurred in the filename:" + filename, e.getMessage());
+            System.exit(1);
         } catch (SQLException e) {
             String errorMessage = "Error executing SQL from file: " + filename;
             QueryLogger.logError(errorMessage, e);
+            System.exit(1);
         } catch (IOException e) {
             String errorMessage = "Failed to read SQL file: " + filename;
             QueryLogger.logError(errorMessage, e);
+            System.exit(1);
         }
     }
 

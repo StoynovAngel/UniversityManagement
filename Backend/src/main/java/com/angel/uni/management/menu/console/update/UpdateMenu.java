@@ -61,6 +61,9 @@ public class UpdateMenu extends Menu implements Command {
     }
 
     private <U> void update(Service<?, U, ?> service, U dto) {
+        if(dto == null) {
+            navigateTo(getUpdateMenu());
+        }
         Command updateCommand = new UpdateCommand<>(service, dto);
         updateCommand.execute();
     }

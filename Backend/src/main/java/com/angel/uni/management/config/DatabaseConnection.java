@@ -28,11 +28,13 @@ public final class DatabaseConnection {
                         databaseProperties.getProperties()
                 );
             } catch (SQLException e) {
-                String errorMessage = "Exiting the program. Failed to establish a database connection: " + e.getMessage();
+                System.out.println("Cannot proceed... Shutting down...");
+                String errorMessage = "Exiting the program. Failed to establish a database connection in " + DatabaseConnection.class.getSimpleName() + ": " + e.getMessage();
                 QueryLogger.logError(errorMessage);
                 System.exit(1);
             } catch (DatabasePropertiesException e) {
-                String errorMessage = "Exiting the program. Properties were not correct: " + e.getMessage();
+                System.out.println("Cannot proceed... Shutting down...");
+                String errorMessage = "Exiting the program. In class " + DatabaseProperties.class.getSimpleName() + " Properties were not correct: " + e.getMessage();
                 QueryLogger.logError(errorMessage);
                 System.exit(1);
             }

@@ -11,6 +11,10 @@ public class UpdateForm extends InputForms<SimpleDTO> {
     public UpdateTeacherDTO inputTeacherForm() {
         long id = validateIdInput();
         in.nextLine();
+        if (dependencyContainer.getTeacherInstance().read(id).isEmpty()) {
+            System.out.println("Teacher with this id does not exist: " + id);
+            return null;
+        }
         System.out.print("New name: ");
         String newTeacherName = validateUserProperty();
         return new UpdateTeacherDTO(newTeacherName, id);
@@ -29,6 +33,10 @@ public class UpdateForm extends InputForms<SimpleDTO> {
     public UpdateGradeDTO inputGradeForm() {
         long id = validateIdInput();
         in.nextLine();
+        if (dependencyContainer.getGradeInstance().read(id).isEmpty()) {
+            System.out.println("Grade with this id does not exist: " + id);
+            return null;
+        }
         double mark = validateDoubleInput();
         return new UpdateGradeDTO(mark, id);
     }
@@ -37,6 +45,10 @@ public class UpdateForm extends InputForms<SimpleDTO> {
     public UpdateStudentDTO inputStudentForm() {
         long id = validateIdInput();
         in.nextLine();
+        if (dependencyContainer.getStudentInstance().read(id).isEmpty()) {
+            System.out.println("Student with this id does not exist: " + id);
+            return null;
+        }
         System.out.print("New student name: ");
         String studentUsername = validateUserProperty();
         return new UpdateStudentDTO(studentUsername, id);
@@ -46,6 +58,10 @@ public class UpdateForm extends InputForms<SimpleDTO> {
     public UpdateGroupDTO inputGroupForm() {
         long id = validateIdInput();
         in.nextLine();
+        if (dependencyContainer.getGroupInstance().read(id).isEmpty()) {
+            System.out.println("Group with this id does not exist: " + id);
+            return null;
+        }
         System.out.print("New group name: ");
         String name = validateStringInput();
         return new UpdateGroupDTO(name, id);

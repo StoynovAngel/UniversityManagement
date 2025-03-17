@@ -87,6 +87,7 @@ public final class DatabaseProperties {
             properties.load(input);
         } catch (IOException e) {
             QueryLogger.logError("Failed to load " + DatabaseConstants.CONFIG_FILE + " file", e);
+            System.exit(1);
         }
     }
 }
