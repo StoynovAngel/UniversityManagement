@@ -42,31 +42,20 @@ public class SearchMenu extends Menu implements IMenu {
 
     @Override
     public void handleUserChoice() {
-        System.out.print("Please enter your choice (0-3): ");
-        try {
-            int choice = in.nextInt();
-            System.out.println(choice);
-            handleNavigation(choice);
-        } catch (InputMismatchException e) {
-            QueryLogger.logError("Input should be an integer" , e.getMessage());
-            System.err.println("Cannot proceed because the input is not correct. Try again.");
-            exitApplication();
-        }
+        System.out.print("Please enter your choice(0-3): ");
+        int choice = userChoiceHandler(getSearchMenu());
+        handleNavigation(choice);
     }
 
     @Override
     public void handleNavigation(int choice) {
-        try{
-            switch (SearchOptions.getByOptionNumber(choice)) {
-                case SEARCH_BY_ID -> getSearchByIdMenu().execute();
-                case SEARCH_BY_NAME -> getSearchByNameMenu().execute();
-                case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
-                case EXIT -> exitApplication();
-                default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
-            }
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            getInitialMenu().execute();
+        SearchOptions searchOptions = navigationHandler(SearchOptions.class, choice);
+        switch (searchOptions) {
+            case SEARCH_BY_ID -> getSearchByIdMenu().execute();
+            case SEARCH_BY_NAME -> getSearchByNameMenu().execute();
+            case RETURN_TO_INITIAL_MENU -> getInitialMenu().execute();
+            case EXIT -> exitApplication();
+            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
         }
     }
 
@@ -80,12 +69,7 @@ public class SearchMenu extends Menu implements IMenu {
     }
 
     protected <T> void getSpecificAttribute(int choice, T param) {
-        ClassOptions option = ClassOptions.getByOptionNumber(choice);
-        if (option == null) {
-            System.err.println("Choice out of range. Please select a valid option.");
-            QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
-            return;
-        }
+        ClassOptions option = navigationHandler(ClassOptions.class, choice);
         switch (option) {
             case TEACHER -> searchType(getContainer().getTeacherInstance(), param);
             case STUDENT -> searchType(getContainer().getStudentInstance(), param);

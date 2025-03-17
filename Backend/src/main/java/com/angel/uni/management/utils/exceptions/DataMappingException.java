@@ -6,6 +6,10 @@ public class DataMappingException extends Exception {
         super(message);
     }
 
+    public DataMappingException(Throwable e) {
+        super(e);
+    }
+
     public DataMappingException(String message, Throwable e) {
         super(message, e);
     }

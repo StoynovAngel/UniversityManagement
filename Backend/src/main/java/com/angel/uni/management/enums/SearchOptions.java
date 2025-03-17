@@ -1,12 +1,13 @@
 package com.angel.uni.management.enums;
 
 import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.interfaces.OptionSelectable;
 import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-public enum SearchOptions {
+public enum SearchOptions implements OptionSelectable<SearchOptions> {
 
     SEARCH_BY_ID(1, "Search by id"),
     SEARCH_BY_NAME(2, "Search by name"),
@@ -35,14 +36,17 @@ public enum SearchOptions {
                 .forEach(searchOptions -> System.out.println(searchOptions.getOptionsNumber() + ". " + searchOptions.getDescription()));
     }
 
-    public static SearchOptions getByOptionNumber(int optionNumber) throws IncorrectInputException {
+    public static SearchOptions getByOptionNumber(int optionNumber) {
         for (SearchOptions option : SearchOptions.values()) {
             if (option.getOptionsNumber() == optionNumber) {
                 return option;
             }
         }
-        String errorMessage = "Invalid option number: " + optionNumber;
-        QueryLogger.logError(errorMessage);
-        throw new IncorrectInputException(errorMessage);
+        return null;
+    }
+
+    @Override
+    public int getOptionNumber() {
+        return optionsNumber;
     }
 }

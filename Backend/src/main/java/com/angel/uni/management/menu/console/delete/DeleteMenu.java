@@ -40,26 +40,18 @@ public class DeleteMenu extends Menu implements Command {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-6): ");
-        try {
-            int choice = in.nextInt();
-            handleNavigation(choice);
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            navigateTo(getDeleteMenu());
-        } catch (InputMismatchException e) {
-            QueryLogger.logError("Input should be an integer", e.getMessage());
-            System.err.println("Cannot proceed because the input is not correct. Try again.");
-            navigateTo(getDeleteMenu());
-        }
+        int choice = userChoiceHandler(getDeleteMenu());
+        handleNavigation(choice);
     }
 
     @Override
-    public void handleNavigation(int choice) throws IncorrectInputException {
-        switch (ClassOptions.getByOptionNumber(choice)) {
+    public void handleNavigation(int choice) {
+        ClassOptions option = navigationHandler(ClassOptions.class, choice);
+        switch (option) {
             case SUBJECT -> deleteSubject();
             case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
             case EXIT -> exitApplication();
-            default -> System.err.println("Incorrect choice provided " + choice + ". It must be between (0-3)");
+            default -> System.out.println("Incorrect choice provided " + choice + ". It must be either 0,2 or 6)");
         }
     }
 
@@ -68,18 +60,17 @@ public class DeleteMenu extends Menu implements Command {
         deleteCommand.execute();
     }
 
-    private void deleteSubject() throws IncorrectInputException {
+    private void deleteSubject() {
         delete(getContainer().getSubjectInstance(), deleteSubjectForm());
     }
 
-    private long deleteSubjectForm() throws IncorrectInputException {
+    private long deleteSubjectForm()  {
         System.out.print("Subject id to be deleted: ");
         if (!in.hasNextLong()) {
             in.nextLine();
             String errorMessage = "Invalid input for Subject id. Expected a long.";
             System.err.println("Incorrect id provided. Please write an integer value next time.");
             QueryLogger.logError(errorMessage);
-            throw new IncorrectInputException(errorMessage);
         }
         return in.nextLong();
     }

@@ -3,7 +3,6 @@ package com.angel.uni.management.menu.console;
 import com.angel.uni.management.enums.MenuOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
-import com.angel.uni.management.utils.exceptions.IncorrectInputException;
 
 public class InitialMenu extends Menu implements IMenu, Command {
     private static volatile InitialMenu instance;
@@ -36,24 +35,21 @@ public class InitialMenu extends Menu implements IMenu, Command {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-4): ");
-        int choice = in.nextInt();
+        int choice = userChoiceHandler(getInitialMenu());
         handleNavigation(choice);
     }
 
     @Override
     public void handleNavigation(int choice) {
-        try {
-            switch (MenuOptions.getByOptionNumber(choice)) {
-                case EXIT -> exitApplication();
-                case SEARCH -> navigateTo(getSearchMenu());
-                case CREATE -> navigateTo(getCreateMenu());
-                case DELETE -> navigateTo(getDeleteMenu());
-                case UPDATE -> navigateTo(getUpdateMenu());
-                default -> System.err.println("Invalid choice. Please enter a number between 0 and 4.");
-            }
-        } catch (IncorrectInputException e) {
-            System.err.println("Returning to initial menu");
-            getInitialMenu().execute();
+        MenuOptions menuOptions = navigationHandler(MenuOptions.class, choice);
+        switch (menuOptions) {
+            case EXIT -> exitApplication();
+            case SEARCH -> navigateTo(getSearchMenu());
+            case CREATE -> navigateTo(getCreateMenu());
+            case DELETE -> navigateTo(getDeleteMenu());
+            case UPDATE -> navigateTo(getUpdateMenu());
+            default -> System.err.println("Invalid choice. Please enter a number between 0 and 4.");
         }
+
     }
 }

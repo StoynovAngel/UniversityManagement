@@ -40,28 +40,13 @@ public class CreateMenu extends Menu implements IMenu, Command {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-6): ");
-
-        if (!in.hasNextInt()) {
-            System.out.flush();
-            System.out.println("Input is not a valid integer. Try again.");
-            QueryLogger.logError("Non-integer input provided in " + getClass().getSimpleName());
-            in.nextLine();
-            navigateTo(getCreateMenu());
-            return;
-        }
-        int choice = in.nextInt();
-        in.nextLine();
+        int choice = userChoiceHandler(getCreateMenu());
         handleNavigation(choice);
     }
 
     @Override
     public void handleNavigation(int choice) {
-        ClassOptions option = ClassOptions.getByOptionNumber(choice);
-        if (option == null) {
-            System.out.println("Choice out of range. Please select a valid option.");
-            QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
-            return;
-        }
+        ClassOptions option = navigationHandler(ClassOptions.class, choice);
         switch (option) {
             case STUDENT -> createStudent();
             case GROUP -> createGroup();

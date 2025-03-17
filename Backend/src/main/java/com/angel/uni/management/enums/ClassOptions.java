@@ -1,9 +1,11 @@
 package com.angel.uni.management.enums;
 
+import com.angel.uni.management.interfaces.OptionSelectable;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
-public enum ClassOptions {
+public enum ClassOptions implements OptionSelectable<ClassOptions> {
 
     TEACHER(1, "Teacher"),
     SUBJECT(2, "Subject"),
@@ -49,5 +51,10 @@ public enum ClassOptions {
             }
         }
         return null;
+    }
+
+    @Override
+    public int getOptionNumber() {
+        return optionsNumber;
     }
 }

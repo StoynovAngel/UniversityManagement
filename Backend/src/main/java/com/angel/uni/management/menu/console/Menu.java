@@ -1,7 +1,12 @@
 package com.angel.uni.management.menu.console;
 
+import com.angel.uni.management.config.QueryLogger;
+import com.angel.uni.management.enums.ClassOptions;
+import com.angel.uni.management.enums.MenuOptions;
+import com.angel.uni.management.enums.SearchOptions;
 import com.angel.uni.management.interfaces.Command;
 import com.angel.uni.management.interfaces.IMenu;
+import com.angel.uni.management.interfaces.OptionSelectable;
 import com.angel.uni.management.menu.console.create.CreateMenu;
 import com.angel.uni.management.menu.console.delete.DeleteMenu;
 import com.angel.uni.management.menu.console.search.SearchByIdMenu;
@@ -17,7 +22,7 @@ public abstract class Menu implements IMenu, Command {
     protected final Scanner in = new Scanner(System.in);
 
     protected <T extends Command> void navigateTo(T menu) {
-        if(menu == null) {
+        if (menu == null) {
             throw new NullPointerException("The menu you are trying to access does not exist");
         }
         menu.execute();
@@ -30,12 +35,27 @@ public abstract class Menu implements IMenu, Command {
 
     protected Long idHandler() {
         System.out.print("Enter valid id: ");
+        if (!in.hasNextLong()) {
+            System.out.flush();
+            System.out.println("Input is not a valid long. Try again.");
+            QueryLogger.logError("Non-long input provided in " + getClass().getSimpleName());
+            in.nextLine();
+            navigateTo(getSearchByIdMenu());
+        }
         return in.nextLong();
     }
 
     protected String nameHandler() {
         System.out.print("Enter valid name: ");
-        return in.next();
+        String input = in.nextLine().trim();
+
+        if (input.isEmpty() || input.matches(".*\\d.*")) {
+            System.out.println("Input must be a valid non-empty name (no numbers). Try again.");
+            QueryLogger.logError("Invalid name input provided in " + getClass().getSimpleName());
+            navigateTo(getSearchByIdMenu());
+        }
+        return input;
+
     }
 
     protected DependencyContainer getContainer() {
@@ -68,5 +88,33 @@ public abstract class Menu implements IMenu, Command {
 
     protected DeleteMenu getDeleteMenu() {
         return DeleteMenu.getInstance();
+    }
+
+    protected <T extends Menu> int userChoiceHandler(T menu) {
+        if (!in.hasNextInt()) {
+            System.out.flush();
+            System.out.println("Input is not a valid integer. Try again.");
+            QueryLogger.logError("Non-integer input provided in " + getClass().getSimpleName());
+            in.nextLine();
+            navigateTo(menu);
+        }
+        return in.nextInt();
+    }
+
+    protected <E extends Enum<E> & OptionSelectable<E>> E navigationHandler(Class<E> enumClass, int choice) {
+        while (true) {
+            E option = OptionSelectable.getByOptionNumber(choice, enumClass.getEnumConstants());
+            if (option == null) {
+                System.out.print("Choice out of range. Please select a valid option: ");
+                if (in.hasNextInt()) {
+                    choice = in.nextInt();
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    in.next();
+                }
+            } else {
+                return option;
+            }
+        }
     }
 }

@@ -16,16 +16,34 @@ public class CreateInput extends InputForms<SimpleDTO> {
         while (true) {
             System.out.print("Please enter subject's name: ");
             String subjectName = in.nextLine().trim();
+            while (checkIfStringIsEmpty(subjectName)) {
+                System.out.println("Subject's name cannot be empty.");
+                System.out.print("Please enter subject's name: ");
+                subjectName = in.nextLine().trim();
+            }
 
             System.out.print("Please enter how many hours per week the subject is being studied: ");
+            while (!in.hasNextInt()) {
+                System.out.println("Please enter a valid number for hours.");
+                System.out.print("Please enter how many hours per week the subject is being studied: ");
+                in.next();
+            }
             int hoursPerWeek = in.nextInt();
+            while (hoursPerWeek <= 0) {
+                System.out.println("Hours per week must be greater than 0.");
+                System.out.print("Please enter how many hours per week the subject is being studied: ");
+                hoursPerWeek = in.nextInt();
+            }
             in.nextLine();
-
-            System.out.print("Please enter teacher's name. User must exist: ");
-            String teacherName = in.nextLine().trim();
+            String teacherName = searchForTeacher();
 
             System.out.print("Please enter subject's description: ");
             String subjectDescription = in.nextLine().trim();
+            while (subjectDescription.isEmpty()) {
+                System.out.println("Subject's description cannot be empty.");
+                System.out.print("Please enter subject's description: ");
+                subjectDescription = in.nextLine().trim();
+            }
 
             return new SimpleSubjectDTO(subjectName, hoursPerWeek, teacherName, subjectDescription);
         }
@@ -36,55 +54,13 @@ public class CreateInput extends InputForms<SimpleDTO> {
         while (true) {
             System.out.print("Please enter grade's name: ");
             String gradeName = in.nextLine().trim();
-            if (gradeName.isEmpty()) {
+            if (checkIfStringIsEmpty(gradeName)) {
                 System.out.println("Grade name cannot be empty. Try again.");
                 continue;
             }
-
-            double mark;
-            while (true) {
-                System.out.print("Student's mark: ");
-                if (!in.hasNextDouble()) {
-                    System.out.println("Input is not a valid number. Try again.");
-                    QueryLogger.logError("Non-numeric input for mark in " + getClass().getSimpleName());
-                    in.nextLine();
-                    continue;
-                }
-                mark = in.nextDouble();
-                in.nextLine();
-                break;
-            }
-
-            String teacherName;
-            while (true) {
-                System.out.print("Please enter teacher's name. This user MUST exist: ");
-                teacherName = in.nextLine();
-                if (teacherName.isEmpty()) {
-                    System.out.println("Teacher's name cannot be empty. Try again.");
-                    continue;
-                }
-                if (dependencyContainer.getTeacherInstance().read(teacherName).isEmpty()) {
-                    System.out.println("No such teacher found: " + teacherName + ". Try again.");
-                    continue;
-                }
-                break;
-            }
-
-            String studentName;
-            while (true) {
-                System.out.print("Please enter student's name. This user MUST exist: ");
-                studentName = in.nextLine();
-                if (studentName.isEmpty()) {
-                    System.out.println("Student's name cannot be empty. Try again.");
-                    continue;
-                }
-                if (dependencyContainer.getStudentInstance().read(studentName).isEmpty()) {
-                    System.out.println("No such student found: " + studentName + ". Try again.");
-                    continue;
-                }
-                break;
-            }
-
+            double mark = validateStudentMark();
+            String teacherName = searchForTeacher();
+            String studentName = searchForStudent();
             String gradeType = chooseGradeType();
             return new SimpleGradeDTO(gradeName, mark, teacherName, studentName, gradeType);
         }
@@ -103,6 +79,63 @@ public class CreateInput extends InputForms<SimpleDTO> {
     @Override
     public SimpleGroupDTO inputGroupForm() {
         return createFormForSingleStringInput(SimpleGroupDTO::new, "Enter group name: ");
+    }
+
+    private double validateStudentMark() {
+        double mark;
+        while (true) {
+            System.out.print("Student's mark: ");
+            if (!in.hasNextDouble()) {
+                System.out.println("Input is not a valid number. Try again.");
+                QueryLogger.logError("Non-numeric input for mark in " + getClass().getSimpleName());
+                in.nextLine();
+                continue;
+            }
+            mark = in.nextDouble();
+            in.nextLine();
+            break;
+        }
+        return mark;
+    }
+
+    private String searchForTeacher() {
+        String teacherName;
+        while (true) {
+            System.out.print("Please enter teacher's name. This user MUST exist: ");
+            teacherName = in.nextLine();
+            if (checkIfStringIsEmpty(teacherName)) {
+                System.out.println("Teacher's name cannot be empty. Try again.");
+                continue;
+            }
+            if (dependencyContainer.getTeacherInstance().read(teacherName).isEmpty()) {
+                System.out.println("No such teacher found: " + teacherName + ". Try again.");
+                continue;
+            }
+            break;
+        }
+        return teacherName;
+    }
+
+    private String searchForStudent() {
+        String studentName;
+        while (true) {
+            System.out.print("Please enter student's name. This user MUST exist: ");
+            studentName = in.nextLine();
+            if (checkIfStringIsEmpty(studentName)) {
+                System.out.println("Student's name cannot be empty. Try again.");
+                continue;
+            }
+            if (dependencyContainer.getStudentInstance().read(studentName).isEmpty()) {
+                System.out.println("No such student found: " + studentName + ". Try again.");
+                continue;
+            }
+            break;
+        }
+        return studentName;
+    }
+
+    private boolean checkIfStringIsEmpty(String str) {
+        return str.isEmpty();
     }
 
     private <T> T createFormForSingleStringInput(Function<String, T> dtoConstructor, String prompt) {

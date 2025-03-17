@@ -42,25 +42,13 @@ public class UpdateMenu extends Menu implements Command {
     @Override
     public void handleUserChoice() {
         System.out.print("Please enter your choice (0-6): ");
-        if (!in.hasNextInt()) {
-            System.err.println("Input is not a valid integer. Try again.");
-            QueryLogger.logError("Non-integer input provided in " + getClass().getSimpleName());
-            in.nextLine();
-            navigateTo(getUpdateMenu());
-        }
-        int choice = in.nextInt();
-        in.nextLine();
+        int choice = userChoiceHandler(getUpdateMenu());
         handleNavigation(choice);
     }
 
     @Override
     public void handleNavigation(int choice) {
-        ClassOptions option = ClassOptions.getByOptionNumber(choice);
-        if (option == null) {
-            System.err.println("Choice out of range. Please select a valid option.");
-            QueryLogger.logError("Invalid enum option number in " + getClass().getSimpleName());
-            return;
-        }
+        ClassOptions option = navigationHandler(ClassOptions.class, choice);
         switch (option) {
             case RETURN_TO_INITIAL_MENU -> navigateTo(getInitialMenu());
             case TEACHER -> updateTeacherName();
